@@ -8,13 +8,13 @@ Aadesh Samdaria - Product Manager
 
 Andre Soetrisno - Scrum Master
 
-Sophie Von Doussa - Developer
+Sophie Von Doussa - Lead Frontend Developer
 
-Jonathan Latti - Developer
+Jonathan Latti - Lead Backend Developer
 
-Shaolong Xu - Developer
+Shaolong Xu - Backend Developer
 
-Yuan Cao - Developer
+Yuan Cao - Frontend Developer
 
 ## Workflow
 Branch Naming Conventions
