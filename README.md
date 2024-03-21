@@ -8,13 +8,13 @@ Aadesh Samdaria - Product Manager
 
 Andre Soetrisno - Scrum Master
 
-Sophie Von Doussa - Role not assigned yet
+Sophie Von Doussa - Developer
 
-Jonathan Latti - Role not assigned yet
+Jonathan Latti - Developer
 
-Shaolong Xu - Role not assigned yet
+Shaolong Xu - Developer
 
-Yuan Cao - Role not assigned yet
+Yuan Cao - Developer
 
 ## Workflow
 Branch Naming Conventions
