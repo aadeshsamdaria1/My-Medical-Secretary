@@ -19,7 +19,9 @@ Yuan Cao - Role not assigned yet
 ## Workflow
 Branch Naming Conventions
 Branch names should follow the following convention:
-<jira-ticket>-<feature-description>
+
+< jira-ticket > - < feature-description >
+
 Bugfix branches should make it clear that it is a bugfix branch using bugfix/
 
 ## Merge Strategies
