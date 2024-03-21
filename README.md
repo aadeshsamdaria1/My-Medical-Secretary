@@ -1,15 +1,15 @@
 # My Medical Secretary
 
 ## Overview
-My Medical Secretary is a medical application designed to assist patients with serious illnesses, such as cancer, in managing their appointments and staying updated with relevant information about their disease. This project is in conjunction with the University of Melbourne, as part of the Software Project subject COMP90082 (Team WombatME)
+My Medical Secretary is a medical application designed to assist patients with serious illnesses, such as cancer, in managing their appointments and staying updated with relevant information about their disease. This project is in conjunction with the University of Melbourne, as part of the Software Project subject COMP90082 (Team ME-Wombat)
 
 ## Team
-Aadesh Samdaria - Product Manager
-Andre Soetrisno - Scrum Master
-Sophie Von Doussa - Role not assigned yet
-Jonathan Latti - Role not assigned yet
-Shaolong Xu - Role not assigned yet
-Yuan Cao - Role not assigned yet
+Aadesh Samdaria - Product Manager\n
+Andre Soetrisno - Scrum Master\n
+Sophie Von Doussa - Role not assigned yet\n
+Jonathan Latti - Role not assigned yet\n
+Shaolong Xu - Role not assigned yet\n
+Yuan Cao - Role not assigned yet\n
 
 ## Workflow
 Branch Naming Conventions
