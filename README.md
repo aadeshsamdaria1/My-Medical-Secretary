@@ -24,6 +24,8 @@ Branch names should follow the following convention:
 
 Bugfix branches should make it clear that it is a bugfix branch using bugfix/
 
+Pull Requests should also be named with < jira-ticket > at the front. For example, 'MW-1 Fix bug'
+
 ## Merge Strategies
 No work directly on main will be committed. Instead, all features and bug fixes are to be merged into the develop branch using a pull request. Once reviewed by one other team member, changes are merged into the master branch for release.
 
