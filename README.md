@@ -4,7 +4,7 @@
 My Medical Secretary is a medical application designed to assist patients with serious illnesses, such as cancer, in managing their appointments and staying updated with relevant information about their disease. This project is in conjunction with the University of Melbourne, as part of the Software Project subject COMP90082 (Team ME-Wombat)
 
 ## Team
-Aadesh Samdaria - Product Manager
+Aadesh Samdaria - Product Owner
 
 Andre Soetrisno - Scrum Master
 
