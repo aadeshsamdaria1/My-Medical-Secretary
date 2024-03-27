@@ -1,5 +1,12 @@
-Ensure Node.js is installed on the system
-in terminal, run:
+Ensure Node.js is installed on the system, run:<br>
+
+```console
 npm install -g expo-cli
-cd into the FRONTEND directory, run:
-npm start
+```
+<br>
+To start the development server, navigate into the FRONTEND directory, run:<br>
+
+```console
+npx expo start
+```
+<br>
