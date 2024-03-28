@@ -1,12 +1,11 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import TabNavigator from './navigation/TabNavigator';
-
-const Tab = createBottomTabNavigator();
+import TabNavigator from './pages/TabNavigator';
+import { StatusBar, SafeAreaView } from 'react-native';
 
 export default function App() {
   return (
-    <TabNavigator/>
+    <>
+      <TabNavigator />
+    </>
   );
 }
