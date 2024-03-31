@@ -1,11 +1,24 @@
 import React from "react";
 import { Calendar } from "react-native-calendars";
-import { View, Text, StyleSheet } from "react-native";
 
-export default function CalendarScreen() {
+const CalendarScreen = ({ markedDates, onDaySelect }) => {
   return (
-    
-      <Calendar />
+    <Calendar
+      onDayPress={(day) => {
+        onDaySelect(day);
+      }}
+      markedDates={Object.keys(markedDates).reduce((acc, date) => {
+        acc[date] = {
+          selected: true,
+          marked: true,
+          selectedColor: 'green',
+          dotColor: 'orange',
+        };
+        return acc;
+      }, {})}
+    />
   );
-}
+};
+
+export default CalendarScreen;
 

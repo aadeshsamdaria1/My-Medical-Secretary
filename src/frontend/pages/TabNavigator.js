@@ -16,10 +16,10 @@ export default function TabNavigator() {
             <Tab.Navigator 
                 screenOptions={{
                     tabBarStyle: {
-                        backgroundColor: 'lightblue',
+                        backgroundColor: 'white', // Set tab bar background color
                     },
                     headerStyle: {
-                        backgroundColor: 'lightblue', // Set header background color
+                        backgroundColor: 'white', // Set header background color
                     },
                     headerTintColor: 'black', // Set header text color
                 }}
@@ -48,9 +48,9 @@ export default function TabNavigator() {
                     name="MessageScreen" 
                     component={MessageScreen} 
                     options={{
-                        title: 'Messages',
+                        title: 'Notifications',
                         tabBarIcon: ({ color, size }) => (
-                            <Ionicons name="chatbubbles" size={size} color={color} />
+                            <Ionicons name="notifications" size={size} color={color} />
                         ),
                     }}
                 />
