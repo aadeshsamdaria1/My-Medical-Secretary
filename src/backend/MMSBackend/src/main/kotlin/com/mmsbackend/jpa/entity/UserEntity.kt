@@ -11,7 +11,7 @@ data class UserEntity(
     val id: Int,
 
     @Enumerated(EnumType.ORDINAL)
-    var userType: UserType,
+    val userType: UserType,
 
     val firstname: String?,
     val middleName: String?,
