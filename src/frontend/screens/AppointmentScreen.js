@@ -9,19 +9,19 @@ const AppointmentScreen = () => {
 
   const appointments = {
     "2024-03-13": {
-      initials: "LA",
+      initials: "AA",
       title: "Chemothrapy",
       date: "Wednesday, 13th March",
       time: "10:00 AM",
     },
     "2024-02-16": {
-      initials: "LA",
+      initials: "BB",
       title: "Chemotherapy",
       date: "Friday, 16th February",
       time: "10:00 PM",
     },
     "2024-04-20": {
-      initials: "LA",
+      initials: "CC",
       title: "Chemothrapy",
       date: "Monday, 20th April",
       time: "10:00 AM",
