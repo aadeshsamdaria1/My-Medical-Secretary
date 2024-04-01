@@ -4,7 +4,6 @@ import com.mmsbackend.api.exception.InvalidPatientException
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.enums.UserType
 import com.mmsbackend.jpa.entity.UserEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.UserMapper
@@ -38,6 +37,7 @@ class UserController(
 
     @PostMapping("/create_admin")
     fun createAdmin(@RequestBody adminDTO: AdminDTO): String {
+        println(adminDTO)
         val admin = userMapper.mapAdminDTO(adminDTO)
         userEntityRepository.save(admin)
         return "Successfully added new admin!"

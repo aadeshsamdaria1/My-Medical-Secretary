@@ -29,9 +29,9 @@ class UserMapper {
     fun mapAdminDTO(adminDTO: AdminDTO): UserEntity{
         return UserEntity(
             userType = UserType.ADMIN,
-            firstname = null,
+            firstname = adminDTO.firstname,
             middleName = null,
-            surname = null,
+            surname = adminDTO.surname,
             dob = null,
             email = adminDTO.email,
             street = null,
