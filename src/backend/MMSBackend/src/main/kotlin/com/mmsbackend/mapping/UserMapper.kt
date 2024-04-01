@@ -4,7 +4,6 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.enums.UserType
 import com.mmsbackend.jpa.entity.UserEntity
-import org.apache.catalina.User
 import org.springframework.stereotype.Service
 
 @Service
