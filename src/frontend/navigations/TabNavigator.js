@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
-
+import ProfileIcon from '../components/ProfileIcon';
 import HomeScreen from '../screens/HomeScreen';
 import AppointmentScreen from '../screens/AppointmentScreen';
 import MessageScreen from '../screens/MessageScreen';
@@ -22,6 +22,7 @@ export default function TabNavigator() {
                         backgroundColor: 'white', // Set header background color
                     },
                     headerTintColor: 'black', // Set header text color
+                    headerRight: () => <ProfileIcon />, // Add the HeaderRight component to the header
                 }}
             >
                 <Tab.Screen 
