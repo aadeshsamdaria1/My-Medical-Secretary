@@ -10,21 +10,45 @@ const AppointmentScreen = () => {
   const appointments = {
     "2024-03-13": {
       initials: "AA",
-      title: "Chemothrapy",
+      doctorName: "Dr. AaaAaa",
+      doctorSpecialty: "Oncologist",
+      hospital: "Hospital Name",
+      location: "Location Name",
+      title: "Chemothrapy Treatment",
       date: "Wednesday, 13th March",
       time: "10:00 AM",
-    },
-    "2024-02-16": {
-      initials: "BB",
-      title: "Chemotherapy",
-      date: "Friday, 16th February",
-      time: "10:00 PM",
+      task: "Take medication",
+      documents: [
+        {
+          name: "Pre-Treatment Guidelines",
+          url: "https://www.google.com/",
+        },
+        {
+          name: "Medication List",
+          url: "https://www.google.com/",
+        },
+      ],
     },
     "2024-04-20": {
-      initials: "CC",
+      initials: "BB",
+      doctorName: "Dr. BbbBbb",
+      doctorSpecialty: "Oncologist",
+      hospital: "Hospital Name",
+      location: "Location Name",
       title: "Chemothrapy",
       date: "Monday, 20th April",
       time: "10:00 AM",
+      task: "Take medication",
+      documents: [
+        {
+          name: "Pre-Treatment Guidelines",
+          url: "https://www.google.com/",
+        },
+        {
+          name: "Medication List",
+          url: "https://www.google.com/",
+        },
+      ],
     },
     // Add more appointments here
   };

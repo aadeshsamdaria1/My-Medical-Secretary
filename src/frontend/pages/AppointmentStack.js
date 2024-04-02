@@ -11,12 +11,12 @@ const AppointmentStack = () => {
       <Stack.Screen
         name="AppointmentList"
         component={AppointmentScreen}
-        options={{ headerShown: false }}
+        options={{ title: "Appointments"}}
       />
       <Stack.Screen
         name="AppointmentDetail"
         component={AppointmentDetailScreen}
-        options={{ title: "Appointment Details" }}
+        options={{ title: "Appointment Detail"}}
       />
     </Stack.Navigator>
   );

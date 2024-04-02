@@ -39,6 +39,7 @@ export default function TabNavigator() {
                     name="AppointmentScreen" 
                     component={AppointmentStack} 
                     options={{
+                        headerShown: false,
                         title: 'Appointments',
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="calendar" size={size} color={color} />

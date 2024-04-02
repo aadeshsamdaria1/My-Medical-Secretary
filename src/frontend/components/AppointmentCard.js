@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import doctorImage from "../assets/anonymous-doctor.jpg";
 
 const AppointmentCard = ({ appointment }) => {
   const navigation = useNavigation();
@@ -15,7 +16,7 @@ const AppointmentCard = ({ appointment }) => {
     <TouchableOpacity onPress={handlePress}>
       <View style={styles.card}>
         <View style={styles.iconWrapper}>
-          <Text style={styles.iconText}>{appointment.initials}</Text>
+          <Image source={doctorImage} style={styles.doctorImage} />
         </View>
         <View style={styles.details}>
           <Text style={styles.title}>{appointment.title}</Text>
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   iconWrapper: {
-    backgroundColor: "#4F8EF7",
+    backgroundColor: "#fff",
     borderRadius: 25,
     height: 50,
     width: 50,
@@ -55,18 +56,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
-  iconText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 20,
+  doctorImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 45,
   },
   details: {
     justifyContent: "center",
     flex: 1,
   },
   title: {
+    color: "#333",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 4,
   },
   datetimeWrapper: {
@@ -74,13 +76,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   date: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 16,
+    color: "#333",
     marginRight: 4,
   },
   time: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 16,
+    color: "#333",
   },
 });
 
