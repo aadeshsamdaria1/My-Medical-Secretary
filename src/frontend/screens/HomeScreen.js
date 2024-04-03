@@ -111,7 +111,7 @@ const HomeScreen = ({ route }) => {
               data={showMoreAppointments ? upcomingAppointments : upcomingAppointments.slice(0, 2)}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <TouchableOpacity style={[styles.appointmentItem, { backgroundColor: 'lightblue' }]}>
+                <View style={[styles.appointmentItem, { backgroundColor: 'lightblue' }]}>
                   <View style={styles.appointmentHeader}>
                     <Image source={item.provider.avatar} style={styles.appointmentAvatar} />
                     <View style={styles.appointmentProviderInfo}>
@@ -123,7 +123,7 @@ const HomeScreen = ({ route }) => {
                     <Text style={styles.appointmentDate}>{formatAppointmentDate(item.date)}</Text>
                     <Text style={styles.appointmentTime}>{item.time}</Text>
                   </View>
-                </TouchableOpacity>
+                </View>
               )}
             />
           ) : (
