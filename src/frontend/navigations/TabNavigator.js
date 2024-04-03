@@ -11,6 +11,7 @@ import ResourceScreen from '../screens/ResourceScreen';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+    const userId = 1; // or any other user ID you want to fetch
     return (
         <NavigationContainer>
             <Tab.Navigator 
@@ -34,6 +35,7 @@ export default function TabNavigator() {
                             <Ionicons name="home" size={size} color={color} />
                         ),
                     }}
+                    initialParams={{ userId: userId }}
                 />
                 <Tab.Screen 
                     name="AppointmentScreen" 

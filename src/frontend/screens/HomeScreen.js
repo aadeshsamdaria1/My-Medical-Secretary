@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { getUserEndpoint } from '../api';
 
-const HomeScreen = () => {
+const HomeScreen = ({ route }) => {
   // Sample data for upcoming appointments and recent messages
 
   const upcomingAppointments = [
@@ -34,11 +35,10 @@ const HomeScreen = () => {
   // GET requests to fetch data from backend
   // const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   // const [recentMessages, setRecentMessages] = useState([]);
+  const [userName, setUserName] = useState('');
+  const [showMoreAppointments, setShowMoreAppointments] = useState(false);
+  const [showMoreMessages, setShowMoreMessages] = useState(false);
 
-  // useEffect(() => {
-  //   fetchUpcomingAppointments();
-  //   fetchRecentMessages();
-  // }, []);
 
   // const fetchUpcomingAppointments = async () => {
   //   try {
@@ -60,24 +60,22 @@ const HomeScreen = () => {
   //   }
   // };
 
+  useEffect(() => {
+    fetchUserName();
+  //   fetchUpcomingAppointments();
+  //   fetchRecentMessages();
+  }, []);
 
-  const [showMoreAppointments, setShowMoreAppointments] = useState(false);
-  const [showMoreMessages, setShowMoreMessages] = useState(false);
-  // const [userName, setUserName] = useState('');
-
-  // useEffect(() => {
-  //   fetchUserName();
-  // }, []);
-
-  // const fetchUserName = async () => {
-  //   try {
-  //     const response = await fetch('/api/user');
-  //     const data = await response.json();
-  //     setUserName(data.name);
-  //   } catch (error) {
-  //     console.error('Error fetching user name:', error);
-  //   }
-  // };
+  const fetchUserName = async () => {
+    try {
+      const userId = route.params?.userId; // Retrieve the user ID from the navigation prop, or use a default value
+      const response = await fetch(getUserEndpoint(userId));
+      const data = await response.json();
+      setUserName(data.firstname + ' ' + data.middleName + ' ' + data.surname);
+    } catch (error) {
+      console.error('Error fetching user name:', error);
+    }
+  };
 
   const handleMessagePress = (message) => {
     Alert.alert(
@@ -102,7 +100,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Hi, John Doe</Text>
+        <Text style={styles.headerText}>Hi, {userName}</Text>
       </View>
 
       <View style={styles.dashboard}>
