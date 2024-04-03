@@ -1,6 +1,6 @@
 package com.mmsbackend.api.controllers
 
-import com.mmsbackend.dto.user.DoctorDTO
+import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.mapping.DoctorMapper
@@ -27,6 +27,6 @@ class DoctorController(
     fun createDoctor(@RequestBody doctorDTO: DoctorDTO): String {
         val doctor = doctorMapper.mapDoctorDTO(doctorDTO)
         doctorEntityRepository.save(doctor)
-        return "Successfully added new patient!"
+        return "Successfully added new doctor!"
     }
 }

@@ -1,4 +1,4 @@
-package com.mmsbackend.dto.user
+package com.mmsbackend.dto.doctor
 
 data class DoctorDTO (
     val name: String,

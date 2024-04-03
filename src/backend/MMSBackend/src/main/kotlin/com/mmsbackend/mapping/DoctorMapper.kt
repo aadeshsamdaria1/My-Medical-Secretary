@@ -1,6 +1,6 @@
 package com.mmsbackend.mapping
 
-import com.mmsbackend.dto.user.DoctorDTO
+import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
 import org.springframework.stereotype.Service
 
