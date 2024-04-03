@@ -9,19 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/api/controllers/AppointmentController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/dto/appointment/AppointmentDTO.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/enums/AppointmentStatus.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/jpa/entity/AppointmentEntity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/jpa/repository/AppointmentEntityRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/mapping/AppointmentMapper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/api/controllers/DoctorController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/api/controllers/DoctorController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/dto/user/DoctorDTO.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/dto/doctor/DoctorDTO.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/mapping/DoctorMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/mapping/DoctorMapper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/resources/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
