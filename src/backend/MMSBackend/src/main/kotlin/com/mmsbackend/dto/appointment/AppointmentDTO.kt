@@ -11,4 +11,6 @@ data class AppointmentDTO (
     val detail: String?,
     val note: String?,
     val userNote: String?,
+
+    val userId: Int
 )
