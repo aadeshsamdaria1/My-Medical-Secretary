@@ -204,12 +204,13 @@ const styles = StyleSheet.create({
 
   confirmButton: {
     backgroundColor: "#4CAF50",
-    borderRadius: 20,
+    borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 30,
     marginHorizontal: 50,
     marginVertical: 20,
     alignItems: "center",
+    paddingHorizontal: 16,
   },
   confirmButtonText: {
     color: "#ffffff",
