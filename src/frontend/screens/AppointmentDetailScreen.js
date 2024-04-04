@@ -12,7 +12,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import doctorImage from "../assets/anonymous-doctor.jpg";
 
 const AppointmentDetailScreen = ({ route }) => {
-  // Assuming `route.params` contains the necessary data
   const { appointmentDetails } = route.params;
 
   const onDocumentPress = (url) => {
@@ -24,88 +23,95 @@ const AppointmentDetailScreen = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.doctorProfileContainer}>
-        <Image source={doctorImage} style={styles.doctorImage} />
-        <View style={styles.doctorDetails}>
-          <Text style={styles.doctorName}>{appointmentDetails.doctorName}</Text>
-          <Text style={styles.doctorSpecialty}>
-            {appointmentDetails.doctorSpecialty}
-          </Text>
-          <Text style={styles.doctorSpecialty}>
-            {appointmentDetails.hospital}
-          </Text>
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Ionicons name="person-outline" size={24} style={styles.iconStyle} />
+          <Text style={styles.sectionTitle}>Doctor Information</Text>
         </View>
-      </View>
-
-      <View style={styles.appointmentInfo}>
-        <Text style={styles.appointmentTitle}>Scheduled Appointment</Text>
-        <View style={styles.detailRow}>
-          <Ionicons
-            name="calendar-outline"
-            size={20}
-            color="#666"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.appointmentDetail}>
-            {appointmentDetails.date}
-          </Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Ionicons
-            name="time-outline"
-            size={20}
-            color="#666"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.appointmentDetail}>
-            {appointmentDetails.time}
-          </Text>
-        </View>
-
-        <View style={styles.detailRow}>
-          <Ionicons
-            name="location"
-            size={20}
-            color="#666"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.appointmentDetail}>
-            {appointmentDetails.location}
-          </Text>
-        </View>
-
-        <View style={styles.reminderSection}>
-          <Text style={styles.reminderTitle}>Pre-Appointment Reminders</Text>
-          <View style={styles.reminderItem}>
-            <Ionicons name="alert-circle-outline" size={20} color="#4894FE" />
-            <Text style={styles.reminderText}>{appointmentDetails.task}</Text>
+        <View style={styles.doctorInfoContainer}>
+          <Image source={doctorImage} style={styles.doctorImage} />
+          <View>
+            <Text style={styles.doctorName}>
+              {appointmentDetails.doctorName}
+            </Text>
+            <Text style={styles.doctorDetail}>
+              {appointmentDetails.doctorSpecialty}
+            </Text>
           </View>
         </View>
+      </View>
 
-        {/* Documents Section */}
-        <View style={styles.documentsSection}>
-          <Text style={styles.documentsTitle}>Related Documents</Text>
-          {appointmentDetails.documents &&
-          appointmentDetails.documents.length > 0 ? (
-            appointmentDetails.documents.map((document, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => onDocumentPress(document.url)}
-              >
-                <View style={styles.documentItem}>
-                  <Text style={styles.documentText}>{document.name}</Text>
-                </View>
-              </TouchableOpacity>
-            ))
-          ) : (
-            <Text style={styles.noDocumentsText}>No documents available.</Text>
-          )}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Ionicons name="home-outline" size={24} style={styles.iconStyle} />
+          <Text style={styles.sectionTitle}>Clinic Information</Text>
+        </View>
+        <Text style={styles.sectionContent}>
+          {appointmentDetails.clinicName}
+        </Text>
+        <Text style={styles.sectionContent}>
+          {appointmentDetails.clinicAddress}
+        </Text>
+        <TouchableOpacity onPress={() => {}}>
+          <Text style={styles.linkText}>View Clinic Details</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Ionicons
+            name="calendar-outline"
+            size={24}
+            style={styles.iconStyle}
+          />
+          <Text style={styles.sectionTitle}>Appointment Time</Text>
+        </View>
+        <Text style={styles.sectionContent}>{appointmentDetails.date}</Text>
+        <Text style={styles.sectionContent}>{appointmentDetails.time}</Text>
+        <TouchableOpacity onPress={() => {}}>
+          <Text style={styles.linkText}>Add to calendar</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Ionicons
+            name="document-outline"
+            size={24}
+            style={styles.iconStyle}
+          />
+          <Text style={styles.sectionTitle}>Related Documents</Text>
+        </View>
+        {appointmentDetails.documents &&
+        appointmentDetails.documents.length > 0 ? (
+          appointmentDetails.documents.map((document, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => onDocumentPress(document.url)}
+            >
+              <View style={styles.documentItem}>
+                <Text style={styles.documentText}>{document.name}</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.noDocumentsText}>No documents available.</Text>
+        )}
+      </View>
+
+      <View style={styles.reminderSection}>
+        <View style={styles.reminderItem}>
+          <Ionicons
+            name="alert-circle-outline"
+            size={20}
+            style={styles.iconStyle}
+          />
+          <Text style={styles.reminderText}>{appointmentDetails.task}</Text>
         </View>
       </View>
 
-      {/* Messaging and Confirmation Button */}
-      <TouchableOpacity style={styles.Button}>
-        <Text style={styles.ButtonText}>Confirm</Text>
+      <TouchableOpacity style={styles.confirmButton}>
+        <Text style={styles.confirmButtonText}>Confirm Appointment</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -114,127 +120,105 @@ const AppointmentDetailScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff", // Use a clean white background
+    backgroundColor: "#fff",
   },
-  doctorProfileContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#f0f4f7", // Lighter background for less visual weight
-  },
-  doctorImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  doctorDetails: {
-    flex: 1,
-    marginLeft: 16,
-  },
-  doctorName: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#202124", // Dark for text for contrast against the light header
-  },
-  doctorSpecialty: {
-    fontSize: 16,
-    color: "#202124", // Complementary dark color for secondary text
-    marginTop: 6,
-  },
-
-  appointmentInfo: {
+  section: {
     padding: 16,
-    backgroundColor: "#ffffff",
-    marginLeft: 8,
-    marginRight: 8,
+    marginHorizontal: 8,
   },
-  appointmentTitle: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: "#202124", // Keep titles dark for emphasis
-    marginBottom: 12,
-  },
-  detailRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  appointmentDetail: {
-    fontSize: 18,
-    marginLeft: 8,
-    color: "#202124", // Dark color for detail text for readability
-  },
-  iconStyle: {
-    color: "#4894FE", // Brand blue for icons
-  },
-
-  Button: {
-    backgroundColor: "#4CAF50", // A vibrant green for the button
-    borderRadius: 25,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    margin: 20,
-    alignItems: "center",
-    shadowColor: "#4CAF50", // Same green for a subtle button shadow
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 7,
-  },
-  ButtonText: {
-    color: "#ffffff",
-    fontSize: 20,
-    fontWeight: "600",
-  },
-  
-
-  reminderSection: {
-    padding: 16,
-    backgroundColor: "#e6f7ff", // Soft blue background to highlight section
-  },
-  reminderTitle: {
-    fontWeight: "600",
-    fontSize: 18, // Reduced size for subtlety
-    color: "#202124",
-    marginBottom: 10,
-  },
-  reminderItem: {
+  sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
   },
-  reminderText: {
-    fontSize: 16, // Reduced size for subtlety
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#000",
     marginLeft: 8,
-    color: "#202124",
+  },
+  sectionContent: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 8,
+    marginLeft: 32,
+  },
+  linkText: {
+    fontSize: 16,
+    color: "#007BFF",
+    textDecorationLine: "underline",
+    marginLeft: 32,
+  },
+  doctorInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  doctorImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 12,
+  },
+  doctorName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+    marginBottom: 8,
+  },
+  doctorDetail: {
+    fontSize: 16,
+    color: "#000",
   },
 
-  documentsSection: {
-    padding: 16,
-    backgroundColor: "#ffffff", // Consistent background with the rest of the screen
-    borderTopWidth: 1, // Only top border to separate from the reminder section
-    borderTopColor: "#d1e3f8",
-  },
-  documentsTitle: {
-    fontWeight: "600",
-    fontSize: 20,
-    marginBottom: 10,
-    color: "#202124",
-  },
   documentItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
   },
   documentText: {
-    fontSize: 18,
-    marginLeft: 8,
+    fontSize: 16,
     color: "#4894FE",
     textDecorationLine: "underline",
+    marginLeft: 32,
+    marginBottom: 8,
   },
   noDocumentsText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#666",
+  },
+
+  reminderSection: {
+    padding: 16,
+    backgroundColor: "#e6f7ff",
+    borderRadius: 10,
+    marginHorizontal: 16,
+  },
+  reminderItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  reminderText: {
+    fontSize: 16, // Reduced size for subtlety
+    marginLeft: 8,
+    fontWeight: "600",
+  },
+
+  confirmButton: {
+    backgroundColor: "#4CAF50",
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    marginHorizontal: 50,
+    marginVertical: 20,
+    alignItems: "center",
+  },
+  confirmButtonText: {
+    color: "#ffffff",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+
+  iconStyle: {
+    color: "#87CEEB", // Sky blue color
   },
 });
 
