@@ -74,6 +74,7 @@ const HomeScreen = ({ route }) => {
       setUserName(data.firstname + ' ' + data.middleName + ' ' + data.surname);
     } catch (error) {
       console.error('Error fetching user name:', error);
+      setUserName('Agent Smith')
     }
   };
 
