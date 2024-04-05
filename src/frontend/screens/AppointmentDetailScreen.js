@@ -90,7 +90,7 @@ const AppointmentDetailScreen = ({ route }) => {
               onPress={() => onDocumentPress(document.url)}
             >
               <View style={styles.documentItem}>
-                <Text style={styles.documentText}>{document.name}</Text>
+                <Text style={styles.linkText}>{document.name}</Text>
               </View>
             </TouchableOpacity>
           ))
@@ -121,25 +121,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    padding: 16,
   },
   section: {
     padding: 16,
-    marginHorizontal: 8,
+    marginHorizontal: 16,
+    backgroundColor: '#fff', // consider using a different shade here if you change the background
+    borderBottomWidth: 1,
+    borderBottomColor: '#eaeaea',
+    borderRadius: 8, // rounded corners for the sections
+    marginVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
   },
   sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12, // More space to set apart the section header from its content
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#000",
+    color: "#6b6b6b",
     marginLeft: 8,
   },
   sectionContent: {
+    fontWeight: "500",
     fontSize: 16,
-    color: "#333",
+    color: "#000",
     marginBottom: 8,
     marginLeft: 32,
   },
@@ -148,6 +163,7 @@ const styles = StyleSheet.create({
     color: "#007BFF",
     textDecorationLine: "underline",
     marginLeft: 32,
+    fontWeight: "500", // Make links bold for emphasis
   },
   doctorInfoContainer: {
     flexDirection: "row",
@@ -158,16 +174,17 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     marginRight: 12,
+    resizeMode: 'cover',
   },
   doctorName: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
-    marginBottom: 8,
+    marginBottom: 4,
   },
   doctorDetail: {
     fontSize: 16,
-    color: "#000",
+    color: "#555",
   },
 
   documentItem: {
@@ -204,15 +221,20 @@ const styles = StyleSheet.create({
 
   confirmButton: {
     backgroundColor: "#4CAF50",
-    borderRadius: 10,
+    borderRadius: 20,
     paddingVertical: 12,
-    paddingHorizontal: 30,
-    marginHorizontal: 50,
-    marginVertical: 20,
-    alignItems: "center",
     paddingHorizontal: 16,
+    marginHorizontal: 16,
+    marginVertical: 16,
+    alignItems: "center",
+    elevation: 2, 
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
   },
   confirmButtonText: {
+    textTransform: 'uppercase',
     color: "#ffffff",
     fontSize: 18,
     fontWeight: "600",
@@ -220,6 +242,7 @@ const styles = StyleSheet.create({
 
   iconStyle: {
     color: "#87CEEB", // Sky blue color
+    alignSelf: "center",
   },
 });
 
