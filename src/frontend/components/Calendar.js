@@ -14,7 +14,7 @@ const CalendarScreen = ({ markedDates, onDaySelect }) => {
         acc[date] = {
           selected: true,
           marked: true,
-          selectedColor: "green",
+          selectedColor: "#007aff",
           dotColor: "#fff",
         };
         return acc;
@@ -34,12 +34,28 @@ const CalendarScreen = ({ markedDates, onDaySelect }) => {
           base: {
             width: 32,
             height: 32,
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'center',
           },
         },
-        textDayFontWeight: '400', // increased text weight
-        textMonthFontWeight: '400', // increased text weight
-        textDayHeaderFontWeight: '400', // increased text weight
+        today: {
+          borderColor: '#007AFF',
+          borderWidth: 2, 
+          borderRadius: 17,
+        },
+        todayText: {
+          color: '#ff3b30', 
+          fontWeight: 'bold', 
+        },
+        textDayFontFamily: 'System',
+        textMonthFontFamily: 'System',
+        textDayHeaderFontFamily: 'System',
+        textDayFontWeight: '500',
+        textMonthFontWeight: 'bold',
+        textDayHeaderFontWeight: '500',
+        textDayFontSize: 16,
+        textMonthFontSize: 20,
+        textDayHeaderFontSize: 16,
         marginHorizontal: 16, // sets horizontal margin, but may not affect some calendar styles
       }}
     />

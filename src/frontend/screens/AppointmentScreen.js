@@ -126,26 +126,26 @@ export default AppointmentScreen;
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 10,
+    paddingTop: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginTop: 16,
     marginBottom: 8,
     alignSelf: "flex-start",
-    marginLeft: 16,
+    marginLeft: 20,
   },
   noAppointments: {
-    fontSize: 16,
-    color: "gray",
-    marginVertical: 16,
+    fontSize: 18, // Larger font for legibility
+    color: "#6e6e72", // Subtle gray color used in iOS for informational text
+    marginVertical: 20, // More vertical spacing
     alignSelf: "flex-start",
-    marginLeft: 16,
+    marginLeft: 20, // Consistent margin with titles
   },
 });
 

@@ -34,17 +34,17 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 10,
+    padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
     elevation: 3,
   },
   iconWrapper: {
@@ -54,22 +54,22 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 10,
+    marginRight: 16,
   },
   doctorImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 45,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   details: {
     justifyContent: "center",
     flex: 1,
   },
   title: {
-    color: "#333",
-    fontWeight: "bold",
+    color: "#000",
+    fontWeight: "600",
     fontSize: 18,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   datetimeWrapper: {
     flexDirection: "row",
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 16,
     color: "#333",
-    marginRight: 4,
+    marginRight: 8,
   },
   time: {
     fontSize: 16,
