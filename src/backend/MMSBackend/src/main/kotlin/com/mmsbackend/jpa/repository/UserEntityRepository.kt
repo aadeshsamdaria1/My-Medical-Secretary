@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserEntityRepository : JpaRepository<UserEntity, Int>
+interface UserEntityRepository : JpaRepository<UserEntity, Int> {
+    fun findByEmail(username: String): UserEntity?
+}

@@ -4,4 +4,6 @@ data class AdminDTO (
     val email: String,
     val firstname: String?,
     val surname: String?,
+
+    val password: String
 )

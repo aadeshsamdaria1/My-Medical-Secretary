@@ -22,5 +22,15 @@ data class UserEntity(
 
     val street: String?,
     val suburb: String?,
-    val state: String?
+    val state: String?,
+
+    val password: String,
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_authority",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "authority_id")]
+    )
+    val authorities: Set<Authority> = emptySet()
 )

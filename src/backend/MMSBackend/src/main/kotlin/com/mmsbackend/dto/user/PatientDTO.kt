@@ -12,5 +12,7 @@ data class PatientDTO (
 
     val street: String?,
     val suburb: String?,
-    val state: String?
+    val state: String?,
+
+    val password: String
 )

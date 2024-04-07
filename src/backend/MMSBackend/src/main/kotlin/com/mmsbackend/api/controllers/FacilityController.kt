@@ -22,7 +22,8 @@ class FacilityController (
     }
 
     @PostMapping("/create")
-    fun createFacility(@RequestBody facilityEntity: FacilityEntity) {
+    fun createFacility(@RequestBody facilityEntity: FacilityEntity): String {
         facilityEntityRepository.save(facilityEntity)
+        return "Successfully created a new ${facilityEntity.facilityType}"
     }
 }
