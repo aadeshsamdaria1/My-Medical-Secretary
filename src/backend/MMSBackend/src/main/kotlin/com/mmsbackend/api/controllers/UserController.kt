@@ -5,6 +5,7 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.persist
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.UserMapper
 import org.springframework.http.ResponseEntity
@@ -36,15 +37,9 @@ class UserController(
             return ResponseEntity.badRequest().body("Could not create patient. Missing ID.")
         }
 
-        val existingPatient = userEntityRepository.findByPatientId(patientDTO.patientId)
-        val savedPatient: PatientEntity = if (existingPatient != null) {
-            userEntityRepository.save(userMapper.updateExistingPatient(existingPatient, patient))
-        } else{
-            userEntityRepository.save(patient)
-        }
-
-        return ResponseEntity.ok("Successfully ${if (existingPatient != null) "updated" else "created" } " +
-                "new patient with Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
+        val savedPatient = patient.persist(userEntityRepository, userMapper)
+        return ResponseEntity.ok("Successfully created / updated patient with " +
+                "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
     }
 
     @PostMapping("/create_admin")

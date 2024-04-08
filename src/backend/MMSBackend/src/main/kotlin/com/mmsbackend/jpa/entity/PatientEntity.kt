@@ -28,12 +28,12 @@ class PatientEntity(
 
 ): UserEntity(mmsId, email)
 
-fun PatientEntity.persist(userEntityRepository: UserEntityRepository, mapper: UserMapper): Int {
+fun PatientEntity.persist(userEntityRepository: UserEntityRepository, mapper: UserMapper): PatientEntity {
 
     val existingPatient = userEntityRepository.findByPatientId(this.patientId)
     return if (existingPatient != null) {
-        userEntityRepository.save(mapper.updateExistingPatient(existingPatient, this)).patientId
+        userEntityRepository.save(mapper.updateExistingPatient(existingPatient, this))
     } else{
-        userEntityRepository.save(this).patientId
+        userEntityRepository.save(this)
     }
 }

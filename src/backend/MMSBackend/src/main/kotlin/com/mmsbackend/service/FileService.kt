@@ -27,9 +27,7 @@ class FileService(
             userMapper.mapHtmlPatient(
                 rowString = row,
                 columns = columns
-            ).persist(userEntityRepository, userMapper).run {
-                this
-            }
+            ).persist(userEntityRepository, userMapper).patientId
         }
     }
 
