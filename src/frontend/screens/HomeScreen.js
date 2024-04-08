@@ -1,54 +1,124 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { getUserEndpoint } from '../api';
+import { Modal, ScrollView, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, Image } from 'react-native';
+import { getUserEndpoint, getAppointmentsByUserEndpoint } from '../api';
+
+const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
+  <Modal visible={visible} animationType="slide" transparent>
+    <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+        <ScrollView>
+          {appointment ? (
+            <>
+              <Text style={styles.modalTitle}>Appointment Details</Text>
+              {appointment.detail && <Text style={styles.modalDetail}>Detail: {appointment.detail}</Text>}
+              {appointment.reason && <Text style={styles.modalDetail}>Reason: {appointment.reason}</Text>}
+              {appointment.note && <Text style={styles.modalDetail}>Note: {appointment.note}</Text>}
+              {appointment.startDate && <Text style={styles.modalDetail}>Date: {new Date(appointment.startDate).toLocaleDateString()}</Text>}
+              {appointment.startTime && <Text style={styles.modalDetail}>Time: {appointment.startTime}</Text>}
+              {appointment.duration && <Text style={styles.modalDetail}>Duration: {appointment.duration} minutes</Text>}
+              <Text style={styles.modalTitle}>Doctors Details</Text>
+              {appointment.doctor.name && <Text style={styles.modalDetail}>Name: {appointment.doctor.name}</Text>}
+              {appointment.doctor.expertise && <Text style={styles.modalDetail}>Expertise: {appointment.doctor.expertise}</Text>}
+              {appointment.doctor.contact && <Text style={styles.modalDetail}>Contact: {appointment.doctor.contact}</Text>}
+              {appointment.doctor.email && <Text style={styles.modalDetail}>Email: {appointment.doctor.email}</Text>}
+              {appointment.doctor.website && <Text style={styles.modalDetail}>Website: {appointment.doctor.website}</Text>}
+              {appointment.doctor.address && <Text style={styles.modalDetail}>Address: {appointment.doctor.address}</Text>}
+            </>
+          ) : (
+            <Text style={styles.modalDetail}>Error while loading appointment details</Text>
+          )}
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    </View>
+  </Modal>
+);
 
 const HomeScreen = ({ route }) => {
-  // Sample data for upcoming appointments and recent messages
+  const userId = route.params?.userId;
 
-  const upcomingAppointments = [
-    {
-      id: '1',
-      date: '2023-04-02',
-      time: '10:00 AM',
-      provider: {
-        name: 'Dr. John Doe',
-        specialty: 'General Practitioner',
-        avatar: require('../assets/favicon.png'),
-      },
-    },
-    {
-      id: '2',
-      date: '2023-04-10',
-      time: '2:30 PM',
-      provider: {
-        name: 'Dr. Jane Smith',
-        specialty: 'Pediatrician',
-        avatar: require('../assets/favicon.png'),
-      },
-    },
-  ];
+  // // Sample data for upcoming appointments and recent messages
+  // const upcomingAppointments = [
+  //   {
+  //     "id": 1,
+  //     "detail": "Routine chekcup",
+  //     "reason": "General health",
+  //     "note": "No specific notes",
+  //     "dateCreate": "2022-04-08T10:30:00Z",
+  //     "lastUpdated": "2022-04-08T12:45:00Z",
+  //     "startTime": "10:30:00",
+  //     "startDate": "2022-04-15T00:00:00.000+00:00",
+  //     "duration": 60,
+  //     "userNote": "",
+  //     "status": "UNCONFIRMED",
+  //     "patient": {
+  //         "mmsId": 450,
+  //         "email": "john.doe@example.com",
+  //         "patientId": 3,
+  //         "firstname": "Zara",
+  //         "middleName": "Doe",
+  //         "surname": "Smith",
+  //         "dob": "1990-01-01T00:00:00Z",
+  //         "address": "123 Main St",
+  //         "suburb": "Cityville",
+  //         "state": "California"
+  //     },
+  //     "doctor": {
+  //         "id": 3,
+  //         "name": "John",
+  //         "address": "1 Street street",
+  //         "contact": "2394823948",
+  //         "email": "john.doe@example.com",
+  //         "expertise": "Arms and legs",
+  //         "website": "doctor.com"
+  //     }
+  // },
+  // ];
   const recentMessages = [
     { id: '1', sender: 'Nurse Mary', message: 'Please remember to take your medication. This is a longer message to demonstrate the functionality.' },
     { id: '2', sender: 'Dr. John Doe', message: 'Your test results are ready.' },
   ];
 
   // GET requests to fetch data from backend
-  // const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   // const [recentMessages, setRecentMessages] = useState([]);
   const [userName, setUserName] = useState('');
   const [showMoreAppointments, setShowMoreAppointments] = useState(false);
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showMoreMessages, setShowMoreMessages] = useState(false);
 
+  const showAppointmentDetails = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowAppointmentModal(true);
+  };
 
-  // const fetchUpcomingAppointments = async () => {
-  //   try {
-  //     const response = await fetch('/api/appointments');
-  //     const data = await response.json();
-  //     setUpcomingAppointments(data);
-  //   } catch (error) {
-  //     console.error('Error fetching upcoming appointments:', error);
-  //   }
-  // };
+  const closeAppointmentModal = () => {
+    setShowAppointmentModal(false);
+    setSelectedAppointment(null);
+  };
+
+  const fetchUserName = async () => {
+    try {
+      const response = await fetch(getUserEndpoint(userId));
+      const data = await response.json();
+      setUserName(data.firstname);
+    } catch (error) {
+      console.error('Error fetching user name:', error);
+    }
+  };
+
+  const fetchUpcomingAppointments = async () => {
+    try {
+      const response = await fetch(getAppointmentsByUserEndpoint(userId));
+      const data = await response.json();
+      setUpcomingAppointments(data);
+    } catch (error) {
+      console.error('Error fetching upcoming appointments:', error);
+    }
+  };
 
   // const fetchRecentMessages = async () => {
   //   try {
@@ -62,21 +132,9 @@ const HomeScreen = ({ route }) => {
 
   useEffect(() => {
     fetchUserName();
-  //   fetchUpcomingAppointments();
-  //   fetchRecentMessages();
+    fetchUpcomingAppointments();
+    // fetchRecentMessages();
   }, []);
-
-  const fetchUserName = async () => {
-    try {
-      const userId = route.params?.userId; // Retrieve the user ID from the navigation prop, or use a default value
-      const response = await fetch(getUserEndpoint(userId));
-      const data = await response.json();
-      setUserName(data.firstname + ' ' + data.middleName + ' ' + data.surname);
-    } catch (error) {
-      console.error('Error fetching user name:', error);
-      setUserName('Agent Smith')
-    }
-  };
 
   const handleMessagePress = (message) => {
     Alert.alert(
@@ -90,12 +148,6 @@ const HomeScreen = ({ route }) => {
       ],
       { cancelable: true }
     );
-  };
-
-  const formatAppointmentDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
   };
 
   return (
@@ -112,19 +164,27 @@ const HomeScreen = ({ route }) => {
               data={showMoreAppointments ? upcomingAppointments : upcomingAppointments.slice(0, 2)}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <View style={[styles.appointmentItem, { backgroundColor: 'lightblue' }]}>
+                <TouchableOpacity
+                  style={[styles.appointmentItem, { backgroundColor: 'lightblue' }]}
+                  onPress={() => showAppointmentDetails(item)}
+                >
                   <View style={styles.appointmentHeader}>
-                    <Image source={item.provider.avatar} style={styles.appointmentAvatar} />
-                    <View style={styles.appointmentProviderInfo}>
-                      <Text style={styles.appointmentProviderName}>{item.provider.name}</Text>
-                      <Text style={styles.appointmentProviderSpecialty}>{item.provider.specialty}</Text>
+                    <View style={styles.appointmentDoctorInfo}>
+                      <Text style={[styles.appointmentDoctorName, { textAlign: 'center' }]}>{item.doctor.name}</Text>
+                      <Text style={[styles.appointmentDoctorSpecialty, { textAlign: 'center' }]}>{item.doctor.expertise}</Text>
                     </View>
                   </View>
                   <View style={styles.appointmentDetails}>
-                    <Text style={styles.appointmentDate}>{formatAppointmentDate(item.date)}</Text>
-                    <Text style={styles.appointmentTime}>{item.time}</Text>
+                    <Text style={styles.appointmentDate}>{new Date(item.startDate).toLocaleDateString()}</Text>
+                    <Text style={styles.appointmentTime}>
+                      {new Date(`1970-01-01T${item.startTime}`).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      })}
+                    </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
           ) : (
@@ -191,6 +251,11 @@ const HomeScreen = ({ route }) => {
           )}
         </View>
       </View>
+      <AppointmentDetailsModal
+        visible={showAppointmentModal}
+        appointment={selectedAppointment}
+        onClose={closeAppointmentModal}
+      />
     </View>
   );
 };
@@ -236,20 +301,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  appointmentAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    marginRight: 12,
-  },
-  appointmentProviderInfo: {
+  appointmentDoctorInfo: {
     flex: 1,
   },
-  appointmentProviderName: {
+  appointmentDoctorName: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  appointmentProviderSpecialty: {
+  appointmentDoctorSpecialty: {
     fontSize: 14,
     color: '#666',
   },
@@ -296,6 +355,39 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     marginVertical: 24,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 8,
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  modalDetail: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  closeButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

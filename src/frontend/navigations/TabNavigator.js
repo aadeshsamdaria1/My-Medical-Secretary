@@ -11,7 +11,7 @@ import ResourceScreen from '../screens/ResourceScreen';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
-    const userId = 1; // or any other user ID you want to fetch
+    const userId = 3; // or any other user ID you want to fetch
     return (
         <NavigationContainer>
             <Tab.Navigator 
