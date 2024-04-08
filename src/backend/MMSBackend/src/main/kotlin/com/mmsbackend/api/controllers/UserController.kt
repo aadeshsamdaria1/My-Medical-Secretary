@@ -1,12 +1,12 @@
 package com.mmsbackend.api.controllers
 
-import com.mmsbackend.api.exception.InvalidPatientException
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.UserEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.UserMapper
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -23,23 +23,27 @@ class UserController(
     }
 
     @PostMapping("/create_patient")
-    fun createPatient(@RequestBody patientDTO: PatientDTO): String {
+    fun createPatient(@RequestBody patientDTO: PatientDTO): ResponseEntity<String> {
         val patient = userMapper.mapPatientDTO(patientDTO)
 
         return if (userValidation.isValidPatient(patient)){
             userEntityRepository.save(patient)
-            "Successfully added new patient!"
+            ResponseEntity.ok("Successfully added new patient with ID: ${patient.id}")
         } else {
-            throw InvalidPatientException("Not enough details to create patient")
-            // TODO: Add which fields are missing in exception
+            ResponseEntity.badRequest().body("Could not create patient")
+            // TODO: Explain which fields missing
         }
     }
 
     @PostMapping("/create_admin")
-    fun createAdmin(@RequestBody adminDTO: AdminDTO): String {
-        println(adminDTO)
+    fun createAdmin(@RequestBody adminDTO: AdminDTO): ResponseEntity<String> {
         val admin = userMapper.mapAdminDTO(adminDTO)
-        userEntityRepository.save(admin)
-        return "Successfully added new admin!"
+
+        return if (userValidation.isValidAdmin(admin)){
+            userEntityRepository.save(admin)
+            ResponseEntity.ok("Successfully added new patient with ID: ${admin.id}")
+        } else{
+            ResponseEntity.badRequest().body("Could not create admin. missing id")
+        }
     }
 }

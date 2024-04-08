@@ -11,7 +11,7 @@ import java.time.Instant
 class AppointmentMapper {
     fun mapAppointmentDTO(appointmentDTO: AppointmentDTO, userEntity: UserEntity): AppointmentEntity{
         return AppointmentEntity(
-            id = 0,
+            id = appointmentDTO.id,
             title = appointmentDTO.title,
             dateCreate = appointmentDTO.dateCreate,
             dateChange = Instant.now(),

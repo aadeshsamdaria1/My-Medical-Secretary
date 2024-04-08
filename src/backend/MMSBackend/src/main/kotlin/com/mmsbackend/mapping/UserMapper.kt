@@ -25,8 +25,7 @@ class UserMapper {
             address = patientDTO.street,
             suburb = patientDTO.suburb,
             state = patientDTO.state,
-            // ID is randomly generated
-            id = 0
+            id = patientDTO.id
         )
     }
 
@@ -41,8 +40,7 @@ class UserMapper {
             address = null,
             suburb = null,
             state = null,
-            // ID is randomly generated
-            id = 0
+            id = adminDTO.id
         )
     }
 

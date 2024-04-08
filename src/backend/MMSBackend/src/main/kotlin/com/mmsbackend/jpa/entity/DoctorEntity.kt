@@ -8,7 +8,6 @@ import jakarta.persistence.Id
 @Entity
 data class DoctorEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
     val name: String,

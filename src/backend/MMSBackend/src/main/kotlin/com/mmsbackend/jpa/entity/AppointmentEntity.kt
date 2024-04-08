@@ -8,7 +8,6 @@ import java.time.Instant
 @Entity
 data class AppointmentEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
     val title: String,
     val dateCreate: Instant,

@@ -3,6 +3,7 @@ package com.mmsbackend.dto.user
 import java.time.Instant
 
 data class PatientDTO (
+    val id: Int,
     val firstname: String?,
     val middleName: String?,
     val surname: String?,

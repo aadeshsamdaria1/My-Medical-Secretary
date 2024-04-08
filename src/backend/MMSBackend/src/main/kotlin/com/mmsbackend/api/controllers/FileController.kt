@@ -13,10 +13,8 @@ import org.springframework.web.multipart.MultipartFile
 class FileController(
     val fileService: FileService
 ) {
-
     @PostMapping("/upload")
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
-
         return try{
             val ids = fileService.readAndUploadUserFile(
                 fileBytes = String(file.bytes)

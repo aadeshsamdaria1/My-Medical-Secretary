@@ -4,6 +4,7 @@ import com.mmsbackend.enums.AppointmentStatus
 import java.time.Instant
 
 data class AppointmentDTO (
+    val id: Int,
     val title: String,
     val dateCreate: Instant,
     val date: Instant,
