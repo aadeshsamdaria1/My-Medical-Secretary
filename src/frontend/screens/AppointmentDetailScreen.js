@@ -13,6 +13,7 @@ import doctorImage from "../assets/anonymous-doctor.jpg";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
+  const [isConfirmed, setIsConfirmed] = React.useState(false);
 
   const onDocumentPress = (url) => {
     // Implement logic to handle document opening, for example:
@@ -37,6 +38,9 @@ const AppointmentDetailScreen = ({ route }) => {
             <Text style={styles.doctorDetail}>
               {appointmentDetails.doctorSpecialty}
             </Text>
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={styles.doctorLocation}>View Doctor Location</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -110,9 +114,19 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.confirmButton}>
-        <Text style={styles.confirmButtonText}>Confirm Appointment</Text>
-      </TouchableOpacity>
+      {!isConfirmed ? (
+        <TouchableOpacity
+          style={[styles.confirmButton, { backgroundColor: "#007aff" }]}
+          onPress={() => setIsConfirmed(true)}
+        >
+          <Text style={styles.confirmButtonText}>Confirm Appointment</Text>
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.confirmationSection}>
+          <Ionicons name="checkmark-circle-outline" size={24} color="#34c759" />
+          <Text style={styles.confirmationText}>Appointment Confirmed</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -122,16 +136,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 16,
+    alignContent: "center",
   },
   section: {
     padding: 16,
     marginHorizontal: 16,
-    backgroundColor: '#fff', // consider using a different shade here if you change the background
+    backgroundColor: "#fff", // consider using a different shade here if you change the background
     borderBottomWidth: 1,
-    borderBottomColor: '#eaeaea',
+    borderBottomColor: "#eaeaea",
     borderRadius: 10, // rounded corners for the sections
     marginVertical: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -141,8 +156,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8, // More space to set apart the section header from its content
   },
   sectionTitle: {
@@ -174,7 +189,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     marginRight: 16,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   doctorName: {
     fontSize: 22,
@@ -186,7 +201,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#555",
   },
-
+  doctorLocation: {
+    fontSize: 18,
+    color: "#007BFF",
+    textDecorationLine: "underline",
+    fontWeight: "500", // Make links bold for emphasis
+  },
   documentItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -229,10 +249,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   confirmButtonText: {
-    textTransform: 'none',
+    textTransform: "none",
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
+  },
+  confirmationSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#e6f7ef",
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginHorizontal: 16,
+    marginVertical: 16,
+  },
+  confirmationText: {
+    color: "#34c759",
+    fontSize: 18,
+    fontWeight: "600",
+    marginLeft: 8,
   },
 
   iconStyle: {
