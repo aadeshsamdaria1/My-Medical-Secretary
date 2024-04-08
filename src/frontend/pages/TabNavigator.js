@@ -51,6 +51,9 @@ export default function TabNavigator() {
                     component={MessageScreen} 
                     options={{
                         title: 'Notifications',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="notifications" size={size} color={color} />
                         ),

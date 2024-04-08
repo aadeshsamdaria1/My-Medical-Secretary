@@ -15,7 +15,8 @@ const AppointmentScreen = () => {
       clinicName: "City Health Clinic",
       clinicAddress: "123 Health St., Room 305",
       title: "Chemothrapy Treatment",
-      date: "Wednesday, 13th March",
+      dateString: "Wednesday, 13th March",
+      date: "2024-03-13",
       time: "10:00 AM",
       task: "Take medication",
       documents: [
@@ -36,7 +37,8 @@ const AppointmentScreen = () => {
       clinicName: "City Health Clinic",
       clinicAddress: "123 Health St., Room 305",
       title: "Chemothrapy",
-      date: "Monday, 20th April",
+      dateString: "Monday, 20th April",
+      date: "2024-04-20",
       time: "10:00 AM",
       task: "Take medication",
       documents: [
@@ -136,7 +138,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginTop: 16,
-    marginBottom: 8,
     alignSelf: "flex-start",
     marginLeft: 20,
   },

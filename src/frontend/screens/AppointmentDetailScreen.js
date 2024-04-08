@@ -6,20 +6,112 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Alert,
   Linking,
+  Platform,
+  Share,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import doctorImage from "../assets/anonymous-doctor.jpg";
+import * as Calendar from "expo-calendar";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
   const [isConfirmed, setIsConfirmed] = React.useState(false);
 
   const onDocumentPress = (url) => {
-    // Implement logic to handle document opening, for example:
     Linking.openURL(url).catch((err) => {
       console.error("Failed to open the URL:", url, err);
     });
+  };
+
+  const shareAppointmentDetails = async (appointmentDetails) => {
+    try {
+      const message = `
+        Appointment Details:
+        Doctor: ${appointmentDetails.doctorName}
+        Specialty: ${appointmentDetails.doctorSpecialty}
+        Date: ${appointmentDetails.date}
+        Time: ${appointmentDetails.time}
+        Clinic: ${appointmentDetails.clinicName}
+        Address: ${appointmentDetails.clinicAddress}
+      `;
+
+      const result = await Share.share({
+        message: message.trim(),
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Shared with activity type of result.activityType
+        } else {
+          // Shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const addAppointmentToCalendar = async () => {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permissions required",
+        "We need calendar permissions to add this event."
+      );
+      return;
+    }
+
+    const defaultCalendarSource =
+      Platform.OS === "ios"
+        ? await getDefaultCalendarSource()
+        : { isLocalAccount: true, name: "Expo Calendar" };
+
+    const calendars = await Calendar.getCalendarsAsync(
+      Calendar.EntityTypes.EVENT
+    );
+    const defaultCalendar =
+      calendars.find((calendar) => calendar.allowsModifications) ||
+      calendars[0];
+
+    try {
+      const eventDetails = {
+        title: appointmentDetails.doctorName,
+        startDate: new Date(appointmentDetails.date).toISOString(),
+        endDate: new Date(
+          new Date(appointmentDetails.date).getTime() + 60 * 60 * 1000
+        ).toISOString(), // Assuming the appointment is 1 hour long
+        timeZone: "UTC",
+        location: appointmentDetails.clinicAddress,
+        notes:
+          "Appointment with " +
+          appointmentDetails.doctorName +
+          " at " +
+          appointmentDetails.clinicName,
+      };
+
+      await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
+      Alert.alert("Success", "Appointment added to your calendar");
+    } catch (error) {
+      console.error("Error adding event to calendar:", error);
+      Alert.alert(
+        "Error",
+        "There was an error adding the appointment to your calendar."
+      );
+    }
+  };
+
+  const getDefaultCalendarSource = async () => {
+    const calendars = await Calendar.getCalendarsAsync(
+      Calendar.EntityTypes.EVENT
+    );
+    const defaultCalendars = calendars.filter(
+      (each) => each.source && each.source.name === "Default"
+    );
+    return defaultCalendars.length ? defaultCalendars[0].source : null;
   };
 
   return (
@@ -56,9 +148,6 @@ const AppointmentDetailScreen = ({ route }) => {
         <Text style={styles.sectionContent}>
           {appointmentDetails.clinicAddress}
         </Text>
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={styles.linkText}>View Clinic Details</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
@@ -70,9 +159,11 @@ const AppointmentDetailScreen = ({ route }) => {
           />
           <Text style={styles.sectionTitle}>Appointment Time</Text>
         </View>
-        <Text style={styles.sectionContent}>{appointmentDetails.date}</Text>
+        <Text style={styles.sectionContent}>
+          {appointmentDetails.dateString}
+        </Text>
         <Text style={styles.sectionContent}>{appointmentDetails.time}</Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={addAppointmentToCalendar}>
           <Text style={styles.linkText}>Add to calendar</Text>
         </TouchableOpacity>
       </View>
@@ -114,19 +205,12 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
       </View>
 
-      {!isConfirmed ? (
-        <TouchableOpacity
-          style={[styles.confirmButton, { backgroundColor: "#007aff" }]}
-          onPress={() => setIsConfirmed(true)}
-        >
-          <Text style={styles.confirmButtonText}>Confirm Appointment</Text>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.confirmationSection}>
-          <Ionicons name="checkmark-circle-outline" size={24} color="#34c759" />
-          <Text style={styles.confirmationText}>Appointment Confirmed</Text>
-        </View>
-      )}
+      <TouchableOpacity
+        style={styles.confirmButton}
+        onPress={() => shareAppointmentDetails(appointmentDetails)}
+      >
+        <Text style={styles.confirmButtonText}>Share Appointment Details</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -253,23 +337,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
-  },
-  confirmationSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#e6f7ef",
-    borderRadius: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginHorizontal: 16,
-    marginVertical: 16,
-  },
-  confirmationText: {
-    color: "#34c759",
-    fontSize: 18,
-    fontWeight: "600",
-    marginLeft: 8,
   },
 
   iconStyle: {
