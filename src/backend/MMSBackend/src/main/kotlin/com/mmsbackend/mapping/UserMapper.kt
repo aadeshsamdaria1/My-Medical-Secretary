@@ -2,9 +2,8 @@ package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.enums.UserType
-import com.mmsbackend.jpa.entity.UserEntity
-import org.jsoup.nodes.Element
+import com.mmsbackend.jpa.entity.AdminEntity
+import com.mmsbackend.jpa.entity.PatientEntity
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDate
@@ -14,9 +13,8 @@ import java.time.format.DateTimeFormatter
 @Service
 class UserMapper {
 
-    fun mapPatientDTO(patientDTO: PatientDTO): UserEntity{
-        return UserEntity(
-            userType = UserType.PATIENT,
+    fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
+        return PatientEntity(
             firstname = patientDTO.firstname,
             middleName = patientDTO.middleName,
             surname = patientDTO.surname,
@@ -25,29 +23,45 @@ class UserMapper {
             address = patientDTO.street,
             suburb = patientDTO.suburb,
             state = patientDTO.state,
-            id = patientDTO.id
+            patientId = patientDTO.patientId,
+
+            // Randomly Generated
+            mmsId = 0
         )
     }
 
-    fun mapAdminDTO(adminDTO: AdminDTO): UserEntity {
-        return UserEntity(
-            userType = UserType.ADMIN,
-            firstname = adminDTO.firstname,
-            middleName = null,
-            surname = adminDTO.surname,
-            dob = null,
+    fun mapAdminDTO(adminDTO: AdminDTO): AdminEntity {
+        return AdminEntity(
             email = adminDTO.email,
-            address = null,
-            suburb = null,
-            state = null,
-            id = adminDTO.id
+            username = adminDTO.username,
+
+            // Randomly Generated
+            mmsId = 0
         )
     }
 
-    fun mapHtmlUser(rowString: List<String>, columns: Map<String, Int>): UserEntity {
+    fun updateExistingPatient(existingPatient: PatientEntity, updatedPatient: PatientEntity): PatientEntity{
+        return PatientEntity(
 
-        return UserEntity(
-            userType = UserType.PATIENT,
+            // Updated fields
+            firstname = updatedPatient.firstname,
+            middleName = updatedPatient.middleName,
+            surname = updatedPatient.surname,
+            dob = updatedPatient.dob,
+            address = updatedPatient.address,
+            suburb = updatedPatient.suburb,
+            state = updatedPatient.state,
+
+            // Unchanged fields
+            email = existingPatient.email,
+            patientId = existingPatient.patientId,
+            mmsId = existingPatient.mmsId
+        )
+    }
+
+    fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): PatientEntity {
+
+        return PatientEntity(
             firstname = extractFromRow(columns, rowString, FIRST_NAME),
             middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
             surname = extractFromRow(columns, rowString, SURNAME),
@@ -55,11 +69,14 @@ class UserMapper {
             email = extractFromRow(columns, rowString, EMAIL),
             suburb = extractFromRow(columns, rowString, SUBURB),
             state = extractFromRow(columns, rowString, STATE),
-            id = extractFromRow(columns, rowString, ID).toInt(),
+            patientId = extractFromRow(columns, rowString, ID).toInt(),
             address = mapAddress(
                 extractFromRow(columns, rowString, ADDRESS1),
                 extractFromRow(columns, rowString, ADDRESS2),
-            )
+            ),
+
+            // Randomly Generated
+            mmsId = 0
         )
     }
 

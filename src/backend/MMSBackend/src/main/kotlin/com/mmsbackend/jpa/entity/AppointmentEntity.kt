@@ -1,7 +1,6 @@
 package com.mmsbackend.jpa.entity
 
 import com.mmsbackend.enums.AppointmentStatus
-import com.mmsbackend.enums.UserType
 import jakarta.persistence.*
 import java.time.Instant
 
@@ -21,5 +20,5 @@ data class AppointmentEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    val user: UserEntity
+    val patient: PatientEntity
 )

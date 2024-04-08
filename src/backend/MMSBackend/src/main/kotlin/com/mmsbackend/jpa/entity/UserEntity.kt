@@ -1,30 +1,13 @@
 package com.mmsbackend.jpa.entity
 
-import com.mmsbackend.enums.UserType
-import com.mmsbackend.jpa.repository.UserEntityRepository
 import jakarta.persistence.*
-import java.time.Instant
+import java.util.UUID
 
 @Entity
-data class UserEntity(
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+open class UserEntity(
     @Id
-    val id: Int,
-
-    @Enumerated(EnumType.ORDINAL)
-    val userType: UserType,
-
-    val firstname: String?,
-    val middleName: String?,
-    val surname: String?,
-
-    val dob: Instant?,
-    val email: String,
-
-    val address: String?,
-    val suburb: String?,
-    val state: String?
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open val mmsId: Int,
+    open val email: String,
 )
-
-fun UserEntity.persist(userEntityRepository: UserEntityRepository): Int {
-    return userEntityRepository.save(this).id
-}

@@ -6,7 +6,5 @@ import org.springframework.stereotype.Service
 
 @Service
 class DoctorValidation {
-    fun isValidDoctor(doctor: DoctorEntity) = (
-        doctor.id != 0
-    )
+    fun isValidDoctor(doctor: DoctorEntity) = doctor.id != 0
 }

@@ -1,6 +1,5 @@
 package com.mmsbackend.dto.appointment
 
-import com.mmsbackend.enums.AppointmentStatus
 import java.time.Instant
 
 data class AppointmentDTO (
@@ -13,5 +12,5 @@ data class AppointmentDTO (
     val note: String?,
     val userNote: String?,
 
-    val userId: Int
+    val patientId: Int
 )

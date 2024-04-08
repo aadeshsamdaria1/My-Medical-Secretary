@@ -3,13 +3,14 @@ package com.mmsbackend.mapping
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
+import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.entity.UserEntity
 import org.springframework.stereotype.Service
 import java.time.Instant
 
 @Service
 class AppointmentMapper {
-    fun mapAppointmentDTO(appointmentDTO: AppointmentDTO, userEntity: UserEntity): AppointmentEntity{
+    fun mapAppointmentDTO(appointmentDTO: AppointmentDTO, patientEntity: PatientEntity): AppointmentEntity{
         return AppointmentEntity(
             id = appointmentDTO.id,
             title = appointmentDTO.title,
@@ -21,7 +22,7 @@ class AppointmentMapper {
             note = appointmentDTO.note,
             userNote = appointmentDTO.userNote,
             status = AppointmentStatus.UNCONFIRMED,
-            user = userEntity
+            patient = patientEntity
         )
     }
 }

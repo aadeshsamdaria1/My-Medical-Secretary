@@ -24,7 +24,7 @@ class FileService(
             .associate { (index, columnName) -> columnName to index }
 
         return tableRows.drop(1).map { row ->
-            userMapper.mapHtmlUser(
+            userMapper.mapHtmlPatient(
                 rowString = row,
                 columns = columns
             ).persist(userEntityRepository).run {
