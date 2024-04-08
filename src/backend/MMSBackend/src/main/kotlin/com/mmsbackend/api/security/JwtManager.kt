@@ -14,12 +14,12 @@ class JwtManager(@Value("\${jwt.secret}") private val jwtSecret: String) {
     @Value("\${jwt.expiration}")
     private val jwtExpirationMs: Long = 86400000 // Default to 24 hours
 
-    fun generateToken(userDetails: UserDetails): String {
+    fun generateToken(username: String): String {
         val now = Date()
         val expiryDate = Date(now.time + jwtExpirationMs)
 
         return Jwts.builder()
-            .setSubject(userDetails.username)
+            .setSubject(username)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(Keys.hmacShaKeyFor(jwtSecret.toByteArray()), SignatureAlgorithm.HS256)
