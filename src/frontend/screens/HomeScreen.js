@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, ScrollView, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, Image } from 'react-native';
+import { Modal, ScrollView, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { getUserEndpoint, getAppointmentsByUserEndpoint } from '../api';
 
 const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
