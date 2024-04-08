@@ -18,10 +18,10 @@ class FileController(
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
 
         return try{
-            fileService.readAndUploadUserFile(
-                fileBytes = file.bytes.toString()
+            val ids = fileService.readAndUploadUserFile(
+                fileBytes = String(file.bytes)
             )
-            ResponseEntity.ok("Success.")
+            ResponseEntity.ok("Successfully created users with these ids: $ids.")
         } catch (e: Exception){
             ResponseEntity.badRequest().body("Error while adding doctor: ${e.message}")
         }
