@@ -3,26 +3,29 @@ package com.mmsbackend.mapping
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
+import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.jpa.entity.UserEntity
 import org.springframework.stereotype.Service
-import java.time.Instant
 
 @Service
 class AppointmentMapper {
-    fun mapAppointmentDTO(appointmentDTO: AppointmentDTO, patientEntity: PatientEntity): AppointmentEntity{
+    fun mapAppointmentDTO(appDTO: AppointmentDTO, patient: PatientEntity, doctor: DoctorEntity): AppointmentEntity{
         return AppointmentEntity(
-            id = appointmentDTO.id,
-            title = appointmentDTO.title,
-            dateCreate = appointmentDTO.dateCreate,
-            dateChange = Instant.now(),
-            date = appointmentDTO.date,
-            duration = appointmentDTO.duration,
-            detail = appointmentDTO.detail,
-            note = appointmentDTO.note,
-            userNote = appointmentDTO.userNote,
+            id = appDTO.id,
+            detail = appDTO.detail,
+            reason = appDTO.reason,
+            note = appDTO.note,
+            dateCreate = appDTO.dateCreate,
+            lastUpdated = appDTO.lastUpdated,
+            startDate = appDTO.startDate,
+            duration = appDTO.duration,
+            startTime = appDTO.startTime,
+
+            userNote = "",
             status = AppointmentStatus.UNCONFIRMED,
-            patient = patientEntity
+
+            patient = patient,
+            doctor = doctor
         )
     }
 }

@@ -4,6 +4,7 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.util.mapAddress
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDate
@@ -88,15 +89,6 @@ class UserMapper {
         return LocalDate.parse(date, DateTimeFormatter.ofPattern(DATE_PATTERN))
             .atStartOfDay(ZoneOffset.UTC)
             .toInstant()
-    }
-
-    private fun mapAddress(address1: String, address2: String): String {
-        return when {
-            address1.isBlank() && address2.isBlank() -> ""
-            address1.isBlank() -> address2
-            address2.isBlank() -> address1
-            else -> "$address1, $address2"
-        }
     }
 
     companion object {
