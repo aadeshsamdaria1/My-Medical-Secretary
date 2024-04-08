@@ -5,6 +5,7 @@ import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.mapping.DoctorMapper
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -43,8 +44,12 @@ class DoctorController(
         return try {
             doctorEntityRepository.deleteById(id)
             ResponseEntity.ok("Doctor with ID $id deleted successfully.")
-        } catch (exception: Exception) {
-            ResponseEntity.status(404).body("Doctor with ID $id not found.")
+        } catch (dive: DataIntegrityViolationException) {
+            ResponseEntity.badRequest().body("Doctor with ID $id cannot be deleted " +
+                    "because they still have Appointments")
+        }
+        catch (e: Exception) {
+            ResponseEntity.badRequest().body("Doctor with ID $id could not be deleted: ${e.message}")
         }
     }
 }

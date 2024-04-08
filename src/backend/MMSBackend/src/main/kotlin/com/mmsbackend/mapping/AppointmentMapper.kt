@@ -28,4 +28,26 @@ class AppointmentMapper {
             doctor = doctor
         )
     }
+
+    fun updateExistingAppointment(existingApp: AppointmentEntity, updatedApp: AppointmentEntity): AppointmentEntity {
+        return AppointmentEntity(
+
+            // Updated Fields
+            detail = updatedApp.detail,
+            reason = updatedApp.reason,
+            note = updatedApp.note,
+            lastUpdated = updatedApp.lastUpdated,
+            startTime = updatedApp.startTime,
+            duration = updatedApp.duration,
+            userNote = updatedApp.userNote,
+            startDate = updatedApp.startDate,
+            status = updatedApp.status,
+            patient = updatedApp.patient,
+            doctor = updatedApp.doctor,
+
+            // Existing Fields
+            id = existingApp.id,
+            dateCreate =  existingApp.dateCreate
+        )
+    }
 }

@@ -37,8 +37,7 @@ class UserController(
         }
 
         val existingPatient = userEntityRepository.findByPatientId(patientDTO.patientId)
-
-        val savedPatient: PatientEntity = if (existingPatient != null){
+        val savedPatient: PatientEntity = if (existingPatient != null) {
             userEntityRepository.save(userMapper.updateExistingPatient(existingPatient, patient))
         } else{
             userEntityRepository.save(patient)

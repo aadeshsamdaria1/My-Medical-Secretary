@@ -36,22 +36,29 @@ class AppointmentController (
 
     @PostMapping("/create")
     fun createAppointment(@RequestBody appointmentDTO: AppointmentDTO): ResponseEntity<String> {
+
         val patient = userEntityRepository.findByPatientId(appointmentDTO.patientId)
             ?: return ResponseEntity.badRequest().body("Could not create appointment. " +
-                "User with id ${appointmentDTO.patientId} does not exist or is not a patient.")
+                "Patient with id ${appointmentDTO.patientId} does not exist or is not a patient.")
 
         val doctor = doctorEntityRepository.findById(appointmentDTO.providerId).getOrNull()
-            ?: return ResponseEntity.badRequest().body("Could not created appointment. " +
+            ?: return ResponseEntity.badRequest().body("Could not create appointment. " +
                 "Provider(doctor) with id ${appointmentDTO.providerId} does not exist.")
 
         val appointment = appointmentMapper.mapAppointmentDTO(appointmentDTO, patient, doctor)
-
-        return if (appointmentValidation.isValidAppointment(appointment)){
-            appointmentEntityRepository.save(appointment)
-            ResponseEntity.ok("Successfully added new appointment with ID: ${appointment.id}")
-        } else{
-            ResponseEntity.badRequest().body("Could not create appointment. Invalid fields")
+        if (!appointmentValidation.isValidAppointment(appointment)){
+            return ResponseEntity.badRequest().body("Could not create appointment. Invalid fields")
             // TODO: Give better invalid field information
         }
+
+        val existingApp = appointmentEntityRepository.findById(appointmentDTO.id).getOrNull()
+        val savedAppointment: AppointmentEntity = if (existingApp != null) {
+            appointmentEntityRepository.save(appointmentMapper.updateExistingAppointment(existingApp, appointment))
+        } else{
+            appointmentEntityRepository.save(appointment)
+        }
+
+        return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created" } " +
+                "new appointment with Genie ID: ${savedAppointment.id}.")
     }
 }
