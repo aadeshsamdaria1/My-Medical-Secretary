@@ -1,6 +1,7 @@
 package com.mmsbackend.jpa.entity
 
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.mapping.UserMapper
 import jakarta.persistence.Entity
 import java.time.Instant
 import java.util.*
@@ -24,6 +25,12 @@ class PatientEntity(
 
 ): UserEntity(mmsId, email)
 
-fun PatientEntity.persist(userEntityRepository: UserEntityRepository): Int {
-    return userEntityRepository.save(this).patientId
+fun PatientEntity.persist(userEntityRepository: UserEntityRepository, mapper: UserMapper): Int {
+
+    val existingPatient = userEntityRepository.findByPatientId(this.patientId)
+    return if (existingPatient != null) {
+        userEntityRepository.save(mapper.updateExistingPatient(existingPatient, this)).patientId
+    } else{
+        userEntityRepository.save(this).patientId
+    }
 }

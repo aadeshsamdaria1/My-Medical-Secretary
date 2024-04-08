@@ -27,8 +27,7 @@ class FileService(
             userMapper.mapHtmlPatient(
                 rowString = row,
                 columns = columns
-            ).persist(userEntityRepository).run {
-                println("Successfully persisted user with ID $this.")
+            ).persist(userEntityRepository, userMapper).run {
                 this
             }
         }
