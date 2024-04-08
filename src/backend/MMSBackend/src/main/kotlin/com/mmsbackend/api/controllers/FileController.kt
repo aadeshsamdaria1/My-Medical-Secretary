@@ -1,0 +1,29 @@
+package com.mmsbackend.api.controllers
+
+import com.mmsbackend.service.FileService
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+
+@RestController
+@RequestMapping("/api/files")
+class FileController(
+    val fileService: FileService
+) {
+
+    @PostMapping("/upload")
+    fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
+
+        return try{
+            fileService.readAndUploadUserFile(
+                fileBytes = file.bytes.toString()
+            )
+            ResponseEntity.ok("Success.")
+        } catch (e: Exception){
+            ResponseEntity.badRequest().body("Error while adding doctor: ${e.message}")
+        }
+    }
+}
