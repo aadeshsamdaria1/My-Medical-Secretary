@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.http.ResponseEntity
 import kotlin.jvm.optionals.getOrNull
 
 @RestController
@@ -24,5 +26,15 @@ class FacilityController (
     @PostMapping("/create")
     fun createFacility(@RequestBody facilityEntity: FacilityEntity) {
         facilityEntityRepository.save(facilityEntity)
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun deleteFacility(@PathVariable id: Int): ResponseEntity<String> {
+        return try {
+            facilityEntityRepository.deleteById(id)
+            ResponseEntity.ok("Facility with ID $id deleted successfully.")
+        } catch (exception: Exception) {
+            ResponseEntity.status(404).body("Facility with ID $id not found.")
+        }
     }
 }
