@@ -24,8 +24,13 @@ class FacilityController (
     }
 
     @PostMapping("/create")
-    fun createFacility(@RequestBody facilityEntity: FacilityEntity) {
-        facilityEntityRepository.save(facilityEntity)
+    fun createFacility(@RequestBody facilityEntity: FacilityEntity): ResponseEntity<String> {
+        return try {
+            val savedFacility = facilityEntityRepository.save(facilityEntity)
+            ResponseEntity.ok("Successfully added new facility with ID: ${savedFacility.id}")
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body("Error while adding facility: ${e.message}")
+        }
     }
 
     @DeleteMapping("/delete/{id}")

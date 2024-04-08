@@ -26,10 +26,14 @@ class DoctorController(
     }
 
     @PostMapping("/create")
-    fun createDoctor(@RequestBody doctorDTO: DoctorDTO): String {
-        val doctor = doctorMapper.mapDoctorDTO(doctorDTO)
-        doctorEntityRepository.save(doctor)
-        return "Successfully added new doctor!"
+    fun createDoctor(@RequestBody doctorDTO: DoctorDTO): ResponseEntity<String> {
+        return try {
+            val doctor = doctorMapper.mapDoctorDTO(doctorDTO)
+            doctorEntityRepository.save(doctor)
+            ResponseEntity.ok("Successfully added new doctor with ID: ${doctor.id}")
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body("Error while adding doctor: ${e.message}")
+        }
     }
 
     @DeleteMapping("/delete/{id}")
