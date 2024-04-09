@@ -14,7 +14,7 @@ class DoctorMapper {
             email = doctorDTO.email,
             expertise = doctorDTO.expertise,
             website = doctorDTO.website,
-            id = 0 // Auto generated
+            id = doctorDTO.id
         )
     }
 }

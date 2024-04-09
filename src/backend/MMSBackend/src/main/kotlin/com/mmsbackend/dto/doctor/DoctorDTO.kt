@@ -1,6 +1,7 @@
 package com.mmsbackend.dto.doctor
 
 data class DoctorDTO (
+    val id: Int,
     val name: String,
     val address: String,
     val contact: String,
