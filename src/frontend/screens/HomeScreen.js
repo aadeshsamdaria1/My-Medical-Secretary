@@ -5,8 +5,8 @@ import { getUserEndpoint, getAppointmentsByUserEndpoint } from '../api';
 const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
   <Modal visible={visible} animationType="slide" transparent>
     <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-        <ScrollView>
+      <View style={[styles.modalContent, { maxHeight: '80%' }]}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
           {appointment ? (
             <>
               <Text style={styles.modalTitle}>Appointment Details</Text>
@@ -16,7 +16,7 @@ const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
               {appointment.startDate && <Text style={styles.modalDetail}>Date: {new Date(appointment.startDate).toLocaleDateString()}</Text>}
               {appointment.startTime && <Text style={styles.modalDetail}>Time: {appointment.startTime}</Text>}
               {appointment.duration && <Text style={styles.modalDetail}>Duration: {appointment.duration} minutes</Text>}
-              <Text style={styles.modalTitle}>Doctors Details</Text>
+              <Text style={styles.modalTitle}>Doctor's Details</Text>
               {appointment.doctor.name && <Text style={styles.modalDetail}>Name: {appointment.doctor.name}</Text>}
               {appointment.doctor.expertise && <Text style={styles.modalDetail}>Expertise: {appointment.doctor.expertise}</Text>}
               {appointment.doctor.contact && <Text style={styles.modalDetail}>Contact: {appointment.doctor.contact}</Text>}
@@ -171,11 +171,18 @@ const HomeScreen = ({ route }) => {
                   <View style={styles.appointmentHeader}>
                     <View style={styles.appointmentDoctorInfo}>
                       <Text style={[styles.appointmentDoctorName, { textAlign: 'center' }]}>{item.doctor.name}</Text>
-                      <Text style={[styles.appointmentDoctorSpecialty, { textAlign: 'center' }]}>{item.doctor.expertise}</Text>
+                      <Text style={[styles.appointmentDetail, { textAlign: 'center' }]}>{item.detail}</Text>
                     </View>
                   </View>
                   <View style={styles.appointmentDetails}>
-                    <Text style={styles.appointmentDate}>{new Date(item.startDate).toLocaleDateString()}</Text>
+                    <Text style={styles.appointmentDate}>
+                      {new Date(item.startDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </Text>
                     <Text style={styles.appointmentTime}>
                       {new Date(`1970-01-01T${item.startTime}`).toLocaleTimeString([], {
                         hour: '2-digit',
@@ -308,7 +315,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  appointmentDoctorSpecialty: {
+  appointmentDetail: {
     fontSize: 14,
     color: '#666',
   },
@@ -324,6 +331,7 @@ const styles = StyleSheet.create({
   appointmentTime: {
     fontSize: 14,
     color: '#666',
+    color: 'red'
   },
   messageItem: {
     padding: 12,
@@ -366,7 +374,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 16,
     borderRadius: 8,
-    width: '80%',
+    width: '80%', // Set a fixed width for the modal content
+  },
+  scrollViewContent: {
+    flexGrow: 1, // Allow the ScrollView content to grow and take up available space
   },
   modalTitle: {
     fontSize: 20,
