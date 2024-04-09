@@ -7,8 +7,10 @@ import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.AppointmentMapper
+import com.mmsbackend.service.AppointmentFileService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import kotlin.jvm.optionals.getOrNull
 
 @RestController
@@ -18,7 +20,8 @@ class AppointmentController (
     val appointmentMapper: AppointmentMapper,
     val userEntityRepository: UserEntityRepository,
     val doctorEntityRepository: DoctorEntityRepository,
-    val appointmentValidation: AppointmentValidation
+    val appointmentValidation: AppointmentValidation,
+    val appointmentFileService: AppointmentFileService
 ) {
     @GetMapping("/get/{id}")
     fun getAppointment(@PathVariable id: Int): AppointmentEntity? {
@@ -60,5 +63,15 @@ class AppointmentController (
 
         return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created" } " +
                 "new appointment with Genie ID: ${savedAppointment.id}.")
+    }
+
+    @PostMapping("/upload")
+    fun uploadAppointmentFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
+        return try {
+            val ids = appointmentFileService.uploadAppointmentFile(file)
+            ResponseEntity.ok("Successfully uploaded appointments with these ids: $ids")
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body("Error while uploading appointments: ${e.message}")
+        }
     }
 }
