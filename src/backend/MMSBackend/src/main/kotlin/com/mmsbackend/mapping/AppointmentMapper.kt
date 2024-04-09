@@ -54,8 +54,6 @@ class AppointmentMapper {
     }
 
     fun mapHtmlAppointment(rowString: List<String>, columns: Map<String, Int>): AppointmentDTO {
-        // Implement parsing logic here, converting rowString and columns into an AppointmentDTO
-        // Example:
         return AppointmentDTO(
                 id = extractFromRow(columns, rowString, "Id").toInt(),
                 detail = extractFromRow(columns, rowString, "Detail"),
