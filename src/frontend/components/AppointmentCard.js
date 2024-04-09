@@ -21,7 +21,7 @@ const AppointmentCard = ({ appointment }) => {
         <View style={styles.details}>
           <Text style={styles.title}>{appointment.title}</Text>
           <View style={styles.datetimeWrapper}>
-            <Text style={styles.date}>{appointment.date}</Text>
+            <Text style={styles.date}>{appointment.dateString}</Text>
             <Text style={styles.time}>{appointment.time}</Text>
           </View>
         </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: 4,
     elevation: 3,
   },
   iconWrapper: {

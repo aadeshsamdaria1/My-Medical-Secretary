@@ -6,113 +6,14 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  Alert,
-  Linking,
-  Platform,
-  Share,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import doctorImage from "../assets/anonymous-doctor.jpg";
-import * as Calendar from "expo-calendar";
+import { onDocumentPress, shareAppointmentDetails, addAppointmentToCalendar, onViewDoctorLocation } from "../utils/appointmentFunctions";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
   const [isConfirmed, setIsConfirmed] = React.useState(false);
-
-  const onDocumentPress = (url) => {
-    Linking.openURL(url).catch((err) => {
-      console.error("Failed to open the URL:", url, err);
-    });
-  };
-
-  const shareAppointmentDetails = async (appointmentDetails) => {
-    try {
-      const message = `
-        Appointment Details:
-        Doctor: ${appointmentDetails.doctorName}
-        Specialty: ${appointmentDetails.doctorSpecialty}
-        Date: ${appointmentDetails.date}
-        Time: ${appointmentDetails.time}
-        Clinic: ${appointmentDetails.clinicName}
-        Address: ${appointmentDetails.clinicAddress}
-      `;
-
-      const result = await Share.share({
-        message: message.trim(),
-      });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // Shared with activity type of result.activityType
-        } else {
-          // Shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // Dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  const addAppointmentToCalendar = async () => {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permissions required",
-        "We need calendar permissions to add this event."
-      );
-      return;
-    }
-
-    const defaultCalendarSource =
-      Platform.OS === "ios"
-        ? await getDefaultCalendarSource()
-        : { isLocalAccount: true, name: "Expo Calendar" };
-
-    const calendars = await Calendar.getCalendarsAsync(
-      Calendar.EntityTypes.EVENT
-    );
-    const defaultCalendar =
-      calendars.find((calendar) => calendar.allowsModifications) ||
-      calendars[0];
-
-    try {
-      const eventDetails = {
-        title: appointmentDetails.doctorName,
-        startDate: new Date(appointmentDetails.date).toISOString(),
-        endDate: new Date(
-          new Date(appointmentDetails.date).getTime() + 60 * 60 * 1000
-        ).toISOString(), // Assuming the appointment is 1 hour long
-        timeZone: "UTC",
-        location: appointmentDetails.clinicAddress,
-        notes:
-          "Appointment with " +
-          appointmentDetails.doctorName +
-          " at " +
-          appointmentDetails.clinicName,
-      };
-
-      await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
-      Alert.alert("Success", "Appointment added to your calendar");
-    } catch (error) {
-      console.error("Error adding event to calendar:", error);
-      Alert.alert(
-        "Error",
-        "There was an error adding the appointment to your calendar."
-      );
-    }
-  };
-
-  const getDefaultCalendarSource = async () => {
-    const calendars = await Calendar.getCalendarsAsync(
-      Calendar.EntityTypes.EVENT
-    );
-    const defaultCalendars = calendars.filter(
-      (each) => each.source && each.source.name === "Default"
-    );
-    return defaultCalendars.length ? defaultCalendars[0].source : null;
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -130,7 +31,7 @@ const AppointmentDetailScreen = ({ route }) => {
             <Text style={styles.doctorDetail}>
               {appointmentDetails.doctorSpecialty}
             </Text>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => {onViewDoctorLocation(appointmentDetails)}}>
               <Text style={styles.doctorLocation}>View Doctor Location</Text>
             </TouchableOpacity>
           </View>
@@ -163,7 +64,7 @@ const AppointmentDetailScreen = ({ route }) => {
           {appointmentDetails.dateString}
         </Text>
         <Text style={styles.sectionContent}>{appointmentDetails.time}</Text>
-        <TouchableOpacity onPress={addAppointmentToCalendar}>
+        <TouchableOpacity onPress={() => addAppointmentToCalendar(appointmentDetails)}>
           <Text style={styles.linkText}>Add to calendar</Text>
         </TouchableOpacity>
       </View>
