@@ -9,22 +9,52 @@ const AppointmentScreen = () => {
 
   const appointments = {
     "2024-03-13": {
-      initials: "LA",
-      title: "Chemothrapy",
-      date: "Wednesday, 13th March",
+      initials: "AA",
+      doctorName: "Dr. AaaAaa",
+      doctorSpecialty: "Oncologist",
+      clinicName: "City Health Clinic",
+      clinicAddress: "123 Health Street",
+      clinicSuburb: 'Melbourne',
+      clinicState: 'Victoria',
+      title: "Chemothrapy Treatment",
+      dateString: "Wednesday, 13th March",
+      date: "2024-03-13",
       time: "10:00 AM",
-    },
-    "2024-02-16": {
-      initials: "LA",
-      title: "Chemotherapy",
-      date: "Friday, 16th February",
-      time: "10:00 PM",
+      task: "Take medication",
+      documents: [
+        {
+          name: "Pre-Treatment Guidelines",
+          url: "https://www.google.com/",
+        },
+        {
+          name: "Medication List",
+          url: "https://www.google.com/",
+        },
+      ],
     },
     "2024-04-20": {
-      initials: "LA",
+      initials: "BB",
+      doctorName: "Dr. BbbBbb",
+      doctorSpecialty: "Oncologist",
+      clinicName: "City Health Clinic",
+      clinicAddress: "123 Health Street",
+      clinicSuburb: 'Melbourne',
+      clinicState: 'Victoria',
       title: "Chemothrapy",
-      date: "Monday, 20th April",
+      dateString: "Monday, 20th April",
+      date: "2024-04-20",
       time: "10:00 AM",
+      task: "Take medication",
+      documents: [
+        {
+          name: "Pre-Treatment Guidelines",
+          url: "https://www.google.com/",
+        },
+        {
+          name: "Medication List",
+          url: "https://www.google.com/",
+        },
+      ],
     },
     // Add more appointments here
   };
@@ -102,26 +132,25 @@ export default AppointmentScreen;
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 10,
+    paddingTop: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginTop: 16,
-    marginBottom: 8,
     alignSelf: "flex-start",
-    marginLeft: 16,
+    marginLeft: 20,
   },
   noAppointments: {
-    fontSize: 16,
-    color: "gray",
-    marginVertical: 16,
+    fontSize: 18, // Larger font for legibility
+    color: "#6e6e72", // Subtle gray color used in iOS for informational text
+    marginVertical: 20, // More vertical spacing
     alignSelf: "flex-start",
-    marginLeft: 16,
+    marginLeft: 20, // Consistent margin with titles
   },
 });
 
