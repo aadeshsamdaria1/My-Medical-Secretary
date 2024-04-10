@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
-
+import ProfileIcon from '../components/ProfileIcon';
 import HomeScreen from '../screens/HomeScreen';
 import AppointmentScreen from '../screens/AppointmentScreen';
 import MessageScreen from '../screens/MessageScreen';
@@ -11,6 +11,7 @@ import ResourceScreen from '../screens/ResourceScreen';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+    const userId = 3; // or any other user ID you want to fetch
     return (
         <NavigationContainer>
             <Tab.Navigator 
@@ -22,6 +23,7 @@ export default function TabNavigator() {
                         backgroundColor: 'white', // Set header background color
                     },
                     headerTintColor: 'black', // Set header text color
+                    headerRight: () => <ProfileIcon />, // Add the HeaderRight component to the header
                 }}
             >
                 <Tab.Screen 
@@ -33,6 +35,7 @@ export default function TabNavigator() {
                             <Ionicons name="home" size={size} color={color} />
                         ),
                     }}
+                    initialParams={{ userId: userId }}
                 />
                 <Tab.Screen 
                     name="AppointmentScreen" 

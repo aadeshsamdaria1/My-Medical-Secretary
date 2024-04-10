@@ -1,5 +1,5 @@
 import React from 'react';
-import TabNavigator from './pages/TabNavigator';
+import TabNavigator from './navigations/TabNavigator';
 import { StatusBar, SafeAreaView } from 'react-native';
 
 export default function App() {
