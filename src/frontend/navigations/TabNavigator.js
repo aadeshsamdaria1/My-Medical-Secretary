@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
 import ProfileIcon from '../components/ProfileIcon';
@@ -10,8 +9,8 @@ import ResourceScreen from '../screens/ResourceScreen';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator() {
-    const userId = 3; // or any other user ID you want to fetch
+export default function TabNavigator({ route, navigation }) {
+    const userId = route.params?.userId;
     return (
             <Tab.Navigator 
                 screenOptions={{
@@ -23,6 +22,18 @@ export default function TabNavigator() {
                     },
                     headerTintColor: 'black', // Set header text color
                     headerRight: () => <ProfileIcon />, // Add the HeaderRight component to the header
+                    headerLeft: () => (
+                      <Ionicons
+                        name="log-out-outline"
+                        size={30}
+                        color="black"
+                        style={{ 
+                          marginLeft: 16,
+                          transform: [{ scaleX: -1 }], // Flip the icon horizontally
+                          fontWeight: 'bold', }}
+                        onPress={() => navigation.navigate('Login')}
+                      />
+                    ),
                 }}
             >
                 <Tab.Screen 
