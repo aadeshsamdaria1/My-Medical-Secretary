@@ -19,9 +19,13 @@ const AppointmentCard = ({ appointment }) => {
           <Image source={doctorImage} style={styles.doctorImage} />
         </View>
         <View style={styles.details}>
-          <Text style={styles.title}>{appointment.title}</Text>
+          <Text style={styles.title}>{appointment.detail}</Text>
           <View style={styles.datetimeWrapper}>
-            <Text style={styles.date}>{appointment.dateString}</Text>
+            <Text style={styles.date}>{new Date(appointment.date).toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "long",
+            day: "numeric",
+          })}</Text>
             <Text style={styles.time}>{appointment.time}</Text>
           </View>
         </View>

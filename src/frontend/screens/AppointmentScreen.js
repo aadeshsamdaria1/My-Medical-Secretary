@@ -4,7 +4,7 @@ import CalendarScreen from "../components/Calendar";
 import AppointmentCard from "../components/AppointmentCard";
 
 const AppointmentScreen = () => {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState("");
 
   const appointments = {
@@ -12,15 +12,13 @@ const AppointmentScreen = () => {
       initials: "AA",
       doctorName: "Dr. AaaAaa",
       doctorSpecialty: "Oncologist",
-      clinicName: "City Health Clinic",
-      clinicAddress: "123 Health Street",
-      clinicSuburb: 'Melbourne',
-      clinicState: 'Victoria',
-      title: "Chemothrapy Treatment",
-      dateString: "Wednesday, 13th March",
+      detail: "Routine checkup",
+      reason: "General health.",
+      note: "No specific notes",
+
+      time: "10:30:00",
       date: "2024-03-13",
-      time: "10:00 AM",
-      task: "Take medication",
+      duration: 60,
       documents: [
         {
           name: "Pre-Treatment Guidelines",
@@ -36,15 +34,13 @@ const AppointmentScreen = () => {
       initials: "BB",
       doctorName: "Dr. BbbBbb",
       doctorSpecialty: "Oncologist",
-      clinicName: "City Health Clinic",
-      clinicAddress: "123 Health Street",
-      clinicSuburb: 'Melbourne',
-      clinicState: 'Victoria',
-      title: "Chemothrapy",
-      dateString: "Monday, 20th April",
-      date: "2024-04-20",
-      time: "10:00 AM",
-      task: "Take medication",
+      detail: "Routine checkup",
+      reason: "General health.",
+      note: "No specific notes",
+
+      time: "10:30:00",
+      date: "2024-04-15",
+      duration: 60,
       documents: [
         {
           name: "Pre-Treatment Guidelines",
@@ -73,8 +69,12 @@ const AppointmentScreen = () => {
       };
     } else {
       // If no specific date is selected or the selected date has no appointments, show upcoming and past appointments
-      const upcomingAppointments = Object.entries(appointments).filter(([date, _]) => date >= today);
-      const pastAppointments = Object.entries(appointments).filter(([date, _]) => date < today);
+      const upcomingAppointments = Object.entries(appointments).filter(
+        ([date, _]) => date >= today
+      );
+      const pastAppointments = Object.entries(appointments).filter(
+        ([date, _]) => date < today
+      );
       return {
         upcomingAppointments,
         pastAppointments,
@@ -83,7 +83,12 @@ const AppointmentScreen = () => {
     }
   };
 
-  const { appointmentDetails, upcomingAppointments, pastAppointments, displayOnlyDetails } = displayAppointments();
+  const {
+    appointmentDetails,
+    upcomingAppointments,
+    pastAppointments,
+    displayOnlyDetails,
+  } = displayAppointments();
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -108,7 +113,9 @@ const AppointmentScreen = () => {
                 <AppointmentCard key={date} appointment={appointment} />
               ))
             ) : (
-              <Text style={styles.noAppointments}>You have no upcoming appointments.</Text>
+              <Text style={styles.noAppointments}>
+                You have no upcoming appointments.
+              </Text>
             )}
 
             {/* Past Appointments Section */}
@@ -118,7 +125,9 @@ const AppointmentScreen = () => {
                 <AppointmentCard key={date} appointment={appointment} />
               ))
             ) : (
-              <Text style={styles.noAppointments}>You have no past appointments.</Text>
+              <Text style={styles.noAppointments}>
+                You have no past appointments.
+              </Text>
             )}
           </>
         )}
@@ -139,7 +148,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     marginTop: 16,
     alignSelf: "flex-start",
@@ -153,7 +162,3 @@ const styles = StyleSheet.create({
     marginLeft: 20, // Consistent margin with titles
   },
 });
-
-
-
-

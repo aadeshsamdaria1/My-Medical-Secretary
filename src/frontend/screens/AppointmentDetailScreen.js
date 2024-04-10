@@ -9,7 +9,13 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import doctorImage from "../assets/anonymous-doctor.jpg";
-import { onDocumentPress, shareAppointmentDetails, addAppointmentToCalendar, onViewDoctorLocation } from "../utils/appointmentFunctions";
+import {
+  onDocumentPress,
+  shareAppointmentDetails,
+  addAppointmentToCalendar,
+  onViewDoctorLocation,
+} from "../utils/appointmentFunctions";
+import moment from "moment";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
@@ -31,24 +37,15 @@ const AppointmentDetailScreen = ({ route }) => {
             <Text style={styles.doctorDetail}>
               {appointmentDetails.doctorSpecialty}
             </Text>
-            <TouchableOpacity onPress={() => {onViewDoctorLocation(appointmentDetails)}}>
+            <TouchableOpacity
+              onPress={() => {
+                onViewDoctorLocation(appointmentDetails);
+              }}
+            >
               <Text style={styles.doctorLocation}>View Doctor Location</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Ionicons name="home-outline" size={24} style={styles.iconStyle} />
-          <Text style={styles.sectionTitle}>Clinic Information</Text>
-        </View>
-        <Text style={styles.sectionContent}>
-          {appointmentDetails.clinicName}
-        </Text>
-        <Text style={styles.sectionContent}>
-          {appointmentDetails.clinicAddress}
-        </Text>
       </View>
 
       <View style={styles.section}>
@@ -61,12 +58,43 @@ const AppointmentDetailScreen = ({ route }) => {
           <Text style={styles.sectionTitle}>Appointment Time</Text>
         </View>
         <Text style={styles.sectionContent}>
-          {appointmentDetails.dateString}
+          {new Date(appointmentDetails.date).toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
         </Text>
-        <Text style={styles.sectionContent}>{appointmentDetails.time}</Text>
-        <TouchableOpacity onPress={() => addAppointmentToCalendar(appointmentDetails)}>
+        <Text style={styles.sectionContent}>
+          {new Date(
+            `${appointmentDetails.date}T${appointmentDetails.time}`
+          ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}{" "}
+          to{" "}
+          {new Date(
+            new Date(
+              `${appointmentDetails.date}T${appointmentDetails.time}`
+            ).getTime() +
+              appointmentDetails.duration * 60000
+          ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        </Text>
+        <TouchableOpacity
+          onPress={() => addAppointmentToCalendar(appointmentDetails)}
+        >
           <Text style={styles.linkText}>Add to calendar</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Ionicons
+            name="information-circle-outline"
+            size={24}
+            style={styles.iconStyle}
+          />
+          <Text style={styles.sectionTitle}>Additional Information</Text>
+        </View>
+        <Text style={styles.sectionContent}>{appointmentDetails.detail}</Text>
+        <Text style={styles.sectionContent}>{appointmentDetails.reason}</Text>
       </View>
 
       <View style={styles.section}>
@@ -98,11 +126,11 @@ const AppointmentDetailScreen = ({ route }) => {
       <View style={styles.reminderSection}>
         <View style={styles.reminderItem}>
           <Ionicons
-            name="alert-circle-outline"
+            name="notifications-outline"
             size={20}
             style={styles.iconStyle}
           />
-          <Text style={styles.reminderText}>{appointmentDetails.task}</Text>
+          <Text style={styles.reminderText}>{appointmentDetails.note}</Text>
         </View>
       </View>
 
@@ -185,6 +213,7 @@ const styles = StyleSheet.create({
   doctorDetail: {
     fontSize: 18,
     color: "#555",
+    marginBottom: 4,
   },
   doctorLocation: {
     fontSize: 18,
@@ -219,7 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reminderText: {
-    fontSize: 16, // Reduced size for subtlety
+    fontSize: 18, // Reduced size for subtlety
     marginLeft: 8,
     fontWeight: "600",
   },
