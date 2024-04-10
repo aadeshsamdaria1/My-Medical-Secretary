@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
     // You can check the username and password against your backend or local data
     if (username === 'admin' && password === 'password') {
       // Successful login, navigate to the next screen
-      const userId = 3; // or any other user ID you want to fetch
+      const userId = 421; // or any other user ID you want to fetch
       navigation.navigate('TabNavigator', { userId});
     } else {
       // Display an error message
