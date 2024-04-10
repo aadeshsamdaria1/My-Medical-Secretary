@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile
 class FileController(
     val fileService: FileService
 ) {
-    @PostMapping("/upload")
+    @PostMapping("/upload/patients")
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try{
             val ids = fileService.readAndUploadUserFile(
@@ -22,6 +22,18 @@ class FileController(
             ResponseEntity.ok("Successfully created users with these ids: $ids.")
         } catch (e: Exception){
             ResponseEntity.badRequest().body("Error while adding doctor: ${e.message}")
+        }
+    }
+
+    @PostMapping("/upload/appointments")
+    fun uploadAppointmentFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
+        return try {
+            val ids = fileService.readAndUploadAppointmentFile(
+                fileBytes = String(file.bytes)
+            )
+            ResponseEntity.ok("Successfully uploaded appointments with these ids: $ids")
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body("Error while uploading appointments: ${e.message}")
         }
     }
 }

@@ -18,7 +18,7 @@ class AppointmentController (
     val appointmentMapper: AppointmentMapper,
     val userEntityRepository: UserEntityRepository,
     val doctorEntityRepository: DoctorEntityRepository,
-    val appointmentValidation: AppointmentValidation
+    val appointmentValidation: AppointmentValidation,
 ) {
     @GetMapping("/get/{id}")
     fun getAppointment(@PathVariable id: Int): AppointmentEntity? {
