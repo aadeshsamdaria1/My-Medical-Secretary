@@ -1,7 +1,6 @@
 package com.mmsbackend.dto.user
 
 data class AdminDTO (
+    val username: String,
     val email: String,
-    val firstname: String?,
-    val surname: String?,
 )
