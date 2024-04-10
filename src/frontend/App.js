@@ -1,5 +1,5 @@
 import React from 'react';
-import TabNavigator from './pages/TabNavigator';
+import TabNavigator from './navigations/TabNavigator';
 import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
