@@ -17,10 +17,6 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  const handleRegister = () => {
-    // Navigate to the register screen
-    navigation.navigate('Register');
-  };
 
   return (
     <KeyboardAvoidingView
@@ -50,9 +46,6 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleSignIn}>
           <Text style={styles.buttonText}>Sign In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
     </View>
