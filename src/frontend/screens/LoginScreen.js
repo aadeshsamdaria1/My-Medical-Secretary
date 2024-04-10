@@ -17,7 +17,6 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-
   return (
     <KeyboardAvoidingView
     style={styles.container}

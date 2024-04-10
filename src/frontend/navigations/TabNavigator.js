@@ -13,7 +13,6 @@ const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
     const userId = 3; // or any other user ID you want to fetch
     return (
-        <NavigationContainer>
             <Tab.Navigator 
                 screenOptions={{
                     tabBarStyle: {
@@ -68,6 +67,5 @@ export default function TabNavigator() {
                     }}
                 />
             </Tab.Navigator>
-        </NavigationContainer>
     );
 };
