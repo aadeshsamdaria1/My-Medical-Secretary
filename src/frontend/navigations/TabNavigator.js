@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import AppointmentScreen from '../screens/AppointmentScreen';
 import MessageScreen from '../screens/MessageScreen';
 import ResourceScreen from '../screens/ResourceScreen';
+import AppointmentStack from './AppointmentStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,8 +40,9 @@ export default function TabNavigator() {
                 />
                 <Tab.Screen 
                     name="AppointmentScreen" 
-                    component={AppointmentScreen} 
+                    component={AppointmentStack} 
                     options={{
+                        headerShown: false,
                         title: 'Appointments',
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="calendar" size={size} color={color} />
@@ -52,6 +54,9 @@ export default function TabNavigator() {
                     component={MessageScreen} 
                     options={{
                         title: 'Notifications',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="notifications" size={size} color={color} />
                         ),

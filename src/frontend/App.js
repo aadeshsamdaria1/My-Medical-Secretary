@@ -1,11 +1,16 @@
 import React from 'react';
 import TabNavigator from './navigations/TabNavigator';
-import { StatusBar, SafeAreaView } from 'react-native';
+import { StatusBar } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   return (
-    <>
-      <TabNavigator />
-    </>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar barStyle="dark-content" />
+        <TabNavigator />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
