@@ -47,6 +47,6 @@ class UserController(
         val admin = userMapper.mapAdminDTO(adminDTO)
 
         userEntityRepository.save(admin)
-        return ResponseEntity.ok("Successfully added new admin with mms ID: ${admin.mmsId}")
+        return ResponseEntity.ok("Successfully added new admin with mms ID: ${admin.mmsId}.")
     }
 }
