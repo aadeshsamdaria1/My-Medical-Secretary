@@ -8,14 +8,13 @@ import {
   Image,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import doctorImage from "../assets/anonymous-doctor.jpg";
 import {
   onDocumentPress,
   shareAppointmentDetails,
   addAppointmentToCalendar,
   onViewDoctorLocation,
+  getFormattedTime,
 } from "../utils/appointmentFunctions";
-import moment from "moment";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
@@ -26,25 +25,34 @@ const AppointmentDetailScreen = ({ route }) => {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Ionicons name="person-outline" size={24} style={styles.iconStyle} />
-          <Text style={styles.sectionTitle}>Doctor Information</Text>
+          <Text style={styles.sectionTitle}>
+            DR. {appointmentDetails.doctor.name}
+          </Text>
+
+          {appointmentDetails.status === "UNCONFIRMED" && (
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusBadgeText}>Unconfirmed</Text>
+            </View>
+          )}
+          {appointmentDetails.status === "CONFIRMED" && (
+            <View style={styles.confirmBadge}>
+              <Text style={styles.statusBadgeText}>Confirmed</Text>
+            </View>
+          )}
         </View>
-        <View style={styles.doctorInfoContainer}>
-          <Image source={doctorImage} style={styles.doctorImage} />
-          <View>
-            <Text style={styles.doctorName}>
-              {appointmentDetails.doctorName}
+        <View>
+          <Text style={styles.sectionContent}>
+            {appointmentDetails.doctor.expertise}
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              onViewDoctorLocation(appointmentDetails);
+            }}
+          >
+            <Text style={styles.linkText}>
+              {appointmentDetails.doctor.address}
             </Text>
-            <Text style={styles.doctorDetail}>
-              {appointmentDetails.doctorSpecialty}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                onViewDoctorLocation(appointmentDetails);
-              }}
-            >
-              <Text style={styles.doctorLocation}>View Doctor Location</Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -58,7 +66,7 @@ const AppointmentDetailScreen = ({ route }) => {
           <Text style={styles.sectionTitle}>Appointment Time</Text>
         </View>
         <Text style={styles.sectionContent}>
-          {new Date(appointmentDetails.date).toLocaleDateString("en-US", {
+          {new Date(appointmentDetails.startDate).toLocaleDateString("en-US", {
             weekday: "long",
             month: "long",
             day: "numeric",
@@ -66,17 +74,13 @@ const AppointmentDetailScreen = ({ route }) => {
           })}
         </Text>
         <Text style={styles.sectionContent}>
-          {new Date(
-            `${appointmentDetails.date}T${appointmentDetails.time}`
-          ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}{" "}
-          to{" "}
-          {new Date(
-            new Date(
-              `${appointmentDetails.date}T${appointmentDetails.time}`
-            ).getTime() +
-              appointmentDetails.duration * 60000
-          ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {getFormattedTime(
+            appointmentDetails.startDate,
+            appointmentDetails.startTime,
+            appointmentDetails.duration
+          )}
         </Text>
+
         <TouchableOpacity
           onPress={() => addAppointmentToCalendar(appointmentDetails)}
         >
@@ -124,14 +128,18 @@ const AppointmentDetailScreen = ({ route }) => {
       </View>
 
       <View style={styles.reminderSection}>
-        <View style={styles.reminderItem}>
-          <Ionicons
-            name="notifications-outline"
-            size={20}
-            style={styles.iconStyle}
-          />
-          <Text style={styles.reminderText}>{appointmentDetails.note}</Text>
-        </View>
+        {appointmentDetails.note ? (
+          <View style={styles.reminderItem}>
+            <Ionicons
+              name="notifications-outline"
+              size={20}
+              style={styles.iconStyle}
+            />
+            <Text style={styles.reminderText}>{appointmentDetails.note}</Text>
+          </View>
+        ) : (
+          <Text style={styles.reminderText}>You have no reminders.</Text>
+        )}
       </View>
 
       <TouchableOpacity
@@ -174,51 +182,23 @@ const styles = StyleSheet.create({
     marginBottom: 8, // More space to set apart the section header from its content
   },
   sectionTitle: {
-    fontSize: 22, // Larger font size for section headers, following iOS design
+    fontSize: 20, // Larger font size for section headers, following iOS design
     fontWeight: "bold",
     color: "#000",
     marginLeft: 8,
   },
   sectionContent: {
     fontWeight: "400", // iOS tends to use lighter font weights for content
-    fontSize: 18, // Increase the font size for better readability
+    fontSize: 16, // Increase the font size for better readability
     color: "#000",
     marginBottom: 4, // Reduce the bottom margin
     marginLeft: 32, // Indent the content to align with the section header
   },
   linkText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#007BFF",
     textDecorationLine: "underline",
     marginLeft: 32,
-    fontWeight: "500", // Make links bold for emphasis
-  },
-  doctorInfoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  doctorImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 16,
-    resizeMode: "cover",
-  },
-  doctorName: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 4,
-  },
-  doctorDetail: {
-    fontSize: 18,
-    color: "#555",
-    marginBottom: 4,
-  },
-  doctorLocation: {
-    fontSize: 18,
-    color: "#007BFF",
-    textDecorationLine: "underline",
     fontWeight: "500", // Make links bold for emphasis
   },
   documentItem: {
@@ -235,6 +215,7 @@ const styles = StyleSheet.create({
   noDocumentsText: {
     fontSize: 16,
     color: "#666",
+    marginLeft: 32,
   },
 
   reminderSection: {
@@ -248,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reminderText: {
-    fontSize: 18, // Reduced size for subtlety
+    fontSize: 16, // Reduced size for subtlety
     marginLeft: 8,
     fontWeight: "600",
   },
@@ -265,8 +246,31 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     textTransform: "none",
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
+  },
+  statusBadge: {
+    alignSelf: "flex-start", // Align to the start if you're using flexbox
+    backgroundColor: "orange", // Use your app's theme color for unconfirmed status
+    borderRadius: 4,
+    paddingVertical: 2,
+    paddingHorizontal: 4,
+    marginTop: 4,
+    marginLeft: 8, // Add some space between the badge and the section title
+  },
+  statusBadgeText: {
+    color: "white", // Text color that contrasts with the badge background
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  confirmBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "green", // Use your app's theme color for confirmed status
+    borderRadius: 4,
+    paddingVertical: 2,
+    paddingHorizontal: 4,
+    marginTop: 4,
+    marginLeft: 8,
   },
 
   iconStyle: {

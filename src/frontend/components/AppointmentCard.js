@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "600",
     fontSize: 18,
-    marginBottom: 2,
+    marginBottom: 6,
   },
   datetimeWrapper: {
     flexDirection: "row",

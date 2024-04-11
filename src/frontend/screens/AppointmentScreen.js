@@ -2,78 +2,42 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import CalendarScreen from "../components/Calendar";
 import AppointmentCard from "../components/AppointmentCard";
+import { useUserDetails } from "../utils/useUserDetails";
+import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
-const AppointmentScreen = () => {
+const AppointmentScreen = ({ route }) => {
   const today = new Date().toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState("");
 
-  const appointments = {
-    "2024-03-13": {
-      initials: "AA",
-      doctorName: "Dr. AaaAaa",
-      doctorSpecialty: "Oncologist",
-      detail: "Routine checkup",
-      reason: "General health.",
-      note: "No specific notes",
-
-      time: "10:30:00",
-      date: "2024-03-13",
-      duration: 60,
-      documents: [
-        {
-          name: "Pre-Treatment Guidelines",
-          url: "https://www.google.com/",
-        },
-        {
-          name: "Medication List",
-          url: "https://www.google.com/",
-        },
-      ],
-    },
-    "2024-04-20": {
-      initials: "BB",
-      doctorName: "Dr. BbbBbb",
-      doctorSpecialty: "Oncologist",
-      detail: "Routine checkup",
-      reason: "General health.",
-      note: "No specific notes",
-
-      time: "10:30:00",
-      date: "2024-04-15",
-      duration: 60,
-      documents: [
-        {
-          name: "Pre-Treatment Guidelines",
-          url: "https://www.google.com/",
-        },
-        {
-          name: "Medication List",
-          url: "https://www.google.com/",
-        },
-      ],
-    },
-    // Add more appointments here
-  };
+  // Assuming a static userId for demonstration; replace as necessary
+  const userId = 421;
+  const userDetails = useUserDetails(userId);
+  const appointmentsFromApi = useUpcomingAppointments(userId);
 
   const onDaySelect = (day) => {
     setSelectedDate(day.dateString);
   };
 
-  // Determine what to display based on the selected date
   const displayAppointments = () => {
-    if (selectedDate && appointments[selectedDate]) {
-      // If a specific date with an appointment is selected, prepare to display only that appointment
+    const formattedAppointments = appointmentsFromApi.map((appointment) => ({
+      date: appointment.startDate.split("T")[0], // Extract date part
+      ...appointment,
+    }));
+
+    if (selectedDate) {
+      const appointmentDetails = formattedAppointments.filter(
+        (appointment) => appointment.date === selectedDate
+      );
       return {
-        appointmentDetails: [appointments[selectedDate]],
-        displayOnlyDetails: true,
+        appointmentDetails,
+        displayOnlyDetails: appointmentDetails.length > 0,
       };
     } else {
-      // If no specific date is selected or the selected date has no appointments, show upcoming and past appointments
-      const upcomingAppointments = Object.entries(appointments).filter(
-        ([date, _]) => date >= today
+      const upcomingAppointments = formattedAppointments.filter(
+        ({ date }) => date >= today
       );
-      const pastAppointments = Object.entries(appointments).filter(
-        ([date, _]) => date < today
+      const pastAppointments = formattedAppointments.filter(
+        ({ date }) => date < today
       );
       return {
         upcomingAppointments,
@@ -94,9 +58,11 @@ const AppointmentScreen = () => {
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <Text style={styles.title}>Calendar</Text>
-        <CalendarScreen markedDates={appointments} onDaySelect={onDaySelect} />
+        <CalendarScreen
+          appointmentsFromApi={appointmentsFromApi}
+          onDaySelect={onDaySelect}
+        />
 
-        {/* Display only the Appointment Details section if a date with an appointment is selected */}
         {displayOnlyDetails ? (
           <>
             <Text style={styles.title}>Appointment Details</Text>
@@ -106,11 +72,10 @@ const AppointmentScreen = () => {
           </>
         ) : (
           <>
-            {/* Upcoming Appointments Section */}
             <Text style={styles.title}>Upcoming Appointments</Text>
             {upcomingAppointments.length > 0 ? (
-              upcomingAppointments.map(([date, appointment]) => (
-                <AppointmentCard key={date} appointment={appointment} />
+              upcomingAppointments.map((appointment, index) => (
+                <AppointmentCard key={index} appointment={appointment} />
               ))
             ) : (
               <Text style={styles.noAppointments}>
@@ -118,11 +83,10 @@ const AppointmentScreen = () => {
               </Text>
             )}
 
-            {/* Past Appointments Section */}
             <Text style={styles.title}>Past Appointments</Text>
             {pastAppointments.length > 0 ? (
-              pastAppointments.map(([date, appointment]) => (
-                <AppointmentCard key={date} appointment={appointment} />
+              pastAppointments.map((appointment, index) => (
+                <AppointmentCard key={index} appointment={appointment} />
               ))
             ) : (
               <Text style={styles.noAppointments}>
@@ -157,7 +121,7 @@ const styles = StyleSheet.create({
   noAppointments: {
     fontSize: 18, // Larger font for legibility
     color: "#6e6e72", // Subtle gray color used in iOS for informational text
-    marginVertical: 20, // More vertical spacing
+    marginVertical: 10, // More vertical spacing
     alignSelf: "flex-start",
     marginLeft: 20, // Consistent margin with titles
   },

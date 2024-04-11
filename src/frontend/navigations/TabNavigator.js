@@ -58,6 +58,7 @@ export default function TabNavigator({ route, navigation }) {
                             <Ionicons name="calendar" size={size} color={color} />
                         ),
                     }}
+                    initialParams={{ userId: userId }}
                 />
                 <Tab.Screen 
                     name="MessageScreen" 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ScrollView, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { getUserEndpoint, getAppointmentsByUserEndpoint } from '../api';
+import { useUserDetails} from '../utils/useUserDetails';
+import { useUpcomingAppointments} from '../utils/useUpcomingAppointments';
 
 const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
   <Modal visible={visible} animationType="slide" transparent>
@@ -38,6 +39,8 @@ const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
 
 const HomeScreen = ({ route }) => {
   const userId = route.params?.userId;
+  const userName = useUserDetails(userId);
+  const upcomingAppointments = useUpcomingAppointments(userId);
 
   // // Sample data for upcoming appointments and recent messages
   // const upcomingAppointments = [
@@ -82,9 +85,7 @@ const HomeScreen = ({ route }) => {
   ];
 
   // GET requests to fetch data from backend
-  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   // const [recentMessages, setRecentMessages] = useState([]);
-  const [userName, setUserName] = useState('');
   const [showMoreAppointments, setShowMoreAppointments] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -100,25 +101,6 @@ const HomeScreen = ({ route }) => {
     setSelectedAppointment(null);
   };
 
-  const fetchUserName = async () => {
-    try {
-      const response = await fetch(getUserEndpoint(userId));
-      const data = await response.json();
-      setUserName(data.firstname);
-    } catch (error) {
-      console.error('Error fetching user name:', error);
-    }
-  };
-
-  const fetchUpcomingAppointments = async () => {
-    try {
-      const response = await fetch(getAppointmentsByUserEndpoint(userId));
-      const data = await response.json();
-      setUpcomingAppointments(data);
-    } catch (error) {
-      console.error('Error fetching upcoming appointments:', error);
-    }
-  };
 
   // const fetchRecentMessages = async () => {
   //   try {
@@ -129,12 +111,6 @@ const HomeScreen = ({ route }) => {
   //     console.error('Error fetching recent messages:', error);
   //   }
   // };
-
-  useEffect(() => {
-    fetchUserName();
-    fetchUpcomingAppointments();
-    // fetchRecentMessages();
-  }, [userId]);
 
   const handleMessagePress = (message) => {
     Alert.alert(

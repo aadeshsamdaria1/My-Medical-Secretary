@@ -1,7 +1,21 @@
 import React from "react";
 import { Calendar } from "react-native-calendars";
 
-const CalendarScreen = ({ markedDates, onDaySelect }) => {
+const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
+  // Prepare markedDates from appointment data
+  const markedDates = appointmentsFromApi.reduce((acc, appointment) => {
+    // Extract just the date part from the startDate
+    const formattedDate = appointment.startDate.split("T")[0];
+    acc[formattedDate] = {
+      selected: true,
+      marked: true,
+      selectedColor: "#007aff",
+      dotColor: "#fff",
+    };
+    return acc;
+  }, {});
+
+
   return (
     <Calendar
       // Event Handler for when a day is pressed
@@ -10,15 +24,7 @@ const CalendarScreen = ({ markedDates, onDaySelect }) => {
       }}
 
       // Marked dates with custom styling
-      markedDates={Object.keys(markedDates).reduce((acc, date) => {
-        acc[date] = {
-          selected: true,
-          marked: true,
-          selectedColor: "#007aff",
-          dotColor: "#fff",
-        };
-        return acc;
-      }, {})}
+      markedDates={markedDates}
 
       // Calendar theme customizations
       theme={{
