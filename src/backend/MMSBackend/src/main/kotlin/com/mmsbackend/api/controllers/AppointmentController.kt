@@ -2,6 +2,8 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.AppointmentValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.dto.appointment.AppointmentStatusDTO
+import com.mmsbackend.dto.appointment.UserNoteDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
@@ -59,5 +61,26 @@ class AppointmentController (
 
         return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created new"} " +
                 "appointment with Genie ID: ${savedAppointment.id}.")
+    }
+
+    @PostMapping("/status/update")
+    fun updateStatus(@RequestBody statusDTO: AppointmentStatusDTO): ResponseEntity<String> {
+        val appointment = appointmentEntityRepository.findById(statusDTO.appointmentId).getOrNull()
+            ?: return ResponseEntity.badRequest().body("Could not update status for appointment with ID " +
+                    "${statusDTO.appointmentId}. Appointment does not exist.")
+        appointment.status = statusDTO.status
+        appointmentEntityRepository.save(appointment)
+        return ResponseEntity.ok("Successfully set status for appointment ${statusDTO.appointmentId} " +
+                "to ${statusDTO.status}.")
+    }
+
+    @PostMapping("/user_note/update")
+    fun updateUserNote(@RequestBody userNoteDTO: UserNoteDTO): ResponseEntity<String> {
+        val appointment = appointmentEntityRepository.findById(userNoteDTO.appointmentId).getOrNull()
+            ?: return ResponseEntity.badRequest().body("Could not update user note for appointment with ID " +
+                    "${userNoteDTO.appointmentId}. Appointment does not exist.")
+        appointment.userNote = userNoteDTO.note
+        appointmentEntityRepository.save(appointment)
+        return ResponseEntity.ok("Successfully updated user note for appointment ${userNoteDTO.appointmentId}.")
     }
 }

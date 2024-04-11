@@ -2,6 +2,9 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.AppointmentValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.dto.appointment.AppointmentStatusDTO
+import com.mmsbackend.dto.appointment.UserNoteDTO
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.PatientEntity
@@ -12,6 +15,7 @@ import com.mmsbackend.mapping.AppointmentMapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.justRun
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -33,6 +37,7 @@ class AppointmentControllerTest {
     private val providerId = Random.nextInt()
     private val newAppointmentId = Random.nextInt()
     private val newAppointmentDTOId = Random.nextInt()
+    private val updateAppointmentId = Random.nextInt()
 
     @MockK
     private lateinit var appointmentEntityRepository: AppointmentEntityRepository
@@ -69,6 +74,9 @@ class AppointmentControllerTest {
 
     @MockK
     private lateinit var newAppointment: AppointmentEntity
+
+    @MockK
+    private lateinit var updateAppointment: AppointmentEntity
 
     @BeforeEach
     fun setup() {
@@ -107,6 +115,11 @@ class AppointmentControllerTest {
         every { newAppointment.id } returns newAppointmentId
 
         every { appointmentMapper.updateExistingAppointment(newAppointment, newAppointment) } returns newAppointment
+        every { appointmentEntityRepository.findById(updateAppointmentId) } returns Optional.of(updateAppointment)
+        every { appointmentEntityRepository.save(updateAppointment) } returns updateAppointment
+
+        justRun { updateAppointment.status = any() }
+        justRun { updateAppointment.userNote = any() }
     }
 
     @Test
@@ -174,6 +187,46 @@ class AppointmentControllerTest {
         every { appointmentValidation.isValidAppointment(newAppointment) } returns false
         val response = appointmentController.createAppointment(newAppointmentDTO)
         val expectedResponse = ResponseEntity.badRequest().body("Could not create appointment. Invalid fields.")
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Successfully confirm an appointment`() {
+        val appointmentStatusDTO = AppointmentStatusDTO(updateAppointmentId, AppointmentStatus.CONFIRMED)
+        val response = appointmentController.updateStatus(appointmentStatusDTO)
+        val expectedResponse = ResponseEntity.ok("Successfully set status for appointment " +
+                "$updateAppointmentId to CONFIRMED.")
+        assertEquals(expectedResponse, response)
+    }
+    
+    @Test
+    fun `Fail to sync update status of non-existent appointment`() {
+        every { appointmentEntityRepository.findById(updateAppointmentId) } returns Optional.empty()
+
+        val appointmentStatusDTO = AppointmentStatusDTO(updateAppointmentId, AppointmentStatus.CONFIRMED)
+        val response = appointmentController.updateStatus(appointmentStatusDTO)
+        val expectedResponse = ResponseEntity.badRequest().body("Could not update status for " +
+                "appointment with ID $updateAppointmentId. Appointment does not exist.")
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Successfully update a user note`() {
+        val userNoteDTO = UserNoteDTO(updateAppointmentId, "A new user note")
+        val response = appointmentController.updateUserNote(userNoteDTO)
+        val expectedResponse = ResponseEntity.ok("Successfully updated user note for " +
+                "appointment ${userNoteDTO.appointmentId}.")
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Fail to sync update user note of non-existent appointment`() {
+        every { appointmentEntityRepository.findById(updateAppointmentId) } returns Optional.empty()
+
+        val userNoteDTO = UserNoteDTO(updateAppointmentId, "A new user note")
+        val response = appointmentController.updateUserNote(userNoteDTO)
+        val expectedResponse = ResponseEntity.badRequest().body("Could not update user note for " +
+                "appointment with ID ${userNoteDTO.appointmentId}. Appointment does not exist.")
         assertEquals(expectedResponse, response)
     }
 }
