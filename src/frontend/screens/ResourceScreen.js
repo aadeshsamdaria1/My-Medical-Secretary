@@ -1,18 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
-export default ResourceScreen = () => {
+const ResourceScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { category } = route.params;
+
+  useEffect(() => {
+    navigation.setOptions({ headerTitle: category });
+  }, [category, navigation]);
+
   return (
-    <View style={styles.container}>
-      <Text>Welcome to ResourceScreen!</Text>
+    <View>
+      <Text>{category}</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+export default ResourceScreen;

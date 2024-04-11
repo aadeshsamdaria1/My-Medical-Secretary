@@ -6,7 +6,8 @@ import ProfileIcon from '../components/ProfileIcon';
 import HomeScreen from '../screens/HomeScreen';
 import AppointmentScreen from '../screens/AppointmentScreen';
 import MessageScreen from '../screens/MessageScreen';
-import ResourceScreen from '../screens/ResourceScreen';
+import ResourceNavigator from './ResourceNavigator';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -59,7 +60,7 @@ export default function TabNavigator() {
                 />
                 <Tab.Screen 
                     name="ResourceScreen" 
-                    component={ResourceScreen} 
+                    component={ResourceNavigator} 
                     options={{
                         title: 'Resources',
                         tabBarIcon: ({ color, size }) => (
