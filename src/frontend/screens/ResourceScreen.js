@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { facilities } from './FacilitiesDummyData'; // Import facility data
-import FacilityDetailScreen from './FacilityDetailScreen';
 
 const ResourceScreen = () => {
   const route = useRoute();
@@ -14,8 +13,9 @@ const ResourceScreen = () => {
     // Filter facilities based on the selected category
     const filtered = facilities.filter(facility => facility.facilityType === category.toUpperCase());
     setFilteredFacilities(filtered);
+    // Update navigation header title dynamically
     navigation.setOptions({ title: `${category}` });
-  }, [category]);
+  }, [category, navigation]);
 
   const handleFacilityPress = (facility) => {
     // Navigate to FacilityDetailScreen with facility details
@@ -23,9 +23,12 @@ const ResourceScreen = () => {
   };
 
   const renderFacilityItem = ({ item }) => (
-    <TouchableOpacity style={styles.facilityItem} onPress={() => handleFacilityPress(item)}>
+    <TouchableOpacity
+      style={styles.facilityItem}
+      onPress={() => handleFacilityPress(item)}
+    >
       <Text style={styles.facilityName}>{item.name}</Text>
-      <Text>{item.address}</Text>
+      <Text style={styles.facilityAddress}>{item.address}</Text>
     </TouchableOpacity>
   );
 
@@ -46,14 +49,19 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   facilityItem: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
     marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingBottom: 10,
+    elevation: 2, // Add shadow
   },
   facilityName: {
     fontWeight: 'bold',
     fontSize: 16,
+    marginBottom: 5,
+  },
+  facilityAddress: {
+    color: '#666',
   },
 });
 
