@@ -134,7 +134,7 @@ const HomeScreen = ({ route }) => {
     fetchUserName();
     fetchUpcomingAppointments();
     // fetchRecentMessages();
-  }, []);
+  }, [userId]);
 
   const handleMessagePress = (message) => {
     Alert.alert(
@@ -184,11 +184,13 @@ const HomeScreen = ({ route }) => {
                       })}
                     </Text>
                     <Text style={styles.appointmentTime}>
-                      {new Date(`1970-01-01T${item.startTime}`).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false,
-                      })}
+                      {new Date(`1970-01-01T${item.startTime}`)
+                        .toLocaleString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true,
+                        })
+                        .toUpperCase()}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -271,6 +273,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: 16,
   },
   header: {
     flexDirection: 'row',
