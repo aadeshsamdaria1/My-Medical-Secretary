@@ -47,8 +47,7 @@ class AppointmentController (
 
         val appointment = appointmentMapper.mapAppointmentDTO(appointmentDTO, patient, doctor)
         if (!appointmentValidation.isValidAppointment(appointment)){
-            return ResponseEntity.badRequest().body("Could not create appointment. Invalid fields")
-            // TODO: Give better invalid field information
+            return ResponseEntity.badRequest().body("Could not create appointment. Invalid fields.")
         }
 
         val existingApp = appointmentEntityRepository.findById(appointmentDTO.id).getOrNull()
@@ -58,7 +57,7 @@ class AppointmentController (
             appointmentEntityRepository.save(appointment)
         }
 
-        return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created" } " +
-                "new appointment with Genie ID: ${savedAppointment.id}.")
+        return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created new"} " +
+                "appointment with Genie ID: ${savedAppointment.id}.")
     }
 }
