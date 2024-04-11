@@ -62,7 +62,7 @@ const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
         textDayFontSize: 16,
         textMonthFontSize: 20,
         textDayHeaderFontSize: 16,
-        marginHorizontal: 16, // sets horizontal margin, but may not affect some calendar styles
+        marginHorizontal: 30, // sets horizontal margin, but may not affect some calendar styles
       }}
     />
   );

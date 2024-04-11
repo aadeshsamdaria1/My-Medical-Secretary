@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   noAppointments: {
-    fontSize: 18, // Larger font for legibility
+    fontSize: 16, // Larger font for legibility
     color: "#6e6e72", // Subtle gray color used in iOS for informational text
     marginVertical: 10, // More vertical spacing
     alignSelf: "flex-start",

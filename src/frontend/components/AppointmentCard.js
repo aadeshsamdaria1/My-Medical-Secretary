@@ -19,12 +19,13 @@ const AppointmentCard = ({ appointment }) => {
           <Image source={doctorImage} style={styles.doctorImage} />
         </View>
         <View style={styles.details}>
-          <Text style={styles.title}>{appointment.detail}</Text>
+          <Text style={styles.title}>Meet with Dr.{appointment.doctor.name}</Text>
           <View style={styles.datetimeWrapper}>
             <Text style={styles.date}>{new Date(appointment.date).toLocaleDateString("en-US", {
             weekday: "short",
             month: "long",
             day: "numeric",
+            year: "numeric",
           })}</Text>
             <Text style={styles.time}>{appointment.time}</Text>
           </View>
@@ -72,8 +73,8 @@ const styles = StyleSheet.create({
   title: {
     color: "#000",
     fontWeight: "600",
-    fontSize: 18,
-    marginBottom: 6,
+    fontSize: 16,
+    marginBottom: 4,
   },
   datetimeWrapper: {
     flexDirection: "row",
