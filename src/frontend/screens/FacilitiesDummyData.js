@@ -1,0 +1,51 @@
+export const facilities = [
+    {
+      name: "Example Hospital 1",
+      contact: "123-456-7890",
+      address: "123 Example St, City, Country",
+      fax: null,
+      website: "http://examplehospital1.com",
+      facilityType: "HOSPITALS",
+    },
+    {
+      name: "Example Hospital 2",
+      contact: "234-567-8901",
+      address: "456 Example Ave, City, Country",
+      fax: "345-678-9012",
+      website: "http://examplehospital2.com",
+      facilityType: "HOSPITALS",
+    },
+    {
+      name: "Radiology Center 1",
+      contact: "345-678-9012",
+      address: "789 Radiology Rd, City, Country",
+      fax: "456-789-0123",
+      website: "http://radiologycenter1.com",
+      facilityType: "RADIOLOGY",
+    },
+    {
+      name: "Radiology Center 2",
+      contact: "456-789-0123",
+      address: "012 Radiology Ave, City, Country",
+      fax: "567-890-1234",
+      website: "http://radiologycenter2.com",
+      facilityType: "RADIOLOGY",
+    },
+    {
+      name: "Pathology Lab 1",
+      contact: "567-890-1234",
+      address: "345 Pathology St, City, Country",
+      fax: null,
+      website: "http://pathologylab1.com",
+      facilityType: "PATHOLOGY",
+    },
+    {
+      name: "Pathology Lab 2",
+      contact: "678-901-2345",
+      address: "678 Pathology Ave, City, Country",
+      fax: null,
+      website: "http://pathologylab2.com",
+      facilityType: "PATHOLOGY",
+    },
+  ];
+  
