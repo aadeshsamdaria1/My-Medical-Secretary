@@ -1,7 +1,6 @@
 package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.appointment.AppointmentDTO
-import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.PatientEntity
@@ -34,7 +33,6 @@ class AppointmentMapper(
             startTime = appDTO.startTime,
 
             userNote = "",
-            status = AppointmentStatus.UNCONFIRMED,
 
             patient = patient,
             doctor = doctor
@@ -53,7 +51,6 @@ class AppointmentMapper(
             duration = updatedApp.duration,
             userNote = updatedApp.userNote,
             startDate = updatedApp.startDate,
-            status = updatedApp.status,
             patient = updatedApp.patient,
             doctor = updatedApp.doctor,
 
@@ -75,7 +72,6 @@ class AppointmentMapper(
             duration = extractFromRow(columns, rowString, DURATION).toInt(),
             userNote = "",
             startDate = SimpleDateFormat(DATE_CREATED_PATTERN).parse(extractFromRow(columns, rowString, START_DATE)),
-            status = AppointmentStatus.UNCONFIRMED,
             dateCreate =  stringToInstant(extractFromRow(columns, rowString, DATE_CREATE), DATE_CREATED_PATTERN),
 
             patient = extractPatient(extractFromRow(columns, rowString, PATIENT)) ?: return null,
