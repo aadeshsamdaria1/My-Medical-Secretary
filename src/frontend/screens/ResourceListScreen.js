@@ -1,19 +1,29 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ResourceScreen from './ResourceScreen';
 import { TouchableOpacity } from 'react-native';
+import hospitalIcon from '../assets/hospital.png'
+import radiologyIcon from '../assets/radiology.png';
+import pathologyIcon from '../assets/pathology.png';
+import doctorsIcon from '../assets/doctor.png';
+import additionalLinksIcon from '../assets/links.png';
 
-const categories = ["Hospitals", "Radiology", "Pathology", "Doctors", "Additional Links"];
+const categories = [
+  { name: "Hospitals", icon: hospitalIcon },
+  { name: "Radiology", icon: radiologyIcon },
+  { name: "Pathology", icon: pathologyIcon },
+  { name: "Doctors", icon: doctorsIcon },
+  { name: "Additional Links", icon: additionalLinksIcon },
+];
 
 const ResourceListScreen = () => {
   const navigation = useNavigation();
 
   const handleCategoryPress = (category) => {
     navigation.navigate('ResourceDetail', {
-      category,
+      category: category.name,
       // Set options for the ResourceDetail screen
-      options: { headerTitle: category }
+      options: { headerTitle: category.name }
     });
   };
 
@@ -22,10 +32,10 @@ const ResourceListScreen = () => {
       {categories.map((category, index) => (
         <TouchableOpacity key={index} onPress={() => handleCategoryPress(category)} style={styles.card}>
           <View style={styles.iconWrapper}>
-            <Text style={styles.iconText}>{category.charAt(0)}</Text>
+            <Image source={category.icon} style={styles.iconImage} />
           </View>
           <View style={styles.details}>
-            <Text style={styles.title}>{category}</Text>
+            <Text style={styles.title}>{category.name}</Text>
           </View>
         </TouchableOpacity>
       ))}
@@ -66,18 +76,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 10,
   },
-  iconText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
   details: {
     justifyContent: 'center',
     flex: 1,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 20 ,
     marginBottom: 4,
+  },
+  iconWrapper: {
+    backgroundColor: '#4F8EF7',
+    borderRadius: 25,
+    height: 50,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    overflow: 'hidden', 
+  },
+  iconImage: {
+    width: '70%',
+    height: '70%',
+    resizeMode: 'contain', 
+    tintColor: '#FFFFFF'
   },
 });
