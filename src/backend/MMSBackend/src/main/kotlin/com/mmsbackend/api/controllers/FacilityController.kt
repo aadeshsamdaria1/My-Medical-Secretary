@@ -1,7 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.jpa.entity.FacilityEntity
-import com.mmsbackend.jpa.entity.UserEntity
+import com.mmsbackend.api.validation.FacilityValidation
 import com.mmsbackend.jpa.repository.FacilityEntityRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +16,8 @@ import kotlin.jvm.optionals.getOrNull
 @RestController
 @RequestMapping("/api/facilities")
 class FacilityController (
-    val facilityEntityRepository: FacilityEntityRepository
+    val facilityEntityRepository: FacilityEntityRepository,
+    val facilityValidation: FacilityValidation
 ){
     @GetMapping("/get/{id}")
     fun getFacility(@PathVariable id: Int): FacilityEntity? {
@@ -25,21 +26,22 @@ class FacilityController (
 
     @PostMapping("/create")
     fun createFacility(@RequestBody facilityEntity: FacilityEntity): ResponseEntity<String> {
-        return try {
-            val savedFacility = facilityEntityRepository.save(facilityEntity)
-            ResponseEntity.ok("Successfully added new facility with ID: ${savedFacility.id}")
-        } catch (e: Exception) {
-            ResponseEntity.badRequest().body("Error while adding facility: ${e.message}")
+        return if (facilityValidation.isValidFacility(facilityEntity)) {
+            facilityEntityRepository.save(facilityEntity)
+            ResponseEntity.ok("Successfully added new facility with ID: ${facilityEntity.id}")
+        } else {
+            ResponseEntity.badRequest().body("Could not create facility. Missing valid ID")
         }
     }
 
     @DeleteMapping("/delete/{id}")
     fun deleteFacility(@PathVariable id: Int): ResponseEntity<String> {
-        return try {
+        val facility = facilityEntityRepository.findById(id).orElse(null)
+        return if (facility != null && facilityValidation.isValidFacility(facility)) {
             facilityEntityRepository.deleteById(id)
             ResponseEntity.ok("Facility with ID $id deleted successfully.")
-        } catch (exception: Exception) {
-            ResponseEntity.status(404).body("Facility with ID $id not found.")
+        } else {
+            ResponseEntity.badRequest().body("Could not delete facility. Facility with ID $id not found or invalid.")
         }
     }
 }
