@@ -14,14 +14,14 @@ class FileController(
     val fileService: FileService
 ) {
     @PostMapping("/upload/patients")
-    fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
+    fun uploadUserFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try{
             val ids = fileService.readAndUploadUserFile(
                 fileBytes = String(file.bytes)
             )
             ResponseEntity.ok("Successfully created users with these ids: $ids.")
         } catch (e: Exception){
-            ResponseEntity.badRequest().body("Error while adding doctor: ${e.message}")
+            ResponseEntity.badRequest().body("Error while uploading patients: ${e.message}.")
         }
     }
 
@@ -31,9 +31,9 @@ class FileController(
             val ids = fileService.readAndUploadAppointmentFile(
                 fileBytes = String(file.bytes)
             )
-            ResponseEntity.ok("Successfully uploaded appointments with these ids: $ids")
+            ResponseEntity.ok("Successfully uploaded appointments with these ids: $ids.")
         } catch (e: Exception) {
-            ResponseEntity.badRequest().body("Error while uploading appointments: ${e.message}")
+            ResponseEntity.badRequest().body("Error while uploading appointments: ${e.message}.")
         }
     }
 }
