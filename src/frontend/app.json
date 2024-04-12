@@ -15,11 +15,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSCalendarsUsageDescription": "This app requires access to your calendar to manage appointments."
-      },
-      "bundleIdentifier": "com.oliil.frontend"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
