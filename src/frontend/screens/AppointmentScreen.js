@@ -11,7 +11,6 @@ const AppointmentScreen = ({route}) => {
 
   // Assuming a static userId for demonstration; replace as necessary
   const userId = route.params.userId;
-  console.log("userId in AppointmentScreen: ", userId)
   const userDetails = useUserDetails(userId);
   const appointmentsFromApi = useUpcomingAppointments(userId);
 
