@@ -19,17 +19,14 @@ import kotlin.random.Random
 class FacilityControllerTest {
 
     private lateinit var facilityController: FacilityController
+    private val facilityId = Random.nextInt()
+    private val missingFacilityId = facilityId + 1
 
     @MockK
     private lateinit var facilityValidation: FacilityValidation
 
     @MockK
     private lateinit var facilityEntityRepository: FacilityEntityRepository
-
-
-
-    private val facilityId = Random.nextInt()
-    private val missingFacilityId = facilityId + 1
 
     @MockK
     private lateinit var facilityEntity: FacilityEntity
@@ -62,7 +59,7 @@ class FacilityControllerTest {
     @Test
     fun `Create facility successfully`() {
         every { facilityEntity.id } returns facilityId
-        every { facilityEntityRepository.save(any()) } returns facilityEntity
+        every { facilityEntityRepository.save(facilityEntity) } returns facilityEntity
 
         val response = facilityController.createFacility(facilityEntity)
         val expectedResponse = ResponseEntity.ok("Successfully added new facility with ID: $facilityId")
@@ -72,7 +69,7 @@ class FacilityControllerTest {
 
     @Test
     fun `Create facility fails with exception`() {
-        every { facilityValidation.isValidFacility(any())} returns false
+        every { facilityValidation.isValidFacility(facilityEntity)} returns false
 
         val response = facilityController.createFacility(facilityEntity)
         val expectedResponse = ResponseEntity.badRequest().body("Could not create facility. Missing valid ID")
