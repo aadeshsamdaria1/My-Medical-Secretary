@@ -2,9 +2,7 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.AppointmentValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
-import com.mmsbackend.dto.appointment.AppointmentStatusDTO
 import com.mmsbackend.dto.appointment.UserNoteDTO
-import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.PatientEntity
@@ -118,7 +116,6 @@ class AppointmentControllerTest {
         every { appointmentEntityRepository.findById(updateAppointmentId) } returns Optional.of(updateAppointment)
         every { appointmentEntityRepository.save(updateAppointment) } returns updateAppointment
 
-        justRun { updateAppointment.status = any() }
         justRun { updateAppointment.userNote = any() }
     }
 
@@ -187,26 +184,6 @@ class AppointmentControllerTest {
         every { appointmentValidation.isValidAppointment(newAppointment) } returns false
         val response = appointmentController.createAppointment(newAppointmentDTO)
         val expectedResponse = ResponseEntity.badRequest().body("Could not create appointment. Invalid fields.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Successfully confirm an appointment`() {
-        val appointmentStatusDTO = AppointmentStatusDTO(updateAppointmentId, AppointmentStatus.CONFIRMED)
-        val response = appointmentController.updateStatus(appointmentStatusDTO)
-        val expectedResponse = ResponseEntity.ok("Successfully set status for appointment " +
-                "$updateAppointmentId to CONFIRMED.")
-        assertEquals(expectedResponse, response)
-    }
-    
-    @Test
-    fun `Fail to sync update status of non-existent appointment`() {
-        every { appointmentEntityRepository.findById(updateAppointmentId) } returns Optional.empty()
-
-        val appointmentStatusDTO = AppointmentStatusDTO(updateAppointmentId, AppointmentStatus.CONFIRMED)
-        val response = appointmentController.updateStatus(appointmentStatusDTO)
-        val expectedResponse = ResponseEntity.badRequest().body("Could not update status for " +
-                "appointment with ID $updateAppointmentId. Appointment does not exist.")
         assertEquals(expectedResponse, response)
     }
 

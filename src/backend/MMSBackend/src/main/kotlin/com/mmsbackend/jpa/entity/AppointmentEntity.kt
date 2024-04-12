@@ -1,10 +1,7 @@
 package com.mmsbackend.jpa.entity
 
-import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
-import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.AppointmentMapper
-import com.mmsbackend.mapping.UserMapper
 import jakarta.persistence.*
 import java.sql.Time
 import java.time.Instant
@@ -31,7 +28,6 @@ data class AppointmentEntity(
 
     // Can be edited by the user
     var userNote: String?,
-    var status: AppointmentStatus,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
