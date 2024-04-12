@@ -5,12 +5,13 @@ import AppointmentCard from "../components/AppointmentCard";
 import { useUserDetails } from "../utils/useUserDetails";
 import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
-const AppointmentScreen = ({ route }) => {
+const AppointmentScreen = ({route}) => {
   const today = new Date().toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState("");
 
   // Assuming a static userId for demonstration; replace as necessary
-  const userId = 421;
+  const userId = route.params.userId;
+  console.log("userId in AppointmentScreen: ", userId)
   const userDetails = useUserDetails(userId);
   const appointmentsFromApi = useUpcomingAppointments(userId);
 
