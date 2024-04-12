@@ -5,7 +5,6 @@ import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
-import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.DoctorMapper
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.bind.annotation.GetMapping
