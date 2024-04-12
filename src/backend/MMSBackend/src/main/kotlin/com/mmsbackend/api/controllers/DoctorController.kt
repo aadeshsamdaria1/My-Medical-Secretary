@@ -3,7 +3,9 @@ package com.mmsbackend.api.controllers
 import com.mmsbackend.api.validation.DoctorValidation
 import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
+import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
+import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.DoctorMapper
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,11 +23,21 @@ import kotlin.jvm.optionals.getOrNull
 class DoctorController(
     val doctorEntityRepository: DoctorEntityRepository,
     val doctorMapper: DoctorMapper,
-    val doctorValidation: DoctorValidation
+    val doctorValidation: DoctorValidation,
+    val appointmentEntityRepository: AppointmentEntityRepository
 ) {
     @GetMapping("/get/{id}")
     fun getDoctor(@PathVariable id: Int): DoctorEntity? {
         return doctorEntityRepository.findById(id).getOrNull()
+    }
+
+    @GetMapping("/get_by_patient_id/{id}")
+    fun getAllDoctorsByPatientId(@PathVariable id: Int): List<DoctorEntity> {
+        return appointmentEntityRepository.findAll().filter {
+            it.patient.patientId == id
+        }.flatMap { appointment ->
+            doctorEntityRepository.findAll().filter { it.id == appointment.doctor.id }
+        }.toSet().toList()
     }
 
     @PostMapping("/create")
