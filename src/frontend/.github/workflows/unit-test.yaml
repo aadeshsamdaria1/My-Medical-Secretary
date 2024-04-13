@@ -1,0 +1,16 @@
+name: My Workflow
+
+on: [push] # Trigger the workflow on push events
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+
+    steps:
+      - uses: actions/checkout@v3 # Check out the repository code
+
+      - name: Install dependencies
+        run: npm ci # Install dependencies (for a Node.js project)
+
+      - name: Run tests
+        run: npm test # Run tests
