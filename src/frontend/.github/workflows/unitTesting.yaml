@@ -1,16 +1,16 @@
-name: My Workflow
-
-on: [pull_request] # Trigger the workflow on pull request events
-
+name: frontendTesting
+run-name: ${{ github.actor }} is testing frontend
+on: [push]
 jobs:
-  build:
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
-
+  run-defined-frontend-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/frontend
     steps:
-      - uses: actions/checkout@v3 # Check out the repository code
-
-      - name: Install dependencies
-        run: npm ci # Install dependencies (for a Node.js project)
-
-      - name: Run tests
-        run: npm test # Run tests
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+      - run: npm ci
+      - run: npm run test
