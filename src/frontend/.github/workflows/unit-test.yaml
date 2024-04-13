@@ -1,6 +1,6 @@
 name: My Workflow
 
-on: [push] # Trigger the workflow on push events
+on: [pull_request] # Trigger the workflow on push events
 
 jobs:
   build:
