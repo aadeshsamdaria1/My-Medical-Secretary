@@ -4,6 +4,7 @@ import { render, fireEvent } from '@testing-library/react-native';
 import LoginScreen from '../../screens/LoginScreen';
 jest.spyOn(Alert, 'alert');
 
+// Login Screen tests
 describe('LoginScreen', () => {
   it('renders correctly', () => {
     const { getByPlaceholderText, getByText } = render(<LoginScreen />);
