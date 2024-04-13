@@ -2,7 +2,6 @@ name: frontendTesting
 run-name: ${{ github.actor }} is testing frontend
 on:
   pull_request:
-  push:
   workflow_dispatch:
 
 jobs:
