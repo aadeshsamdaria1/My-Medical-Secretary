@@ -60,13 +60,14 @@ const AppointmentScreen = ({route}) => {
         <AppointmentCalendar
           appointmentsFromApi={appointmentsFromApi}
           onDaySelect={onDaySelect}
+          testID="calendar"
         />
 
         {displayOnlyDetails ? (
           <>
             <Text style={styles.title}>Appointment Details</Text>
             {appointmentDetails.map((appointment, index) => (
-              <AppointmentCard key={index} appointment={appointment} />
+              <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
             ))}
           </>
         ) : (
@@ -74,7 +75,7 @@ const AppointmentScreen = ({route}) => {
             <Text style={styles.title}>Upcoming Appointments</Text>
             {upcomingAppointments.length > 0 ? (
               upcomingAppointments.map((appointment, index) => (
-                <AppointmentCard key={index} appointment={appointment} />
+                <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
               ))
             ) : (
               <Text style={styles.noAppointments}>
@@ -85,7 +86,7 @@ const AppointmentScreen = ({route}) => {
             <Text style={styles.title}>Past Appointments</Text>
             {pastAppointments.length > 0 ? (
               pastAppointments.map((appointment, index) => (
-                <AppointmentCard key={index} appointment={appointment} />
+                <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
               ))
             ) : (
               <Text style={styles.noAppointments}>

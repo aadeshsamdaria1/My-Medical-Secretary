@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import doctorImage from "../assets/anonymous-doctor.jpg";
 
-const AppointmentCard = ({ appointment }) => {
+const AppointmentCard = ({ appointment, testID }) => {
   const navigation = useNavigation();
   const handlePress = () => {
     navigation.navigate("AppointmentDetail", {
@@ -13,7 +13,7 @@ const AppointmentCard = ({ appointment }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress} testID={testID}>
       <View style={styles.card}>
         <View style={styles.iconWrapper}>
           <Image source={doctorImage} style={styles.doctorImage} />
