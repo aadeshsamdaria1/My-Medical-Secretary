@@ -13,18 +13,24 @@ const categories = [
   { name: "Radiology", icon: radiologyIcon },
   { name: "Pathology", icon: pathologyIcon },
   { name: "Doctors", icon: doctorsIcon },
-  { name: "Additional Links", icon: additionalLinksIcon },
+  //{ name: "Additional Links", icon: additionalLinksIcon },
 ];
 
-const ResourceListScreen = () => {
+const ResourceListScreen = ( {route} ) => {
   const navigation = useNavigation();
 
+  const userId = route.params?.userId;
+
   const handleCategoryPress = (category) => {
-    navigation.navigate('ResourceDetail', {
-      category: category.name,
-      // Set options for the ResourceDetail screen
-      options: { headerTitle: category.name }
-    });
+    if (category.name == "Doctors") {
+      navigation.navigate('DoctorsScreen', {userId:userId});
+    } else {
+      navigation.navigate('ResourceDetail', {
+        category: category.name,
+        options: { headerTitle: category.name }
+      });
+    }
+
   };
 
   return (

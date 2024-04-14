@@ -67,6 +67,7 @@ export default function TabNavigator() {
                             <Ionicons name="book" size={size} color={color} />
                         ),
                     }}
+                    initialParams={{ userId : userId}}
                 />
             </Tab.Navigator>
         </NavigationContainer>
