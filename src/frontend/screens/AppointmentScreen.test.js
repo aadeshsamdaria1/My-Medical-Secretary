@@ -46,12 +46,9 @@ const mockAppointmentsFromApi = [
 
 describe("AppointmentScreen Integration Test", () => {
   beforeEach(() => {
-    // Mocking the API hooks
     jest.spyOn(useUserDetailsHook, "useUserDetails").mockReturnValue({
-      // ... mocked user details
     });
 
-    // Use the mock array directly
     jest
       .spyOn(useUpcomingAppointmentsHook, "useUpcomingAppointments")
       .mockReturnValue(mockAppointmentsFromApi);

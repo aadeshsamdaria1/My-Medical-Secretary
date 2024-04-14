@@ -42,7 +42,7 @@ const testDetail = {
 
 
 jest.mock("@react-navigation/native", () => ({
-  ...jest.requireActual("@react-navigation/native"), // Retain the actual exported objects
+  ...jest.requireActual("@react-navigation/native"), 
   useNavigation: () => ({
     navigate: mockNavigate,
   }),
@@ -50,12 +50,11 @@ jest.mock("@react-navigation/native", () => ({
 
 jest.mock("react-native-gesture-handler", () => ({
   TouchableOpacity: ({ children, onPress }) => (
-    <div onClick={onPress}>{children}</div> // Use 'div' for DOM elements in the Jest environment
+    <div onClick={onPress}>{children}</div>
   ),
 }));
 
 describe("AppointmentCard", () => {
-  // Define the appointment object for reuse across tests
   const appointment = testDetail();
 
   it("renders correctly", () => {
@@ -66,9 +65,8 @@ describe("AppointmentCard", () => {
   });
 
   it("navigates to appointment detail on press", () => {
-    // Use the same appointment object without redefining it
     const { getByText } = render(<AppointmentCard appointment={appointment} />);
-    // No need to call useNavigation again since you have mockNavigate reference
+
     fireEvent.press(getByText("Meet with Dr.John"));
     expect(mockNavigate).toHaveBeenCalledWith("AppointmentDetail", {
       appointmentDetails: appointment,
@@ -76,5 +74,3 @@ describe("AppointmentCard", () => {
   });
 });
 
-// cleanup is called automatically by the testing library
-// afterEach(cleanup);

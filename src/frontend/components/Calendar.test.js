@@ -12,7 +12,6 @@ jest.mock('react-native-calendars', () => ({
 describe('CalendarScreen', () => {
   const mockAppointments = [
     { startDate: '2024-04-24T00:00:00.000Z' },
-    // add more appointments if needed
   ];
 
   it('renders with marked dates from appointments', () => {
@@ -20,7 +19,6 @@ describe('CalendarScreen', () => {
       <AppointmentCalendar appointmentsFromApi={mockAppointments} onDaySelect={() => {}} />
     );
 
-    // Check that the Calendar component received the correct props
     expect(Calendar).toHaveBeenCalledWith(
       expect.objectContaining({
         markedDates: {
