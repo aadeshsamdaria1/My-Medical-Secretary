@@ -19,15 +19,19 @@ const AppointmentCard = ({ appointment }) => {
           <Image source={doctorImage} style={styles.doctorImage} />
         </View>
         <View style={styles.details}>
-          <Text style={styles.title}>Meet with Dr.{appointment.doctor.name}</Text>
+          <Text style={styles.title}>
+            Meet with Dr.{appointment.doctor.name}
+          </Text>
           <View style={styles.datetimeWrapper}>
-            <Text style={styles.date}>{new Date(appointment.date).toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}</Text>
-            <Text style={styles.time}>{appointment.time}</Text>
+            <Text style={styles.date}>
+              {new Date(appointment.startDate).toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </Text>
+            <Text style={styles.time}>{appointment.startTime}</Text>
           </View>
         </View>
       </View>

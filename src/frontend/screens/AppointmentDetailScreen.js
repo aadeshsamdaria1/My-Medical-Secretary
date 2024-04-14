@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   section: {
     padding: 16,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     backgroundColor: "#fff", 
     borderBottomWidth: 1,
     borderBottomColor: "#eaeaea",

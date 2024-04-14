@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar } from "react-native-calendars";
 
-const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
+const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
   // Prepare markedDates from appointment data
   const markedDates = appointmentsFromApi.reduce((acc, appointment) => {
     // Extract just the date part from the startDate
@@ -18,6 +18,7 @@ const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
 
   return (
     <Calendar
+      testID="calendar"
       onDayPress={(day) => {
         onDaySelect(day);
       }}
@@ -65,4 +66,4 @@ const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
   );
 };
 
-export default CalendarScreen;
+export default AppointmentCalendar;
