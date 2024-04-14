@@ -9,7 +9,6 @@ const AppointmentScreen = ({route}) => {
   const today = new Date().toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState("");
 
-  // Assuming a static userId for demonstration; replace as necessary
   const userId = route.params.userId;
   const userDetails = useUserDetails(userId);
   const appointmentsFromApi = useUpcomingAppointments(userId);
@@ -20,7 +19,7 @@ const AppointmentScreen = ({route}) => {
 
   const displayAppointments = () => {
     const formattedAppointments = appointmentsFromApi.map((appointment) => ({
-      date: appointment.startDate.split("T")[0], // Extract date part
+      date: appointment.startDate.split("T")[0], 
       ...appointment,
     }));
 
@@ -119,10 +118,10 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   noAppointments: {
-    fontSize: 16, // Larger font for legibility
-    color: "#6e6e72", // Subtle gray color used in iOS for informational text
-    marginVertical: 10, // More vertical spacing
+    fontSize: 16, 
+    color: "#6e6e72", 
+    marginVertical: 10, 
     alignSelf: "flex-start",
-    marginLeft: 20, // Consistent margin with titles
+    marginLeft: 20, 
   },
 });

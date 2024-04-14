@@ -18,15 +18,12 @@ const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
 
   return (
     <Calendar
-      // Event Handler for when a day is pressed
       onDayPress={(day) => {
         onDaySelect(day);
       }}
 
-      // Marked dates with custom styling
       markedDates={markedDates}
 
-      // Calendar theme customizations
       theme={{
         'stylesheet.calendar.main': {
           week: {
@@ -62,7 +59,7 @@ const CalendarScreen = ({ appointmentsFromApi, onDaySelect }) => {
         textDayFontSize: 16,
         textMonthFontSize: 20,
         textDayHeaderFontSize: 16,
-        marginHorizontal: 30, // sets horizontal margin, but may not affect some calendar styles
+        marginHorizontal: 30, 
       }}
     />
   );

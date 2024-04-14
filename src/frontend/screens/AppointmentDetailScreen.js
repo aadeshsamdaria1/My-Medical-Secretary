@@ -162,10 +162,10 @@ const styles = StyleSheet.create({
   section: {
     padding: 16,
     marginHorizontal: 16,
-    backgroundColor: "#fff", // consider using a different shade here if you change the background
+    backgroundColor: "#fff", 
     borderBottomWidth: 1,
     borderBottomColor: "#eaeaea",
-    borderRadius: 10, // rounded corners for the sections
+    borderRadius: 10, 
     marginVertical: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -179,27 +179,27 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8, // More space to set apart the section header from its content
+    marginBottom: 8, 
   },
   sectionTitle: {
-    fontSize: 20, // Larger font size for section headers, following iOS design
+    fontSize: 20, 
     fontWeight: "bold",
     color: "#000",
     marginLeft: 8,
   },
   sectionContent: {
-    fontWeight: "400", // iOS tends to use lighter font weights for content
-    fontSize: 16, // Increase the font size for better readability
+    fontWeight: "400", 
+    fontSize: 16, 
     color: "#000",
-    marginBottom: 4, // Reduce the bottom margin
-    marginLeft: 32, // Indent the content to align with the section header
+    marginBottom: 4, 
+    marginLeft: 32,
   },
   linkText: {
     fontSize: 16,
     color: "#007BFF",
     textDecorationLine: "underline",
     marginLeft: 32,
-    fontWeight: "500", // Make links bold for emphasis
+    fontWeight: "500", 
   },
   documentItem: {
     flexDirection: "row",
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reminderText: {
-    fontSize: 16, // Reduced size for subtlety
+    fontSize: 16, 
     marginLeft: 8,
     fontWeight: "600",
   },
@@ -250,22 +250,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   statusBadge: {
-    alignSelf: "flex-start", // Align to the start if you're using flexbox
-    backgroundColor: "orange", // Use your app's theme color for unconfirmed status
+    alignSelf: "flex-start", 
+    backgroundColor: "orange", 
     borderRadius: 4,
     paddingVertical: 2,
     paddingHorizontal: 4,
     marginTop: 4,
-    marginLeft: 8, // Add some space between the badge and the section title
+    marginLeft: 8, 
   },
   statusBadgeText: {
-    color: "white", // Text color that contrasts with the badge background
+    color: "white", 
     fontSize: 12,
     fontWeight: "bold",
   },
   confirmBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "green", // Use your app's theme color for confirmed status
+    backgroundColor: "green", 
     borderRadius: 4,
     paddingVertical: 2,
     paddingHorizontal: 4,
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   },
 
   iconStyle: {
-    color: "#007aff", // Sky blue color
+    color: "#007aff", 
     alignSelf: "center",
   },
 });
