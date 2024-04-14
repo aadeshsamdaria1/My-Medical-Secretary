@@ -82,7 +82,7 @@ class UserMapper {
     }
 
     private fun extractFromRow(columns: Map<String, Int>, rowString: List<String>, col: String): String {
-        return columns[col]?.let { rowString.getOrNull(it) } ?: throw Exception("Data missing.")
+        return columns[col]?.let { rowString.getOrNull(it) } ?: throw Exception("Data missing for column $col.")
     }
 
     private fun stringToInstant(date: String): Instant {
