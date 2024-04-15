@@ -47,7 +47,7 @@ class AuthServiceTest {
             userEntityRepository, jwtService, jwtEntityRepository
         )
         every { userEntityRepository.findByEmail(email) } returns patient
-        every { jwtService.generateJwt(patientId.toString()) } returns Pair(validJwt, expiry)
+        every { jwtService.generateJwt(patientId.toString(), any()) } returns Pair(validJwt, expiry)
         every { patient.patientId } returns patientId
         every { patient.password } returns password
         every { jwtEntityRepository.save(any()) } returns jwtEntity

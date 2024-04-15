@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -15,10 +16,8 @@ class JwtService {
         const val EXPIRATION_TIME: Long = 864_000_000
     }
 
-    fun generateJwt(subject: String): Pair<String, Date> {
-        val now = Date()
+    fun generateJwt(subject: String, now: Date): Pair<String, Date> {
         val expiryDate = Date(now.time + EXPIRATION_TIME)
-
         val key = Keys.hmacShaKeyFor(SECRET_KEY.toByteArray(Charsets.UTF_8))
         val jwt = Jwts.builder()
             .setSubject(subject)

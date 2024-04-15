@@ -6,6 +6,7 @@ import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.JwtEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AuthService(
@@ -25,7 +26,8 @@ class AuthService(
     private fun generateJwt(patient: PatientEntity): String {
 
         val subject = patient.patientId.toString()
-        val (jwt, expiryDate) = jwtService.generateJwt(subject)
+        val now = Date()
+        val (jwt, expiryDate) = jwtService.generateJwt(subject, now)
 
         jwtEntityRepository.save(
             JwtEntity(
