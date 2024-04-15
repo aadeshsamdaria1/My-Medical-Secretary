@@ -9,7 +9,8 @@ class AdminEntity (
     // Inherited fields
     mmsId: Int,
     email: String,
+    password: String,
 
     val username: String,
 
-): UserEntity(mmsId, email)
+): UserEntity(mmsId, email, password)

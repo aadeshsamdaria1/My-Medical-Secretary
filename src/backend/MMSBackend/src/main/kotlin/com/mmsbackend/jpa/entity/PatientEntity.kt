@@ -14,6 +14,7 @@ class PatientEntity(
     // Inherited fields
     mmsId: Int,
     email: String,
+    password: String,
 
     @Column(unique = true)
     val patientId: Int,
@@ -26,7 +27,7 @@ class PatientEntity(
     val suburb: String?,
     val state: String?
 
-): UserEntity(mmsId, email)
+): UserEntity(mmsId, email, password)
 
 fun PatientEntity.persist(userEntityRepository: UserEntityRepository, mapper: UserMapper): PatientEntity {
 

@@ -38,9 +38,12 @@ class FileServiceTest {
     @MockK
     private lateinit var appointmentEntityRepository: AppointmentEntityRepository
 
+    @MockK
+    private lateinit var passwordService: PasswordService
+
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper()
+        userMapper = UserMapper(passwordService)
         appointmentMapper = AppointmentMapper(
             userEntityRepository, doctorEntityRepository
         )
@@ -64,6 +67,7 @@ class FileServiceTest {
             every { userEntityRepository.findByPatientId(patientId1) } returns null
             every { userEntityRepository.findByPatientId(patientId2) } returns null
             every { userEntityRepository.save( any() ) } answers { invocation.args[0] as PatientEntity }
+            every { passwordService.generateSecurePassword() } returns UUID.randomUUID().toString()
         }
 
         @Test

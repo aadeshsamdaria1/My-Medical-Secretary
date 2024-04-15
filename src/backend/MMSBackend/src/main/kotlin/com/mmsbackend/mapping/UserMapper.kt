@@ -4,6 +4,7 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.service.PasswordService
 import com.mmsbackend.util.mapAddress
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -12,7 +13,9 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @Service
-class UserMapper {
+class UserMapper(
+    val passwordService: PasswordService
+) {
 
     fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
         return PatientEntity(
@@ -27,7 +30,8 @@ class UserMapper {
             patientId = patientDTO.patientId,
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = passwordService.generateSecurePassword()
         )
     }
 
@@ -37,7 +41,8 @@ class UserMapper {
             username = adminDTO.username,
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = passwordService.generateSecurePassword()
         )
     }
 
@@ -56,7 +61,8 @@ class UserMapper {
             // Unchanged fields
             email = existingPatient.email,
             patientId = existingPatient.patientId,
-            mmsId = existingPatient.mmsId
+            mmsId = existingPatient.mmsId,
+            password = existingPatient.password
         )
     }
 
@@ -77,7 +83,8 @@ class UserMapper {
             ),
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = passwordService.generateSecurePassword()
         )
     }
 

@@ -8,6 +8,7 @@ import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.entity.persist
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.UserMapper
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import kotlin.jvm.optionals.getOrNull
@@ -37,9 +38,16 @@ class UserController(
             return ResponseEntity.badRequest().body("Could not create patient. Missing ID.")
         }
 
-        val savedPatient = patient.persist(userEntityRepository, userMapper)
-        return ResponseEntity.ok("Successfully created / updated patient with " +
-                "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
+        return try {
+            val savedPatient = patient.persist(userEntityRepository, userMapper)
+            ResponseEntity.ok("Successfully created / updated patient with " +
+                    "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
+        } catch (dive: DataIntegrityViolationException) {
+            ResponseEntity.badRequest().body("Patient with this email already exists in the database.")
+        } catch (e: Exception) {
+            println(e)
+            ResponseEntity.badRequest().body(e.message)
+        }
     }
 
     @PostMapping("/create_admin")
