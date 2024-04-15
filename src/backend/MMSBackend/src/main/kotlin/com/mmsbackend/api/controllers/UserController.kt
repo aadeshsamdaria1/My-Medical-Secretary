@@ -5,8 +5,8 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.jpa.entity.persist
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
