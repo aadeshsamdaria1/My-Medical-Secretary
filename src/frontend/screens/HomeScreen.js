@@ -41,7 +41,7 @@ const HomeScreen = ({ route }) => {
   const userId = route.params?.userId;
   const userName = useUserDetails(userId);
   const upcomingAppointments = useUpcomingAppointments(userId);
-  console.log (upcomingAppointments);
+  // console.log (upcomingAppointments);
   // // Sample data for upcoming appointments and recent messages
   // const upcomingAppointments = [
   //   {

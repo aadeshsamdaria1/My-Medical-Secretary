@@ -124,16 +124,12 @@ export const getDefaultCalendarSource = async () => {
 };
 
 export const getFormattedTime = (startDate, startTime, duration) => {
-  // Start Date and Time
   const startDateTime = new Date(`${startDate.split('T')[0]}T${startTime}`);
 
-  // End Time Calculation
   const endTime = new Date(startDateTime.getTime() + duration * 60000);
 
-  // Formatting Options
   const options = { hour: '2-digit', minute: '2-digit', hour12: true };
 
-  // Formatted Start and End Times
   const formattedStartTime = startDateTime.toLocaleTimeString('en-US', options);
   const formattedEndTime = endTime.toLocaleTimeString('en-US', options);
 

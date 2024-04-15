@@ -17,6 +17,7 @@ import {
 } from "../utils/appointmentFunctions";
 
 const AppointmentDetailScreen = ({ route }) => {
+  console.log(route);
   const { appointmentDetails } = route.params;
 
   return (

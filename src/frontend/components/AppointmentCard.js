@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import doctorImage from "../assets/doctor.jpg";
 
 const AppointmentCard = ({ appointment, testID }) => {
   const navigation = useNavigation();
@@ -16,9 +15,6 @@ const AppointmentCard = ({ appointment, testID }) => {
   return (
     <TouchableOpacity onPress={handlePress} testID={testID}>
       <View style={styles.card}>
-        <View style={styles.iconWrapper}>
-          <Image source={doctorImage} style={styles.doctorImage} />
-        </View>
         <View style={styles.details}>
           <Text style={styles.title}>
             Meet with Dr.{appointment.doctor.name}
@@ -68,20 +64,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  iconWrapper: {
-    backgroundColor: "#fff",
-    borderRadius: 25,
-    height: 50,
-    width: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 16,
-  },
-  doctorImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
   details: {
     justifyContent: "center",
     flex: 1,
@@ -90,7 +72,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "600",
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   datetimeWrapper: {
     flexDirection: "row",

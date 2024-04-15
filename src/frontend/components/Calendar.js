@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import { Calendar } from "react-native-calendars";
 
 const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
-  // Prepare markedDates from appointment data
   const markedDates = appointmentsFromApi.reduce((acc, appointment) => {
-    // Extract just the date part from the startDate
     const formattedDate = appointment.startDate.split("T")[0];
     acc[formattedDate] = {
       selected: true,
@@ -52,16 +50,11 @@ const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
           color: '#ff3b30', 
           fontWeight: 'bold', 
         },
-        textDayFontFamily: 'System',
-        textMonthFontFamily: 'System',
-        textDayHeaderFontFamily: 'System',
-        textDayFontWeight: '500',
-        textMonthFontWeight: 'bold',
-        textDayHeaderFontWeight: '500',
-        textDayFontSize: 16,
-        textMonthFontSize: 20,
-        textDayHeaderFontSize: 16,
-        marginHorizontal: 30, 
+        textDay: {
+          fontSize: 16,
+          color: '#666',
+          fontWeight: '600',
+        },
       }}
     />
   );

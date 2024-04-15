@@ -13,6 +13,7 @@ const AppointmentScreen = ({route}) => {
   const userId = route.params.userId;
   // const userDetails = useUserDetails(userId);
   const appointmentsFromApi = useUpcomingAppointments(userId);
+  console.log(appointmentsFromApi)
 
   const onDaySelect = (day) => {
     setSelectedDate(day.dateString);

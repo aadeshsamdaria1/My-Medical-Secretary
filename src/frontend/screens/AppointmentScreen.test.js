@@ -46,8 +46,7 @@ const mockAppointmentsFromApi = [
 
 describe("AppointmentScreen Integration Test", () => {
   beforeEach(() => {
-    jest.spyOn(useUserDetailsHook, "useUserDetails").mockReturnValue({
-    });
+    jest.spyOn(useUserDetailsHook, "useUserDetails").mockReturnValue({});
 
     jest
       .spyOn(useUpcomingAppointmentsHook, "useUpcomingAppointments")
@@ -68,8 +67,24 @@ describe("AppointmentScreen Integration Test", () => {
     await waitFor(() => {
       expect(getByText("Calendar")).toBeTruthy();
       expect(getByTestId("appointment-card-171251")).toBeTruthy();
-      expect(getByTestId('calendar')).toBeTruthy();
-      
+      expect(getByTestId("calendar")).toBeTruthy();
     });
   });
+
+  it("displays message when no appointments are available", async () => {
+    jest
+      .spyOn(useUpcomingAppointmentsHook, "useUpcomingAppointments")
+      .mockReturnValue([]);
+
+    const { getByText } = render(
+      <AppointmentScreen route={{ params: { userId: "421" } }} />
+    );
+
+    await waitFor(() => {
+      expect(getByText("You have no upcoming appointments.")).toBeTruthy();
+    });
+  });
+
+
+
 });

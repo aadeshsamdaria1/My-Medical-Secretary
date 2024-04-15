@@ -1,6 +1,7 @@
 import React from "react";
 import { render, fireEvent} from "@testing-library/react-native";
 import AppointmentCard from "./AppointmentCard";
+import { useNavigation } from "@react-navigation/native";
 
 const mockNavigate = jest.fn();
 
@@ -74,5 +75,23 @@ describe("AppointmentCard", () => {
     });
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("responds to press interactions", () => {
+    const { getByText } = render(<AppointmentCard appointment={testDetail} testID="appointment-card" />);
+    fireEvent.press(getByText("Meet with Dr.John"));
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith("AppointmentDetail", {
+      appointmentDetails: testDetail,
+    });
+  });
+
+  it('matches snapshot', () => {
+    const { toJSON } = render(<AppointmentCard appointment={testDetail} />);
+    expect(toJSON()).toMatchSnapshot();
+  });
   
+
 });
