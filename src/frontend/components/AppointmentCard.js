@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import doctorImage from "../assets/doctor.png";
+import doctorImage from "../assets/doctor.jpg";
 
 const AppointmentCard = ({ appointment, testID }) => {
   const navigation = useNavigation();

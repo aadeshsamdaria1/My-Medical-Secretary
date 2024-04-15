@@ -1,7 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { render, fireEvent, TouchableOpacity } from "@testing-library/react-native";
+import { render, fireEvent} from "@testing-library/react-native";
 import AppointmentCard from "./AppointmentCard";
+// import { useNavigation } from "@react-navigation/native";
 
 const mockNavigate = jest.fn();
 
@@ -48,15 +48,13 @@ jest.mock("@react-navigation/native", () => ({
 }));
 
 jest.mock("react-native-gesture-handler", () => ({
+  // eslint-disable-next-line react/prop-types
   TouchableOpacity: ({ children, onPress }) => (
     <div onClick={onPress}>{children}</div>
   ),
 }));
 
-TouchableOpacity.PropTypes = {
-  children: PropTypes.node,
-  onPress: PropTypes.func,
-};
+
 
 describe("AppointmentCard", () => {
   const appointment = testDetail;

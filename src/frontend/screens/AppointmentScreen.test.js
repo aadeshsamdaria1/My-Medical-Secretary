@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import { render, waitFor } from "@testing-library/react-native";
 import AppointmentScreen from "./AppointmentScreen";
 import * as useUserDetailsHook from "../utils/useUserDetails";
 import * as useUpcomingAppointmentsHook from "../utils/useUpcomingAppointments";
