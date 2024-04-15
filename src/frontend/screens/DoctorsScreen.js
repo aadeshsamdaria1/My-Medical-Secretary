@@ -35,10 +35,12 @@ const DoctorsScreen = ( ) => {
 
   const renderDoctorItem = ({ item }) => (
     <TouchableOpacity
-      style={styles.facilityItem}
+      style={styles.doctorItem}
       onPress={() => handleDoctorPress(item)}
     >
-      <Text style={styles.facilityName}>{item.name}</Text>
+      <Text style={styles.doctorName}>{item.name}</Text>
+      <Text style={styles.doctorExpertise}>{item.expertise}</Text>
+      
     </TouchableOpacity>
   );
 
@@ -58,18 +60,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  facilityItem: {
+  doctorItem: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
     elevation: 2,
   },
-  facilityName: {
+  doctorName: {
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 5,
   },
+  doctorExpertise: {
+    fontSize: 16,
+    marginBottom: 5
+  }
 });
 
 
