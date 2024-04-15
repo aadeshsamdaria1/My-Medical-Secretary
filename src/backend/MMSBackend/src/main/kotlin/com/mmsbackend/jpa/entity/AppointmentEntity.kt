@@ -37,13 +37,3 @@ data class AppointmentEntity(
     @JoinColumn(name = "providerId")
     val doctor: DoctorEntity
 )
-
-fun AppointmentEntity.persist(repository: AppointmentEntityRepository, mapper: AppointmentMapper): AppointmentEntity {
-
-    val existingAppointment = repository.findById(this.id).getOrNull()
-    return if (existingAppointment != null) {
-        repository.save(mapper.updateExistingAppointment(existingAppointment, this))
-    } else{
-        repository.save(this)
-    }
-}

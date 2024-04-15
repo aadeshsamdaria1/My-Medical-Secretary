@@ -1,4 +1,4 @@
-package com.mmsbackend.service
+package com.mmsbackend.service.security
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -15,16 +15,17 @@ class JwtService {
         const val EXPIRATION_TIME: Long = 864_000_000
     }
 
-    fun generateJwt(subject: String): String {
+    fun generateJwt(subject: String): Pair<String, Date> {
         val now = Date()
         val expiryDate = Date(now.time + EXPIRATION_TIME)
 
         val key = Keys.hmacShaKeyFor(SECRET_KEY.toByteArray(Charsets.UTF_8))
-        return Jwts.builder()
+        val jwt = Jwts.builder()
             .setSubject(subject)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
+        return Pair(jwt, expiryDate)
     }
 }

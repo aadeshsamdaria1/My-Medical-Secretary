@@ -1,8 +1,7 @@
-package com.mmsbackend.service
+package com.mmsbackend.service.security
 
 import org.springframework.stereotype.Service
 import java.security.SecureRandom
-import kotlin.io.encoding.Base64
 
 @Service
 class PasswordService {
@@ -12,8 +11,12 @@ class PasswordService {
     }
 
     fun generateSecurePassword(): String {
-        val allowedChars = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+
         val secureRandom = SecureRandom()
+        val allowedChars =
+            ('a'..'z') +
+            ('A'..'Z') +
+            ('0'..'9')
 
         return (1..PASSWORD_LENGTH)
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }

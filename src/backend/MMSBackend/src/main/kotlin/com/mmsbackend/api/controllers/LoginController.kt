@@ -2,7 +2,7 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.exception.MissingPatientEmailException
-import com.mmsbackend.service.AuthService
+import com.mmsbackend.service.security.AuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

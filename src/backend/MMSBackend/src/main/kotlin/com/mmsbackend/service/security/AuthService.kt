@@ -1,14 +1,17 @@
-package com.mmsbackend.service
+package com.mmsbackend.service.security
 
 import com.mmsbackend.exception.MissingPatientEmailException
+import com.mmsbackend.jpa.entity.JwtEntity
 import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.repository.JwtEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
     val userEntityRepository: UserEntityRepository,
-    val jwtService: JwtService
+    val jwtService: JwtService,
+    val jwtEntityRepository: JwtEntityRepository
 ) {
 
     fun authenticate(email: String, password: String): String? {
@@ -22,9 +25,17 @@ class AuthService(
     private fun generateJwt(patient: PatientEntity): String {
 
         val subject = patient.patientId.toString()
-        val jwt = jwtService.generateJwt(subject)
+        val (jwt, expiryDate) = jwtService.generateJwt(subject)
 
-        // TODO: Persist jwt 
+        jwtEntityRepository.save(
+            JwtEntity(
+                id = 0, // Automatically generated
+                user = patient,
+                token = jwt,
+                expiryTime = expiryDate
+            )
+        )
+
         return jwt
     }
 }

@@ -4,7 +4,7 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.service.PasswordService
+import com.mmsbackend.service.security.PasswordService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension

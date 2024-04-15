@@ -8,6 +8,7 @@ import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
+import com.mmsbackend.service.security.PasswordService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension

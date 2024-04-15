@@ -2,7 +2,7 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.exception.MissingPatientEmailException
-import com.mmsbackend.service.AuthService
+import com.mmsbackend.service.security.AuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension

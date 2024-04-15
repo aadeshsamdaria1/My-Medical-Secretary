@@ -1,8 +1,8 @@
 package com.mmsbackend.service
 
-import com.mmsbackend.jpa.entity.persist
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
 import org.jsoup.Jsoup

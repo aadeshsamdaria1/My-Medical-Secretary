@@ -4,7 +4,7 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.service.PasswordService
+import com.mmsbackend.service.security.PasswordService
 import com.mmsbackend.util.mapAddress
 import org.springframework.stereotype.Service
 import java.time.Instant
