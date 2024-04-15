@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import doctorImage from "../assets/anonymous-doctor.jpg";
+import doctorImage from "../assets/doctor.png";
 
 const AppointmentCard = ({ appointment, testID }) => {
   const navigation = useNavigation();
@@ -37,6 +38,17 @@ const AppointmentCard = ({ appointment, testID }) => {
       </View>
     </TouchableOpacity>
   );
+};
+
+AppointmentCard.propTypes = {
+  testID: PropTypes.string,
+  appointment: PropTypes.shape({
+    doctor: PropTypes.shape({
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    startDate: PropTypes.string.isRequired,
+    startTime: PropTypes.string.isRequired
+  }).isRequired
 };
 
 const styles = StyleSheet.create({

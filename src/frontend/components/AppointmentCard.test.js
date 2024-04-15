@@ -1,7 +1,7 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react-native";
+import PropTypes from "prop-types";
+import { render, fireEvent, TouchableOpacity } from "@testing-library/react-native";
 import AppointmentCard from "./AppointmentCard";
-import { useNavigation } from "@react-navigation/native";
 
 const mockNavigate = jest.fn();
 
@@ -40,9 +40,8 @@ const testDetail = {
   userNote: "",
 };
 
-
 jest.mock("@react-navigation/native", () => ({
-  ...jest.requireActual("@react-navigation/native"), 
+  ...jest.requireActual("@react-navigation/native"),
   useNavigation: () => ({
     navigate: mockNavigate,
   }),
@@ -54,8 +53,13 @@ jest.mock("react-native-gesture-handler", () => ({
   ),
 }));
 
+TouchableOpacity.PropTypes = {
+  children: PropTypes.node,
+  onPress: PropTypes.func,
+};
+
 describe("AppointmentCard", () => {
-  const appointment = testDetail();
+  const appointment = testDetail;
 
   it("renders correctly", () => {
     const { getByText } = render(<AppointmentCard appointment={appointment} />);
@@ -73,4 +77,3 @@ describe("AppointmentCard", () => {
     });
   });
 });
-

@@ -1,11 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {
@@ -18,7 +18,6 @@ import {
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
-  const [isConfirmed, setIsConfirmed] = React.useState(false);
 
   return (
     <ScrollView style={styles.container}>
@@ -278,5 +277,32 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
+
+AppointmentDetailScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      appointmentDetails: PropTypes.shape({
+        doctor: PropTypes.shape({
+          name: PropTypes.string,
+          expertise: PropTypes.string,
+          address: PropTypes.string,
+        }),
+        status: PropTypes.string,
+        startDate: PropTypes.string,
+        startTime: PropTypes.string,
+        duration: PropTypes.number,
+        detail: PropTypes.string,
+        reason: PropTypes.string,
+        documents: PropTypes.arrayOf(
+          PropTypes.shape({
+            url: PropTypes.string,
+            name: PropTypes.string,
+          })
+        ),
+        note: PropTypes.string,
+      }),
+    }).isRequired,
+  }).isRequired,
+};
 
 export default AppointmentDetailScreen;

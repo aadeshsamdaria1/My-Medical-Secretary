@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import AppointmentCalendar from "../components/Calendar";
 import AppointmentCard from "../components/AppointmentCard";
@@ -10,7 +11,7 @@ const AppointmentScreen = ({route}) => {
   const [selectedDate, setSelectedDate] = useState("");
 
   const userId = route.params.userId;
-  const userDetails = useUserDetails(userId);
+  // const userDetails = useUserDetails(userId);
   const appointmentsFromApi = useUpcomingAppointments(userId);
 
   const onDaySelect = (day) => {
@@ -100,7 +101,6 @@ const AppointmentScreen = ({route}) => {
   );
 };
 
-export default AppointmentScreen;
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -126,3 +126,14 @@ const styles = StyleSheet.create({
     marginLeft: 20, 
   },
 });
+
+AppointmentScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      userId: PropTypes.number.isRequired, 
+    }).isRequired
+  }).isRequired,
+};
+
+
+export default AppointmentScreen;

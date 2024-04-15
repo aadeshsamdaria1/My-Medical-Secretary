@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Calendar } from "react-native-calendars";
 
 const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
@@ -64,6 +65,11 @@ const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
       }}
     />
   );
+};
+
+AppointmentCalendar.propTypes = {
+  appointmentsFromApi: PropTypes.array.isRequired,
+  onDaySelect: PropTypes.func.isRequired,
 };
 
 export default AppointmentCalendar;

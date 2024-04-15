@@ -69,6 +69,7 @@ describe("AppointmentScreen Integration Test", () => {
       expect(getByText("Calendar")).toBeTruthy();
       expect(getByTestId("appointment-card-171251")).toBeTruthy();
       expect(getByTestId('calendar')).toBeTruthy();
+      
     });
   });
 });
