@@ -12,6 +12,7 @@ jest.mock('react-native-calendars', () => ({
 describe('CalendarScreen', () => {
   const mockAppointments = [
     { startDate: '2024-04-24T00:00:00.000Z' },
+    { startDate: '2024-04-25T00:00:00.000Z' }
   ];
 
   it('renders with marked dates from appointments', () => {
@@ -28,6 +29,12 @@ describe('CalendarScreen', () => {
             selectedColor: '#007aff',
             dotColor: '#fff',
           },
+          '2024-04-25': {
+            selected: true,
+            marked: true,
+            selectedColor: '#007aff',
+            dotColor: '#fff',
+          }
         },
       }),
       {}
@@ -42,4 +49,32 @@ describe('CalendarScreen', () => {
     fireEvent.press(getByTestId('calendar'), { dateString: '2024-04-24' });
     expect(onDaySelectMock).toHaveBeenCalledWith({ dateString: '2024-04-24' });
   });
+
+  it('does not mark dates without appointments', () => {
+    const { getByTestId } = render(
+      <AppointmentCalendar appointmentsFromApi={[]} onDaySelect={() => {}} />
+    );
+    expect(Calendar).toHaveBeenCalledWith(
+      expect.objectContaining({
+        markedDates: {}
+      }),
+      {}
+    );
+  });
+
+  it('handles invalid date inputs gracefully', () => {
+    const onDaySelectMock = jest.fn();
+    const invalidDates = [{ startDate: 'invalid-date' }];
+    render(
+      <AppointmentCalendar appointmentsFromApi={invalidDates} onDaySelect={onDaySelectMock} />
+    );
+    expect(Calendar).toHaveBeenCalledWith(
+      expect.objectContaining({
+        markedDates: {}
+      }),
+      {}
+    );
+  });
+
+
 });
