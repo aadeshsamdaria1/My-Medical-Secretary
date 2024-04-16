@@ -12,7 +12,6 @@ import java.util.*
 class AuthService(
     val userEntityRepository: UserEntityRepository,
     val jwtService: JwtService,
-    val jwtEntityRepository: JwtEntityRepository
 ) {
 
     fun authenticate(username: String, password: String): String? {
@@ -29,14 +28,7 @@ class AuthService(
         val now = Date()
         val (jwt, expiryDate) = jwtService.generateJwt(subject, now)
 
-        jwtEntityRepository.save(
-            JwtEntity(
-                id = 0, // Automatically generated
-                user = patient,
-                token = jwt,
-                expiryTime = expiryDate
-            )
-        )
+        jwtService.persistJwt(patient = patient, token = jwt, expiry = expiryDate)
 
         return jwt
     }
