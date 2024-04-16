@@ -12,7 +12,7 @@ import ResourceNavigator from './ResourceNavigator';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
-    const userId = 3; // or any other user ID you want to fetch
+    const userId = 3088; // testing userID
     return (
         <NavigationContainer>
             <Tab.Navigator 

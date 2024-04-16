@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Doctors } from './DummyDoctors';
+import { getDoctorsByUserEndpoint } from '../api';
 
-
-const getDoctorsByUserId = (userId) => {
-      return Doctors;
-}
 
 const DoctorsScreen = ( ) => {
   const route = useRoute();
@@ -18,8 +15,9 @@ const DoctorsScreen = ( ) => {
     // Fetch doctors for the user using the userId
     const fetchDoctors = async () => {
       try {
-        const doctorsData = await getDoctorsByUserId(userId);
-        setDoctors(doctorsData);
+        const response = await fetch(getDoctorsByUserEndpoint(userId));
+        const data = await response.json();
+        setDoctors(data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
       }
