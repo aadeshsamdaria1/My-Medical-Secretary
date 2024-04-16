@@ -81,6 +81,26 @@ class PasswordServiceTest {
     }
 
     @Test
+    fun `Generate a username where first name is too short and last name is too long`() {
+        val name = Name("a", "qwertyuiopasdfghjklzxcvbnm")
+        val expectedUsername = "patient_a"
+        every { userEntityRepository.existsByUsername( expectedUsername ) } returns false
+
+        val username = passwordService.generateUsernameFromName(name)
+        assertEquals(username, expectedUsername)
+    }
+
+    @Test
+    fun `Generate a username where last name is too short and first name is too long`() {
+        val name = Name("qwertyuiopasdfghjklzxcvbnm", "a")
+        val expectedUsername = "qwert"
+        every { userEntityRepository.existsByUsername( expectedUsername ) } returns false
+
+        val username = passwordService.generateUsernameFromName(name)
+        assertEquals(username, expectedUsername)
+    }
+
+    @Test
     fun `Generate a username where multiple names are taken`() {
         val name = Name("firstname", "lastname")
         val expectedUsername = "firstname4"
@@ -111,6 +131,28 @@ class PasswordServiceTest {
         val expectedUsername = "vangogh1"
 
         every { userEntityRepository.existsByUsername( "vangogh") } returns true
+        every { userEntityRepository.existsByUsername(expectedUsername) } returns false
+
+        val username = passwordService.generateUsernameFromName(name)
+        assertEquals(username, expectedUsername)
+    }
+
+    @Test
+    fun `Pad very short names with user tag`() {
+        val name = Name("ab", "cd")
+        val expectedUsername = "patient_ab"
+
+        every { userEntityRepository.existsByUsername(expectedUsername) } returns false
+
+        val username = passwordService.generateUsernameFromName(name)
+        assertEquals(username, expectedUsername)
+    }
+
+    @Test
+    fun `Handle null surname`() {
+        val name = Name("ab", null)
+        val expectedUsername = "patient_ab"
+
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
         val username = passwordService.generateUsernameFromName(name)

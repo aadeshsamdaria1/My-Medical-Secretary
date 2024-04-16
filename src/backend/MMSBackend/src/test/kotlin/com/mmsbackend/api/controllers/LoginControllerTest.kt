@@ -17,7 +17,7 @@ import java.util.*
 @ExtendWith(MockKExtension::class)
 class LoginControllerTest {
 
-    private lateinit var loginController: LoginController
+    private lateinit var loginController: AuthController
 
     private val username = UUID.randomUUID().toString()
     private val password = UUID.randomUUID().toString()
@@ -29,7 +29,7 @@ class LoginControllerTest {
 
     @BeforeEach
     fun setup() {
-        loginController = LoginController(
+        loginController = AuthController(
             authService
         )
         every { authService.authenticate(username, password) } returns validToken

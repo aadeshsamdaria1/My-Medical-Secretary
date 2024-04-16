@@ -20,7 +20,7 @@ class PatientEntity(
     @Column(unique = true)
     val patientId: Int,
 
-    val firstname: String?,
+    val firstname: String,
     val middleName: String?,
     val surname: String?,
     val dob: Instant?,

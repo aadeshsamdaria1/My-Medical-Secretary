@@ -83,14 +83,18 @@ class UserMapper(
         val name = Name(firstname = firstname, surname = surname)
 
         return PatientEntity(
+
+            // Compulsory columns
             firstname = firstname,
             surname = surname,
-            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
-            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
             email = extractFromRow(columns, rowString, EMAIL),
+            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
+            patientId = extractFromRow(columns, rowString, ID).toInt(),
+
+            // Optional columns
+            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
             suburb = extractFromRow(columns, rowString, SUBURB),
             state = extractFromRow(columns, rowString, STATE),
-            patientId = extractFromRow(columns, rowString, ID).toInt(),
             address = mapAddress(
                 extractFromRow(columns, rowString, ADDRESS1),
                 extractFromRow(columns, rowString, ADDRESS2),

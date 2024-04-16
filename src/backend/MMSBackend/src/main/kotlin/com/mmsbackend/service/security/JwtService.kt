@@ -13,6 +13,8 @@ class JwtService {
     companion object {
         // TODO: Store a secure secret key in deployment environment
         const val SECRET_KEY = "Secret Key - 9FJL2NtVWq2T9HdGfRrT4w5z8BcEeHgKjNmPq5s8vBz3Cx6E9GjMbQeThWmZq4t"
+
+        // TODO: Decide with team on good expiry time
         const val EXPIRATION_TIME: Long = 864_000_000
     }
 

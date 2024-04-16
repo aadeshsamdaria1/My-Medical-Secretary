@@ -19,10 +19,13 @@ class PasswordService(
 
         return (1..PASSWORD_LENGTH)
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
-            .joinToString("")    }
+            .joinToString("")
+    }
 
     fun generateUsernameFromName(name: Name): String {
-        val base = getBaseUsername(firstname = normalise(name.firstname), surname = normalise(name.surname))
+        val firstname = name.firstname
+        val surname = name.surname ?: ""
+        val base = getBaseUsername(firstname = normalise(firstname), surname = normalise(surname))
         return if ( !userEntityRepository.existsByUsername(base)) {
             base
         } else {
@@ -41,6 +44,7 @@ class PasswordService(
             isAcceptableLength(firstname) -> firstname
             isAcceptableLength(surname) -> surname
             isAcceptableLength(firstname + surname) -> firstname + surname
+            isTooShort(firstname) -> USERNAME_PAD + firstname
             else -> firstname.take(MIN_BASE_USERNAME_LENGTH)
         }
     }
@@ -49,10 +53,14 @@ class PasswordService(
         return username.length in MIN_BASE_USERNAME_LENGTH..MAX_BASE_USERNAME_LENGTH
     }
 
+    private fun isTooShort(username: String): Boolean {
+        return username.length < MIN_BASE_USERNAME_LENGTH
+    }
+
     companion object {
-        // TODO: Tune these with team
         const val MIN_BASE_USERNAME_LENGTH = 5
         const val MAX_BASE_USERNAME_LENGTH = 20
         const val PASSWORD_LENGTH = 10
+        const val USERNAME_PAD = "patient_"
     }
 }

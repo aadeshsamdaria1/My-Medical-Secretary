@@ -28,10 +28,9 @@ class FileService(
             .associate { (index, columnName) -> columnName to index }
 
         return tableRows.drop(1).map { row ->
-            userMapper.mapHtmlPatient(
-                rowString = row,
-                columns = columns
-            ).persist(userEntityRepository, userMapper).patientId
+            // TODO: Decide whether to fail all patients or only some lines
+            val mappedPatients = userMapper.mapHtmlPatient(rowString = row, columns = columns)
+            mappedPatients.persist(userEntityRepository, userMapper).patientId
         }
     }
 
