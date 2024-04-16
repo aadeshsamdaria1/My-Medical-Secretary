@@ -8,6 +8,7 @@ import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
+import com.mmsbackend.service.security.PasswordService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -38,9 +39,12 @@ class FileServiceTest {
     @MockK
     private lateinit var appointmentEntityRepository: AppointmentEntityRepository
 
+    @MockK
+    private lateinit var passwordService: PasswordService
+
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper()
+        userMapper = UserMapper(passwordService)
         appointmentMapper = AppointmentMapper(
             userEntityRepository, doctorEntityRepository
         )
@@ -64,6 +68,8 @@ class FileServiceTest {
             every { userEntityRepository.findByPatientId(patientId1) } returns null
             every { userEntityRepository.findByPatientId(patientId2) } returns null
             every { userEntityRepository.save( any() ) } answers { invocation.args[0] as PatientEntity }
+            every { passwordService.generateSecurePassword() } returns UUID.randomUUID().toString()
+            every { passwordService.generateUsernameFromName(any()) } returns UUID.randomUUID().toString()
         }
 
         @Test

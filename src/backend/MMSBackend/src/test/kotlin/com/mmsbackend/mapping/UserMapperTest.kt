@@ -4,6 +4,9 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.service.security.PasswordService
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -23,9 +26,17 @@ class UserMapperTest {
 
     private lateinit var userMapper: UserMapper
 
+    @MockK
+    private lateinit var passwordService: PasswordService
+
+    private val password = UUID.randomUUID().toString()
+    private val username = UUID.randomUUID().toString()
+
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper()
+        userMapper = UserMapper(passwordService)
+        every { passwordService.generateSecurePassword() } returns password
+        every { passwordService.generateUsernameFromName(any()) } returns username
     }
 
     @Nested
@@ -67,16 +78,18 @@ class UserMapperTest {
             state = "Correct state",
             email = "Correct email",
             patientId = correctId,
-            mmsId = correctMmsId
+            mmsId = correctMmsId,
+            password = password,
+            username = username
         )
 
         @Test
         fun `Map a patient DTO to user entity`() {
             val patient = userMapper.mapPatientDTO(patientDTO)
-            val expectedPatient = PatientEntity(
-                0, email, patientId, firstname, middleName, surname, dob, address, suburb, state
+            val mappedPatient = PatientEntity(
+                0, email, password, username, patientId, firstname, middleName, surname, dob, address, suburb, state
             )
-            assertThat(expectedPatient).usingRecursiveComparison().isEqualTo(patient)
+            assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(patient)
         }
 
         @Test
@@ -95,7 +108,9 @@ class UserMapperTest {
                 // These fields should appear in final object
                 email = "Correct email",
                 patientId = correctId,
-                mmsId = correctMmsId
+                mmsId = correctMmsId,
+                password = password,
+                username = username
             )
 
             val newPatient = PatientEntity(
@@ -103,6 +118,8 @@ class UserMapperTest {
                 email = "Incorrect email",
                 patientId = incorrectId,
                 mmsId = incorrectMmsId,
+                password = "password",
+                username = "username",
 
                 // These fields should appear in final object
                 firstname = "Correct first name",
@@ -111,7 +128,7 @@ class UserMapperTest {
                 dob = correctDOB,
                 address = "Correct address",
                 suburb = "Correct suburb",
-                state = "Correct state"
+                state = "Correct state",
             )
 
             val mappedPatient = userMapper.updateExistingPatient(oldPatient, newPatient)
@@ -175,7 +192,12 @@ class UserMapperTest {
         @Test
         fun `Map Admin DTO to User Entity`() {
             val admin = userMapper.mapAdminDTO(adminDTO)
-            val expectedAdmin = AdminEntity(0, email, username)
+            val expectedAdmin = AdminEntity(
+                mmsId = 0,
+                email = email,
+                password = password,
+                username = username
+            )
             assertThat(admin).usingRecursiveComparison().isEqualTo(expectedAdmin)
         }
     }

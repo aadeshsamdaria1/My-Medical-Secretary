@@ -1,9 +1,11 @@
 package com.mmsbackend.mapping
 
+import com.mmsbackend.data.Name
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.service.security.PasswordService
 import com.mmsbackend.util.mapAddress
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -12,9 +14,16 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @Service
-class UserMapper {
+class UserMapper(
+    val passwordService: PasswordService
+) {
 
     fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
+        val name = Name(
+            firstname = patientDTO.firstname,
+            surname = patientDTO.surname
+        )
+
         return PatientEntity(
             firstname = patientDTO.firstname,
             middleName = patientDTO.middleName,
@@ -27,7 +36,9 @@ class UserMapper {
             patientId = patientDTO.patientId,
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = passwordService.generateSecurePassword(),
+            username = passwordService.generateUsernameFromName(name)
         )
     }
 
@@ -37,7 +48,8 @@ class UserMapper {
             username = adminDTO.username,
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = passwordService.generateSecurePassword()
         )
     }
 
@@ -56,28 +68,42 @@ class UserMapper {
             // Unchanged fields
             email = existingPatient.email,
             patientId = existingPatient.patientId,
-            mmsId = existingPatient.mmsId
+            mmsId = existingPatient.mmsId,
+            password = existingPatient.password,
+            username = existingPatient.username
         )
     }
 
     fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): PatientEntity {
 
+        // TODO: Decide which fields are actually necessary, and allow others to be missing
+
+        val firstname = extractFromRow(columns, rowString, FIRST_NAME)
+        val surname = extractFromRow(columns, rowString, SURNAME)
+        val name = Name(firstname = firstname, surname = surname)
+
         return PatientEntity(
-            firstname = extractFromRow(columns, rowString, FIRST_NAME),
-            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
-            surname = extractFromRow(columns, rowString, SURNAME),
-            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
+
+            // Compulsory columns
+            firstname = firstname,
+            surname = surname,
             email = extractFromRow(columns, rowString, EMAIL),
+            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
+            patientId = extractFromRow(columns, rowString, ID).toInt(),
+
+            // Optional columns
+            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
             suburb = extractFromRow(columns, rowString, SUBURB),
             state = extractFromRow(columns, rowString, STATE),
-            patientId = extractFromRow(columns, rowString, ID).toInt(),
             address = mapAddress(
                 extractFromRow(columns, rowString, ADDRESS1),
                 extractFromRow(columns, rowString, ADDRESS2),
             ),
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = passwordService.generateSecurePassword(),
+            username = passwordService.generateUsernameFromName(name)
         )
     }
 

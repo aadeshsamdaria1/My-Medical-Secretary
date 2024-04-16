@@ -14,11 +14,13 @@ class PatientEntity(
     // Inherited fields
     mmsId: Int,
     email: String,
+    password: String,
+    username: String,
 
     @Column(unique = true)
     val patientId: Int,
 
-    val firstname: String?,
+    val firstname: String,
     val middleName: String?,
     val surname: String?,
     val dob: Instant?,
@@ -26,14 +28,9 @@ class PatientEntity(
     val suburb: String?,
     val state: String?
 
-): UserEntity(mmsId, email)
-
-fun PatientEntity.persist(userEntityRepository: UserEntityRepository, mapper: UserMapper): PatientEntity {
-
-    val existingPatient = userEntityRepository.findByPatientId(this.patientId)
-    return if (existingPatient != null) {
-        userEntityRepository.save(mapper.updateExistingPatient(existingPatient, this))
-    } else{
-        userEntityRepository.save(this)
-    }
-}
+): UserEntity(
+    mmsId = mmsId,
+    email = email,
+    password = password,
+    username = username
+)
