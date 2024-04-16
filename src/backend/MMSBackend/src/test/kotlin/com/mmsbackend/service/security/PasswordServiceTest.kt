@@ -26,7 +26,7 @@ class PasswordServiceTest {
 
     @Test
     fun `Successfully generate a secure password`() {
-        val password = passwordService.generateSecurePassword()
+        val password = passwordService.generateAndEncodeSecurePassword()
         assertThat(password.length == PasswordService.PASSWORD_LENGTH)
     }
 

@@ -8,8 +8,8 @@ import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -18,7 +18,8 @@ import kotlin.jvm.optionals.getOrNull
 class UserController(
     val userEntityRepository: UserEntityRepository,
     val userValidation: UserValidation,
-    val userMapper: UserMapper
+    val userMapper: UserMapper,
+    val encoder: PasswordEncoder
 ) {
     @GetMapping("/get_patient/{id}")
     fun getPatient(@PathVariable id: Int): PatientEntity? {
@@ -38,7 +39,7 @@ class UserController(
             return ResponseEntity.badRequest().body("Could not create patient. Missing ID.")
         }
 
-        val savedPatient = patient.persist(userEntityRepository, userMapper)
+        val savedPatient = patient.persist(userEntityRepository, userMapper, encoder)
         return ResponseEntity.ok("Successfully created / updated patient with " +
                 "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
     }

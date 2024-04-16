@@ -1,9 +1,7 @@
 package com.mmsbackend.service.security
 
 import com.mmsbackend.exception.MissingPatientByUsernameException
-import com.mmsbackend.jpa.entity.JwtEntity
 import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.jpa.repository.JwtEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
 import java.util.*
@@ -11,7 +9,7 @@ import java.util.*
 @Service
 class AuthService(
     val userEntityRepository: UserEntityRepository,
-    val jwtService: JwtService,
+    val jwtService: TokenService,
 ) {
 
     fun authenticate(username: String, password: String): String? {

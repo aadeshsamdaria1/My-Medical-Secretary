@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class UserMapper(
-    val passwordService: PasswordService
+    val passwordService: PasswordService,
 ) {
 
     fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
@@ -37,7 +37,7 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword(),
+            password = passwordService.generateAndEncodeSecurePassword(),
             username = passwordService.generateUsernameFromName(name)
         )
     }
@@ -49,7 +49,7 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword()
+            password = passwordService.generateAndEncodeSecurePassword()
         )
     }
 
@@ -102,7 +102,7 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword(),
+            password = passwordService.generateAndEncodeSecurePassword(),
             username = passwordService.generateUsernameFromName(name)
         )
     }

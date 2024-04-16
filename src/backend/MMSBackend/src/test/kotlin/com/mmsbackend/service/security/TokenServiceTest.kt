@@ -16,9 +16,9 @@ import java.time.Instant
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
-class JwtServiceTest {
+class TokenServiceTest {
 
-    private lateinit var jwtService: JwtService
+    private lateinit var jwtService: TokenService
 
     private val patientId = 3
     private val validJwt = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxLCJleHAiOjM2MDF9." +
@@ -37,7 +37,7 @@ class JwtServiceTest {
 
     @BeforeEach
     fun setup() {
-        jwtService = JwtService(jwtEntityRepository)
+        jwtService = TokenService(jwtEntityRepository)
 
         every { jwtEntityRepository.save( any() ) } returns jwtEntity
         every { patient.patientId } returns patientId

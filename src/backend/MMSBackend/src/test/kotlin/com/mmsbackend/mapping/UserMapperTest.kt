@@ -35,7 +35,7 @@ class UserMapperTest {
     @BeforeEach
     fun setup() {
         userMapper = UserMapper(passwordService)
-        every { passwordService.generateSecurePassword() } returns password
+        every { passwordService.generateAndEncodeSecurePassword() } returns password
         every { passwordService.generateUsernameFromName(any()) } returns username
     }
 

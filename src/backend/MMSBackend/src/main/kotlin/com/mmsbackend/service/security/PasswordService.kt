@@ -2,24 +2,28 @@ package com.mmsbackend.service.security
 
 import com.mmsbackend.data.Name
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.security.SecureRandom
 
 @Service
 class PasswordService(
-    val userEntityRepository: UserEntityRepository
+    val userEntityRepository: UserEntityRepository,
+    val encoder: PasswordEncoder
 ) {
 
-    fun generateSecurePassword(): String {
+    fun generateAndEncodeSecurePassword(): String {
         val secureRandom = SecureRandom()
         val allowedChars =
             ('a'..'z') +
-                    ('A'..'Z') +
-                    ('0'..'9')
+            ('A'..'Z') +
+            ('0'..'9')
 
-        return (1..PASSWORD_LENGTH)
+        val securePassword = (1..PASSWORD_LENGTH)
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
             .joinToString("")
+
+        return encoder.encode(securePassword)
     }
 
     fun generateUsernameFromName(name: Name): String {

@@ -6,6 +6,7 @@ import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
 import org.jsoup.Jsoup
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,7 +14,8 @@ class FileService(
     val userMapper: UserMapper,
     val userEntityRepository: UserEntityRepository,
     val appointmentMapper: AppointmentMapper,
-    val appointmentEntityRepository: AppointmentEntityRepository
+    val appointmentEntityRepository: AppointmentEntityRepository,
+    val encoder: PasswordEncoder
 ) {
 
     fun readAndUploadUserFile(fileBytes: String): List<Int> {
@@ -30,7 +32,7 @@ class FileService(
         return tableRows.drop(1).map { row ->
             // TODO: Decide whether to fail all patients or only some lines
             val mappedPatients = userMapper.mapHtmlPatient(rowString = row, columns = columns)
-            mappedPatients.persist(userEntityRepository, userMapper).patientId
+            mappedPatients.persist(userEntityRepository, userMapper, encoder).patientId
         }
     }
 
