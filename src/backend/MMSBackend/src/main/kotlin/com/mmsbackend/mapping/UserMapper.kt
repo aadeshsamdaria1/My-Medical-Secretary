@@ -21,7 +21,7 @@ class UserMapper {
             surname = patientDTO.surname,
             dob = patientDTO.dob,
             email = patientDTO.email,
-            address = patientDTO.street,
+            address = patientDTO.address,
             suburb = patientDTO.suburb,
             state = patientDTO.state,
             patientId = patientDTO.patientId,
@@ -82,7 +82,7 @@ class UserMapper {
     }
 
     private fun extractFromRow(columns: Map<String, Int>, rowString: List<String>, col: String): String {
-        return columns[col]?.let { rowString.getOrNull(it) } ?: throw Exception("zara")
+        return columns[col]?.let { rowString.getOrNull(it) } ?: throw Exception("Data missing for column $col.")
     }
 
     private fun stringToInstant(date: String): Instant {

@@ -7,11 +7,9 @@ data class PatientDTO (
     val firstname: String,
     val middleName: String?,
     val surname: String,
-
     val dob: Instant,
     val email: String,
-
-    val street: String?,
+    val address: String?,
     val suburb: String?,
     val state: String?
 )

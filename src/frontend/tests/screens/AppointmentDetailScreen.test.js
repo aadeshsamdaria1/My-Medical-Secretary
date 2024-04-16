@@ -1,15 +1,15 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import AppointmentDetailScreen from "./AppointmentDetailScreen";
+import AppointmentDetailScreen from "../../screens/AppointmentDetailScreen";
 import {
   onDocumentPress,
   shareAppointmentDetails,
   addAppointmentToCalendar,
   onViewDoctorLocation
-} from "../utils/appointmentFunctions";
+} from "../../utils/appointmentFunctions";
 
 
-jest.mock("../utils/appointmentFunctions", () => ({
+jest.mock("../../utils/appointmentFunctions", () => ({
     onDocumentPress: jest.fn(),
     shareAppointmentDetails: jest.fn(),
     addAppointmentToCalendar: jest.fn(),

@@ -1,11 +1,11 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react-native";
-import AppointmentScreen from "./AppointmentScreen";
-import * as useUserDetailsHook from "../utils/useUserDetails";
-import * as useUpcomingAppointmentsHook from "../utils/useUpcomingAppointments";
+import AppointmentScreen from "../../screens/AppointmentScreen";
+import * as useUserDetailsHook from "../../utils/useUserDetails";
+import * as useUpcomingAppointmentsHook from "../../utils/useUpcomingAppointments";
 
-jest.mock("../components/Calendar", () => "AppointmentCalendar");
-jest.mock("../components/AppointmentCard", () => "AppointmentCard");
+jest.mock("../../components/Calendar", () => "AppointmentCalendar");
+jest.mock("../../components/AppointmentCard", () => "AppointmentCard");
 
 const mockAppointmentsFromApi = [
   {

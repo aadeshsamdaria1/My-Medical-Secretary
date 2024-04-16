@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent} from "@testing-library/react-native";
-import AppointmentCard from "./AppointmentCard";
+import AppointmentCard from "../../components/AppointmentCard";
 import { useNavigation } from "@react-navigation/native";
 
 const mockNavigate = jest.fn();
