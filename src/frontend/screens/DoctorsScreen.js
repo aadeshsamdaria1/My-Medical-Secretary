@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { Doctors } from './DummyDoctors';
 import { getDoctorsByUserEndpoint } from '../api';
 
 

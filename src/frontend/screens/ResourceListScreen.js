@@ -6,14 +6,12 @@ import hospitalIcon from '../assets/hospital.png'
 import radiologyIcon from '../assets/radiology.png';
 import pathologyIcon from '../assets/pathology.png';
 import doctorsIcon from '../assets/doctor.png';
-import additionalLinksIcon from '../assets/links.png';
 
 const categories = [
   { name: "Hospitals", icon: hospitalIcon },
   { name: "Radiology", icon: radiologyIcon },
   { name: "Pathology", icon: pathologyIcon },
   { name: "Doctors", icon: doctorsIcon },
-  //{ name: "Additional Links", icon: additionalLinksIcon },
 ];
 
 const ResourceListScreen = ( {route} ) => {

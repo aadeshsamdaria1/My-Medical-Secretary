@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-// import { facilities } from './FacilitiesDummyData'; // Import facility data TO DELETE
 import { getFacilitiesEndpoint } from '../api';
 
 const ResourceScreen = () => {
@@ -21,7 +20,7 @@ const ResourceScreen = () => {
       console.error('Error fetching facilities:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchAllFacilities();
   }, []);
@@ -30,7 +29,7 @@ const ResourceScreen = () => {
     // Filter facilities based on the selected category
     const filtered = facilities.filter(facility => facility.facilityType === category.toUpperCase());
     setFilteredFacilities(filtered);
-    // Update navigation header title dynamically
+    // Update navigation header title
     navigation.setOptions({ title: `${category}` });
   }, [category, navigation, facilities]);
 
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
-    elevation: 2, // Add shadow
+    elevation: 2,
   },
   facilityName: {
     fontWeight: 'bold',
