@@ -48,18 +48,14 @@ const HomeScreen = ({ route }) => {
     { id: '1', sender: 'Nurse Mary', message: 'Please remember to take your medication. This is a longer message to demonstrate the functionality.' },
     { id: '2', sender: 'Dr. John Doe', message: 'Your test results are ready.' },
   ];
-
-  // GET requests to fetch data from backend
-  // const [upcomingAppointments, setUpcomingAppointments] = useState([]);
-  // const [recentMessages, setRecentMessages] = useState([]);
-  // const [userName, setUserName] = useState('');
+  // Screen data
   const [showMoreAppointments, setShowMoreAppointments] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showMoreMessages, setShowMoreMessages] = useState(false);
   const userName = useUserDetails(userId);
   const upcomingAppointments = useUpcomingAppointments(userId);
-
+  // Screen controllers
   const showAppointmentDetails = (appointment) => {
     setSelectedAppointment(appointment);
     setShowAppointmentModal(true);
@@ -69,42 +65,6 @@ const HomeScreen = ({ route }) => {
     setShowAppointmentModal(false);
     setSelectedAppointment(null);
   };
-
-  // const fetchUserName = async () => {
-  //   try {
-  //     const response = await fetch(getUserEndpoint(userId));
-  //     const data = await response.json();
-  //     setUserName(data.firstname);
-  //   } catch (error) {
-  //     console.error('Error fetching user name:', error);
-  //   }
-  // };
-
-  // const fetchUpcomingAppointments = async () => {
-  //   try {
-  //     const response = await fetch(getAppointmentsByUserEndpoint(userId));
-  //     const data = await response.json();
-  //     setUpcomingAppointments(data);
-  //   } catch (error) {
-  //     console.error('Error fetching upcoming appointments:', error);
-  //   }
-  // };
-
-  // const fetchRecentMessages = async () => {
-  //   try {
-  //     const response = await fetch('/api/messages');
-  //     const data = await response.json();
-  //     setRecentMessages(data);
-  //   } catch (error) {
-  //     console.error('Error fetching recent messages:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchUserName();
-  //   fetchUpcomingAppointments();
-  //   // fetchRecentMessages();
-  // }, [userId]);
 
   const handleMessagePress = (message) => {
     Alert.alert(
@@ -119,7 +79,7 @@ const HomeScreen = ({ route }) => {
       { cancelable: true }
     );
   };
-
+  // Screen UI
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -239,7 +199,7 @@ const HomeScreen = ({ route }) => {
     </View>
   );
 };
-
+// Screen Stylings
 const styles = StyleSheet.create({
   container: {
     flex: 1,

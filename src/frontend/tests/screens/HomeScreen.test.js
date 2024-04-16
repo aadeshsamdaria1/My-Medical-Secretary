@@ -4,7 +4,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import HomeScreen from '../../screens/HomeScreen';
 import * as useUserDetailsHook from "../../utils/useUserDetails";
 import * as useUpcomingAppointmentsHook from "../../utils/useUpcomingAppointments";
-
+// Mock user data
 const mockUserData = {
     "mmsId": 1,
     "email": "roulaf@haus.com.au",
@@ -17,6 +17,7 @@ const mockUserData = {
     "suburb": "Balwyn",
     "state": "VIC"
 }
+// Mock Upcoming Appointments to test show more and show less buttons
 const mockUpcomingAppointments = [
     {
       id: 1,
@@ -74,6 +75,7 @@ const mockUpcomingAppointments = [
 describe('HomeScreen', () => {
   const route = { params: { userId: 1 } };
   beforeEach(() => {
+    // mocking user data and appointments data
     jest.spyOn(useUserDetailsHook, "useUserDetails").mockReturnValue(mockUserData.firstname);
 
     jest

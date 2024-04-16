@@ -4,10 +4,10 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvo
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  // Login handle functionality
   const handleSignIn = () => {
     // Perform sign-in logic here
-    // You can check the username and password against your backend or local data
+    
     if (username === 'admin' && password === 'password') {
       // Successful login, navigate to the next screen
       const userId = 421; // or any other user ID you want to fetch
@@ -17,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert('Error', 'Invalid username or password');
     }
   };
-
+  // Login screen UI
   return (
     <KeyboardAvoidingView
     style={styles.container}
@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
+// Login screen styling
 const styles = StyleSheet.create({
     container: {
         flex: 1,

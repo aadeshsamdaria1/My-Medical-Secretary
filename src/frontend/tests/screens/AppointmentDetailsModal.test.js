@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import AppointmentDetailsModal from '../../components/AppointmentDetailsModal';
-
+// Mock appointment
 const mockAppointment = {
   id: 1,
   detail: 'Routine checkup',
