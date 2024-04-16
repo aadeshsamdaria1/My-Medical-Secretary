@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import HomeScreen from '../../screens/HomeScreen';
-import { getUserEndpoint, getAppointmentsByUserEndpoint } from '../../__mocks__/api';
 jest.mock('../../api');
 
 const mockUserData = {
