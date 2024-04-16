@@ -1,26 +1,29 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Calendar } from "react-native-calendars";
 
-const CalendarScreen = ({ markedDates, onDaySelect }) => {
+const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
+  const markedDates = appointmentsFromApi.reduce((acc, appointment) => {
+    const formattedDate = appointment.startDate.split("T")[0];
+    acc[formattedDate] = {
+      selected: true,
+      marked: true,
+      selectedColor: "#007aff",
+      dotColor: "#fff",
+    };
+    return acc;
+  }, {});
+
+
   return (
     <Calendar
-      // Event Handler for when a day is pressed
+      testID="calendar"
       onDayPress={(day) => {
         onDaySelect(day);
       }}
 
-      // Marked dates with custom styling
-      markedDates={Object.keys(markedDates).reduce((acc, date) => {
-        acc[date] = {
-          selected: true,
-          marked: true,
-          selectedColor: "#007aff",
-          dotColor: "#fff",
-        };
-        return acc;
-      }, {})}
+      markedDates={markedDates}
 
-      // Calendar theme customizations
       theme={{
         'stylesheet.calendar.main': {
           week: {
@@ -47,19 +50,19 @@ const CalendarScreen = ({ markedDates, onDaySelect }) => {
           color: '#ff3b30', 
           fontWeight: 'bold', 
         },
-        textDayFontFamily: 'System',
-        textMonthFontFamily: 'System',
-        textDayHeaderFontFamily: 'System',
-        textDayFontWeight: '500',
-        textMonthFontWeight: 'bold',
-        textDayHeaderFontWeight: '500',
-        textDayFontSize: 16,
-        textMonthFontSize: 20,
-        textDayHeaderFontSize: 16,
-        marginHorizontal: 16, // sets horizontal margin, but may not affect some calendar styles
+        textDay: {
+          fontSize: 16,
+          color: '#666',
+          fontWeight: '600',
+        },
       }}
     />
   );
 };
 
-export default CalendarScreen;
+AppointmentCalendar.propTypes = {
+  appointmentsFromApi: PropTypes.array.isRequired,
+  onDaySelect: PropTypes.func.isRequired,
+};
+
+export default AppointmentCalendar;

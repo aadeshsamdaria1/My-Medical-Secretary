@@ -5,18 +5,29 @@ import AppointmentDetailScreen from "../screens/AppointmentDetailScreen";
 
 const Stack = createStackNavigator();
 
-const AppointmentStack = () => {
+const AppointmentStack = ({ route }) => {
+  const { userId } = route.params;
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="AppointmentList"
         component={AppointmentScreen}
-        options={{ title: "Appointments", headerTitleAlign: "center", headerTitleStyle:{fontWeight: "bold"} }}
+        initialParams={{ userId }}
+        options={{
+          title: "Appointments",
+          headerTitleAlign: "center",
+          headerTitleStyle: { fontWeight: "bold" },
+        }}
       />
       <Stack.Screen
         name="AppointmentDetail"
         component={AppointmentDetailScreen}
-        options={{ title: "Appointment Detail", headerTitleAlign: "center", headerTitleStyle:{fontWeight: "bold"}}}
+        options={{
+          title: "Appointment Detail",
+          headerTitleAlign: "center",
+          headerTitleStyle: { fontWeight: "bold" },
+        }}
       />
     </Stack.Navigator>
   );

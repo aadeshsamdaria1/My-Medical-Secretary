@@ -122,3 +122,16 @@ export const getDefaultCalendarSource = async () => {
   );
   return defaultCalendars.length ? defaultCalendars[0].source : null;
 };
+
+export const getFormattedTime = (startDate, startTime, duration) => {
+  const startDateTime = new Date(`${startDate.split('T')[0]}T${startTime}`);
+
+  const endTime = new Date(startDateTime.getTime() + duration * 60000);
+
+  const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+  const formattedStartTime = startDateTime.toLocaleTimeString('en-US', options);
+  const formattedEndTime = endTime.toLocaleTimeString('en-US', options);
+
+  return `${formattedStartTime} to ${formattedEndTime}`;
+};

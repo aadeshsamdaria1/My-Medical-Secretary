@@ -6,44 +6,7 @@ import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
 const HomeScreen = ({ route }) => {
   const userId = route.params?.userId;
-
-  // // Sample data for upcoming appointments and recent messages
-  // const upcomingAppointments = [
-  //   {
-  //     "id": 1,
-  //     "detail": "Routine chekcup",
-  //     "reason": "General health",
-  //     "note": "No specific notes",
-  //     "dateCreate": "2022-04-08T10:30:00Z",
-  //     "lastUpdated": "2022-04-08T12:45:00Z",
-  //     "startTime": "10:30:00",
-  //     "startDate": "2022-04-15T00:00:00.000+00:00",
-  //     "duration": 60,
-  //     "userNote": "",
-  //     "status": "UNCONFIRMED",
-  //     "patient": {
-  //         "mmsId": 450,
-  //         "email": "john.doe@example.com",
-  //         "patientId": 3,
-  //         "firstname": "Zara",
-  //         "middleName": "Doe",
-  //         "surname": "Smith",
-  //         "dob": "1990-01-01T00:00:00Z",
-  //         "address": "123 Main St",
-  //         "suburb": "Cityville",
-  //         "state": "California"
-  //     },
-  //     "doctor": {
-  //         "id": 3,
-  //         "name": "John",
-  //         "address": "1 Street street",
-  //         "contact": "2394823948",
-  //         "email": "john.doe@example.com",
-  //         "expertise": "Arms and legs",
-  //         "website": "doctor.com"
-  //     }
-  // },
-  // ];
+  // console.log (upcomingAppointments);
   const recentMessages = [
     { id: '1', sender: 'Nurse Mary', message: 'Please remember to take your medication. This is a longer message to demonstrate the functionality.' },
     { id: '2', sender: 'Dr. John Doe', message: 'Your test results are ready.' },
