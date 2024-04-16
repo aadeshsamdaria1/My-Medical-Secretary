@@ -11,43 +11,42 @@ class PasswordService(
 ) {
 
     fun generateSecurePassword(): String {
-        return generateSecureSequence(PASSWORD_LENGTH)
-    }
-
-    fun generateUsernameFromName(name: Name): String {
-        val baseUsername = getBaseUsername(name)
-        return generateSequence(1) { it + 1 }
-            .map { baseUsername + it.toString() }
-            .first { !userEntityRepository.existsByUsername(it) }
-    }
-
-    private fun getBaseUsername(name: Name): String {
-        return when {
-            isAcceptableLength(name.firstname) -> name.firstname
-            isAcceptableLength(name.surname) -> name.surname
-            isAcceptableLength(name.firstname + name.surname) -> name.firstname + name.surname
-            else -> generateRandomUsername()
-        }
-    }
-
-    private fun isAcceptableLength(username: String): Boolean {
-        return username.length in MIN_BASE_USERNAME_LENGTH..MAX_BASE_USERNAME_LENGTH
-    }
-
-    private fun generateRandomUsername(): String {
-        return generateSecureSequence(MIN_BASE_USERNAME_LENGTH)
-    }
-
-    private fun generateSecureSequence(length: Int): String {
         val secureRandom = SecureRandom()
         val allowedChars =
             ('a'..'z') +
                     ('A'..'Z') +
                     ('0'..'9')
 
-        return (1..length)
+        return (1..PASSWORD_LENGTH)
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
-            .joinToString("")
+            .joinToString("")    }
+
+    fun generateUsernameFromName(name: Name): String {
+        val base = getBaseUsername(firstname = normalise(name.firstname), surname = normalise(name.surname))
+        return if ( !userEntityRepository.existsByUsername(base)) {
+            base
+        } else {
+            generateSequence(1) { it + 1 }
+                .map { base + it.toString() }
+                .first { !userEntityRepository.existsByUsername(it) }
+        }
+    }
+
+    private fun normalise(name: String): String {
+        return name.lowercase().replace("\\s".toRegex(), "")
+    }
+
+    private fun getBaseUsername(firstname: String, surname: String): String {
+        return when {
+            isAcceptableLength(firstname) -> firstname
+            isAcceptableLength(surname) -> surname
+            isAcceptableLength(firstname + surname) -> firstname + surname
+            else -> firstname.take(MIN_BASE_USERNAME_LENGTH)
+        }
+    }
+
+    private fun isAcceptableLength(username: String): Boolean {
+        return username.length in MIN_BASE_USERNAME_LENGTH..MAX_BASE_USERNAME_LENGTH
     }
 
     companion object {

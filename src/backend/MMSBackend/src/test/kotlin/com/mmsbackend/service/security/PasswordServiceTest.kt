@@ -32,8 +32,8 @@ class PasswordServiceTest {
 
     @Test
     fun `Generate a username from unseen first name of acceptable length`() {
-        val name = Name("Firstname", "Lastname")
-        val expectedUsername = "Firstname1"
+        val name = Name("firstname", "lastname")
+        val expectedUsername = "firstname"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
         val username = passwordService.generateUsernameFromName(name)
@@ -42,8 +42,8 @@ class PasswordServiceTest {
 
     @Test
     fun `Generate a username where first name is too long`() {
-        val name = Name("qwertyuiopasdfghjklzxcvbnm", "Lastname")
-        val expectedUsername = "Lastname1"
+        val name = Name("qwertyuiopasdfghjklzxcvbnm", "lastname")
+        val expectedUsername = "lastname"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
         val username = passwordService.generateUsernameFromName(name)
@@ -52,8 +52,8 @@ class PasswordServiceTest {
 
     @Test
     fun `Generate a username where first name is too short`() {
-        val name = Name("aa", "Lastname")
-        val expectedUsername = "Lastname1"
+        val name = Name("aa", "lastname")
+        val expectedUsername = "lastname"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
         val username = passwordService.generateUsernameFromName(name)
@@ -63,7 +63,7 @@ class PasswordServiceTest {
     @Test
     fun `Generate a username where both first and last name are too short`() {
         val name = Name("aaaa", "bbbb")
-        val expectedUsername = "aaaabbbb1"
+        val expectedUsername = "aaaabbbb"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
         val username = passwordService.generateUsernameFromName(name)
@@ -73,21 +73,44 @@ class PasswordServiceTest {
     @Test
     fun `Generate a username where both first and last name are too long`() {
         val name = Name("qwertyuiopasdfghjklzxcvbnm", "qwertyuiopasdfghjklzxcvbnm")
-
-        every { userEntityRepository.existsByUsername( any() ) } returns false
+        val expectedUsername = "qwert"
+        every { userEntityRepository.existsByUsername( expectedUsername ) } returns false
 
         val username = passwordService.generateUsernameFromName(name)
-        assertEquals(username.length, PasswordService.MIN_BASE_USERNAME_LENGTH + 1)
+        assertEquals(username, expectedUsername)
     }
 
     @Test
     fun `Generate a username where multiple names are taken`() {
-        val name = Name("Firstname", "Lastname")
-        val expectedUsername = "Firstname4"
+        val name = Name("firstname", "lastname")
+        val expectedUsername = "firstname4"
 
-        every { userEntityRepository.existsByUsername("Firstname1") } returns true
-        every { userEntityRepository.existsByUsername("Firstname2") } returns true
-        every { userEntityRepository.existsByUsername("Firstname3") } returns true
+        every { userEntityRepository.existsByUsername("firstname") } returns true
+        every { userEntityRepository.existsByUsername("firstname1") } returns true
+        every { userEntityRepository.existsByUsername("firstname2") } returns true
+        every { userEntityRepository.existsByUsername("firstname3") } returns true
+        every { userEntityRepository.existsByUsername(expectedUsername) } returns false
+
+        val username = passwordService.generateUsernameFromName(name)
+        assertEquals(username, expectedUsername)
+    }
+
+    @Test
+    fun `Generate a username from a name with whitespace`() {
+        val name = Name(" f i r s   t  ", "lastname")
+        val expectedUsername = "first"
+        every { userEntityRepository.existsByUsername(expectedUsername) } returns false
+
+        val username = passwordService.generateUsernameFromName(name)
+        assertEquals(username, expectedUsername)
+    }
+
+    @Test
+    fun `Lowercase entire username & remove whitespace simultaneously`() {
+        val name = Name("Van Gogh", "lastname")
+        val expectedUsername = "vangogh1"
+
+        every { userEntityRepository.existsByUsername( "vangogh") } returns true
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
         val username = passwordService.generateUsernameFromName(name)

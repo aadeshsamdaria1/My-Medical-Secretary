@@ -21,4 +21,5 @@ open class UserEntity(
     @JsonIgnore
     @Column(nullable = false)
     open var password: String
+    // TODO: Build update password endpoint
 )
