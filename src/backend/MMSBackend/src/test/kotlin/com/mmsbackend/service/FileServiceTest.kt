@@ -69,6 +69,7 @@ class FileServiceTest {
             every { userEntityRepository.findByPatientId(patientId2) } returns null
             every { userEntityRepository.save( any() ) } answers { invocation.args[0] as PatientEntity }
             every { passwordService.generateSecurePassword() } returns UUID.randomUUID().toString()
+            every { passwordService.generateUsernameFromName(any()) } returns UUID.randomUUID().toString()
         }
 
         @Test

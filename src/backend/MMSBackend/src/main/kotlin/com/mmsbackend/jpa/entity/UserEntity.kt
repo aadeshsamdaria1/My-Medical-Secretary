@@ -12,6 +12,9 @@ open class UserEntity(
     open val mmsId: Int,
 
     @Column(nullable = false, unique = true)
+    open val username: String,
+
+    @Column(nullable = false)
     open val email: String,
 
     // Do not return password in REST requests

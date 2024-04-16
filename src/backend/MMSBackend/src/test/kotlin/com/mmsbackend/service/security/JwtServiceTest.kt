@@ -1,8 +1,6 @@
 package com.mmsbackend.service.security
 
-import io.mockk.every
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

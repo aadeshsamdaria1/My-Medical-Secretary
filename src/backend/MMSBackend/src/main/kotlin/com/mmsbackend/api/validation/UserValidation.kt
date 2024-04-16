@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service
 class UserValidation {
     fun isValidPatient(patient: PatientEntity): Boolean {
 
-
         return patient.patientId != 0
     }
 
     private fun hasUniqueEmail(patient: PatientEntity) {
+        // TODO: Finish this
 
     }
 }

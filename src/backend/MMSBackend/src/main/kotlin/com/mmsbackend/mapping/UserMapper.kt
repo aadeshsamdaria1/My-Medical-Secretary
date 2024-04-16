@@ -1,5 +1,6 @@
 package com.mmsbackend.mapping
 
+import com.mmsbackend.data.Name
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.AdminEntity
@@ -18,6 +19,11 @@ class UserMapper(
 ) {
 
     fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
+        val name = Name(
+            firstname = patientDTO.firstname,
+            surname = patientDTO.surname
+        )
+
         return PatientEntity(
             firstname = patientDTO.firstname,
             middleName = patientDTO.middleName,
@@ -31,7 +37,8 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword()
+            password = passwordService.generateSecurePassword(),
+            username = passwordService.generateUsernameFromName(name)
         )
     }
 
@@ -62,16 +69,21 @@ class UserMapper(
             email = existingPatient.email,
             patientId = existingPatient.patientId,
             mmsId = existingPatient.mmsId,
-            password = existingPatient.password
+            password = existingPatient.password,
+            username = existingPatient.username
         )
     }
 
     fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): PatientEntity {
 
+        val firstname = extractFromRow(columns, rowString, FIRST_NAME)
+        val surname = extractFromRow(columns, rowString, SURNAME)
+        val name = Name(firstname = firstname, surname = surname)
+
         return PatientEntity(
-            firstname = extractFromRow(columns, rowString, FIRST_NAME),
+            firstname = firstname,
+            surname = surname,
             middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
-            surname = extractFromRow(columns, rowString, SURNAME),
             dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
             email = extractFromRow(columns, rowString, EMAIL),
             suburb = extractFromRow(columns, rowString, SUBURB),
@@ -84,7 +96,8 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword()
+            password = passwordService.generateSecurePassword(),
+            username = passwordService.generateUsernameFromName(name)
         )
     }
 

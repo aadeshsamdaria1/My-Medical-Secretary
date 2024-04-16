@@ -10,7 +10,11 @@ class AdminEntity (
     mmsId: Int,
     email: String,
     password: String,
+    username: String,
 
-    val username: String,
-
-): UserEntity(mmsId, email, password)
+): UserEntity(
+    mmsId = mmsId,
+    email = email,
+    password = password,
+    username = username
+)

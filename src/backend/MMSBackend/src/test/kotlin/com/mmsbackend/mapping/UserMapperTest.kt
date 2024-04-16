@@ -30,12 +30,13 @@ class UserMapperTest {
     private lateinit var passwordService: PasswordService
 
     private val password = UUID.randomUUID().toString()
-
+    private val username = UUID.randomUUID().toString()
 
     @BeforeEach
     fun setup() {
         userMapper = UserMapper(passwordService)
         every { passwordService.generateSecurePassword() } returns password
+        every { passwordService.generateUsernameFromName(any()) } returns username
     }
 
     @Nested
@@ -78,14 +79,15 @@ class UserMapperTest {
             email = "Correct email",
             patientId = correctId,
             mmsId = correctMmsId,
-            password = password
+            password = password,
+            username = username
         )
 
         @Test
         fun `Map a patient DTO to user entity`() {
             val patient = userMapper.mapPatientDTO(patientDTO)
             val mappedPatient = PatientEntity(
-                0, email, password, patientId, firstname, middleName, surname, dob, address, suburb, state
+                0, email, password, username, patientId, firstname, middleName, surname, dob, address, suburb, state
             )
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(patient)
         }
@@ -107,7 +109,8 @@ class UserMapperTest {
                 email = "Correct email",
                 patientId = correctId,
                 mmsId = correctMmsId,
-                password = password
+                password = password,
+                username = username
             )
 
             val newPatient = PatientEntity(
@@ -116,6 +119,7 @@ class UserMapperTest {
                 patientId = incorrectId,
                 mmsId = incorrectMmsId,
                 password = "password",
+                username = "username",
 
                 // These fields should appear in final object
                 firstname = "Correct first name",

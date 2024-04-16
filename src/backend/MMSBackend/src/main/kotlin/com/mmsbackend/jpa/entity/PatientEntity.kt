@@ -15,6 +15,7 @@ class PatientEntity(
     mmsId: Int,
     email: String,
     password: String,
+    username: String,
 
     @Column(unique = true)
     val patientId: Int,
@@ -27,4 +28,9 @@ class PatientEntity(
     val suburb: String?,
     val state: String?
 
-): UserEntity(mmsId, email, password)
+): UserEntity(
+    mmsId = mmsId,
+    email = email,
+    password = password,
+    username = username
+)
