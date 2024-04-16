@@ -1,6 +1,6 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.exception.MissingPatientEmailException
+import com.mmsbackend.exception.MissingPatientByUsernameException
 import com.mmsbackend.jpa.entity.JwtEntity
 import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.JwtEntityRepository
@@ -22,7 +22,7 @@ class AuthServiceTest {
 
     private lateinit var authService: AuthService
 
-    private val email = UUID.randomUUID().toString()
+    private val username = UUID.randomUUID().toString()
     private val password = UUID.randomUUID().toString()
     private val patientId = Random.nextInt()
     private val validJwt = UUID.randomUUID().toString()
@@ -46,7 +46,7 @@ class AuthServiceTest {
         authService = AuthService(
             userEntityRepository, jwtService, jwtEntityRepository
         )
-        every { userEntityRepository.findByEmail(email) } returns patient
+        every { userEntityRepository.findByUsername(username) } returns patient
         every { jwtService.generateJwt(patientId.toString(), any()) } returns Pair(validJwt, expiry)
         every { patient.patientId } returns patientId
         every { patient.password } returns password
@@ -55,20 +55,20 @@ class AuthServiceTest {
 
     @Test
     fun `Successfully authenticate an email and password`() {
-        val jwt = authService.authenticate(email, password)
+        val jwt = authService.authenticate(username, password)
         assertEquals(validJwt, jwt)
     }
 
     @Test
     fun `Fail to authenticate when email does not exist`() {
-        every { userEntityRepository.findByEmail(email) } returns null
-        assertThrows<MissingPatientEmailException> { authService.authenticate(email, password) }
+        every { userEntityRepository.findByUsername(username) } returns null
+        assertThrows<MissingPatientByUsernameException> { authService.authenticate(username, password) }
     }
 
     @Test
     fun `Return null when password incorrect`() {
         every { patient.password } returns UUID.randomUUID().toString()
-        val jwt = authService.authenticate(email, password)
+        val jwt = authService.authenticate(username, password)
         assertNull(jwt)
     }
 }

@@ -96,6 +96,17 @@ class UserControllerTest {
                 "Could not create patient. Missing ID.")
             assertEquals(response, expectedResponse)
         }
+
+//        @Test
+//        fun `Fail to create new patient if patient already exists`() {
+//
+//            every { patientEntity.patientId } returns 0
+//
+//            val response = userController.createPatient(patientDTO)
+//            val expectedResponse = ResponseEntity.badRequest().body(
+//                "Could not create patient. Missing ID.")
+//            assertEquals(response, expectedResponse)
+//        }
     }
 
     @Nested

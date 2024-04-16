@@ -1,6 +1,6 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.exception.MissingPatientEmailException
+import com.mmsbackend.exception.MissingPatientByUsernameException
 import com.mmsbackend.jpa.entity.JwtEntity
 import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.JwtEntityRepository
@@ -15,10 +15,10 @@ class AuthService(
     val jwtEntityRepository: JwtEntityRepository
 ) {
 
-    fun authenticate(email: String, password: String): String? {
+    fun authenticate(username: String, password: String): String? {
 
-        val patient = userEntityRepository.findByEmail(email) ?: 
-            throw MissingPatientEmailException(email)
+        val patient = userEntityRepository.findByUsername(username) ?:
+            throw MissingPatientByUsernameException(username)
         
         return if (patient.password == password) generateJwt(patient) else null
     }

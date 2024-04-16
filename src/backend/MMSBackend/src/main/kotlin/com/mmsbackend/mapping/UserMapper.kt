@@ -76,6 +76,8 @@ class UserMapper(
 
     fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): PatientEntity {
 
+        // TODO: Decide which fields are actually necessary, and allow others to be missing
+
         val firstname = extractFromRow(columns, rowString, FIRST_NAME)
         val surname = extractFromRow(columns, rowString, SURNAME)
         val name = Name(firstname = firstname, surname = surname)

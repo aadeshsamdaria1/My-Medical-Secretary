@@ -1,7 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
-import com.mmsbackend.exception.MissingPatientEmailException
+import com.mmsbackend.exception.MissingPatientByUsernameException
 import com.mmsbackend.service.security.AuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,15 +19,15 @@ class LoginController(
     @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): ResponseEntity<String> {
         val token = try {
-            authService.authenticate(request.email, request.password)
-        } catch (mpe: MissingPatientEmailException) {
-            return ResponseEntity.badRequest().body("Patient with email ${request.email} does not exist.")
+            authService.authenticate(request.username, request.password)
+        } catch (mpe: MissingPatientByUsernameException) {
+            return ResponseEntity.badRequest().body("Patient with username ${request.username} does not exist.")
         }
 
         return if (token != null){
             ResponseEntity.ok(token)
         } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email or password.")
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password.")
         }
     }
 }

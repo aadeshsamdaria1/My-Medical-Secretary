@@ -38,16 +38,9 @@ class UserController(
             return ResponseEntity.badRequest().body("Could not create patient. Missing ID.")
         }
 
-        return try {
-            val savedPatient = patient.persist(userEntityRepository, userMapper)
-            ResponseEntity.ok("Successfully created / updated patient with " +
-                    "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
-        } catch (dive: DataIntegrityViolationException) {
-            ResponseEntity.badRequest().body("Patient with this email already exists in the database.")
-        } catch (e: Exception) {
-            println(e)
-            ResponseEntity.badRequest().body(e.message)
-        }
+        val savedPatient = patient.persist(userEntityRepository, userMapper)
+        return ResponseEntity.ok("Successfully created / updated patient with " +
+                "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
     }
 
     @PostMapping("/create_admin")
