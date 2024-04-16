@@ -3,11 +3,43 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Doctors from './pages/Doctors';
+import Patients from './pages/Patients';
+import Facilities from './pages/Facilities';
+import FileUpload from './pages/FileUpload';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App/>,
+  },
+  {
+    path: "doctors",
+    element: <Doctors/>
+  },
+  {
+    path: "patients",
+    element: <Patients/>
+  },
+  {
+    path: "facilities",
+    element: <Facilities/>
+  },
+  {
+    path: "file_upload",
+    element: <FileUpload/>
+  }
+
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
