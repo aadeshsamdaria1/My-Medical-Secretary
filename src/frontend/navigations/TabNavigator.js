@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
 import ProfileIcon from '../components/ProfileIcon';
@@ -7,14 +6,13 @@ import HomeScreen from '../screens/HomeScreen';
 import AppointmentScreen from '../screens/AppointmentScreen';
 import MessageScreen from '../screens/MessageScreen';
 import ResourceNavigator from './ResourceNavigator';
-
+import AppointmentStack from './AppointmentStack';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator() {
-    const userId = 3088; // testing userID
+export default function TabNavigator({ route, navigation }) {
+    const userId = route.params?.userId;
     return (
-        <NavigationContainer>
             <Tab.Navigator 
                 screenOptions={{
                     tabBarStyle: {
@@ -25,6 +23,18 @@ export default function TabNavigator() {
                     },
                     headerTintColor: 'black', // Set header text color
                     headerRight: () => <ProfileIcon />, // Add the HeaderRight component to the header
+                    headerLeft: () => (
+                      <Ionicons
+                        name="log-out-outline"
+                        size={30}
+                        color="black"
+                        style={{ 
+                          marginLeft: 16,
+                          transform: [{ scaleX: -1 }], // Flip the icon horizontally
+                          fontWeight: 'bold', }}
+                        onPress={() => navigation.navigate('Login')}
+                      />
+                    ),
                 }}
             >
                 <Tab.Screen 
@@ -40,8 +50,9 @@ export default function TabNavigator() {
                 />
                 <Tab.Screen 
                     name="AppointmentScreen" 
-                    component={AppointmentScreen} 
+                    component={AppointmentStack} 
                     options={{
+                        headerShown: false,
                         title: 'Appointments',
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="calendar" size={size} color={color} />
@@ -53,6 +64,9 @@ export default function TabNavigator() {
                     component={MessageScreen} 
                     options={{
                         title: 'Notifications',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="notifications" size={size} color={color} />
                         ),
@@ -70,6 +84,5 @@ export default function TabNavigator() {
                     initialParams={{ userId : userId}}
                 />
             </Tab.Navigator>
-        </NavigationContainer>
     );
 };

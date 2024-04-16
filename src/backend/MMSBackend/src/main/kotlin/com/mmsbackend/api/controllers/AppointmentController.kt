@@ -2,6 +2,7 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.AppointmentValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.dto.appointment.UserNoteDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
@@ -18,7 +19,7 @@ class AppointmentController (
     val appointmentMapper: AppointmentMapper,
     val userEntityRepository: UserEntityRepository,
     val doctorEntityRepository: DoctorEntityRepository,
-    val appointmentValidation: AppointmentValidation
+    val appointmentValidation: AppointmentValidation,
 ) {
     @GetMapping("/get/{id}")
     fun getAppointment(@PathVariable id: Int): AppointmentEntity? {
@@ -47,8 +48,7 @@ class AppointmentController (
 
         val appointment = appointmentMapper.mapAppointmentDTO(appointmentDTO, patient, doctor)
         if (!appointmentValidation.isValidAppointment(appointment)){
-            return ResponseEntity.badRequest().body("Could not create appointment. Invalid fields")
-            // TODO: Give better invalid field information
+            return ResponseEntity.badRequest().body("Could not create appointment. Invalid fields.")
         }
 
         val existingApp = appointmentEntityRepository.findById(appointmentDTO.id).getOrNull()
@@ -58,7 +58,17 @@ class AppointmentController (
             appointmentEntityRepository.save(appointment)
         }
 
-        return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created" } " +
-                "new appointment with Genie ID: ${savedAppointment.id}.")
+        return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created new"} " +
+                "appointment with Genie ID: ${savedAppointment.id}.")
+    }
+
+    @PostMapping("/user_note/update")
+    fun updateUserNote(@RequestBody userNoteDTO: UserNoteDTO): ResponseEntity<String> {
+        val appointment = appointmentEntityRepository.findById(userNoteDTO.appointmentId).getOrNull()
+            ?: return ResponseEntity.badRequest().body("Could not update user note for appointment with ID " +
+                    "${userNoteDTO.appointmentId}. Appointment does not exist.")
+        appointment.userNote = userNoteDTO.note
+        appointmentEntityRepository.save(appointment)
+        return ResponseEntity.ok("Successfully updated user note for appointment ${userNoteDTO.appointmentId}.")
     }
 }
