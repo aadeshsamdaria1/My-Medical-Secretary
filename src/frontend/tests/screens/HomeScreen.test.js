@@ -2,8 +2,9 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import HomeScreen from '../../screens/HomeScreen';
-jest.mock('../../api');
-
+import * as useUserDetailsHook from "../../utils/useUserDetails";
+import * as useUpcomingAppointmentsHook from "../../utils/useUpcomingAppointments";
+// Mock user data
 const mockUserData = {
     "mmsId": 1,
     "email": "roulaf@haus.com.au",
@@ -16,6 +17,7 @@ const mockUserData = {
     "suburb": "Balwyn",
     "state": "VIC"
 }
+// Mock Upcoming Appointments to test show more and show less buttons
 const mockUpcomingAppointments = [
     {
       id: 1,
@@ -73,17 +75,15 @@ const mockUpcomingAppointments = [
 describe('HomeScreen', () => {
   const route = { params: { userId: 1 } };
   beforeEach(() => {
-    jest.spyOn(global, 'fetch')
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValueOnce(mockUserData),
-      })
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValueOnce(mockUpcomingAppointments),
-      });
+    // mocking user data and appointments data
+    jest.spyOn(useUserDetailsHook, "useUserDetails").mockReturnValue(mockUserData.firstname);
+
+    jest
+      .spyOn(useUpcomingAppointmentsHook, "useUpcomingAppointments")
+      .mockReturnValue(mockUpcomingAppointments);
   });
 
   afterEach(() => {
-    jest.clearAllTimers();
     jest.restoreAllMocks();
   });
 
@@ -99,13 +99,9 @@ describe('HomeScreen', () => {
   });
 
   it('displays "No upcoming appointments" message when there are no appointments', async () => {
-    jest.spyOn(global, 'fetch')
-    .mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce(mockUserData),
-    })
-    .mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce([]),
-    });
+    jest
+    .spyOn(useUpcomingAppointmentsHook, "useUpcomingAppointments")
+    .mockReturnValue([]);
     const { getByText } = render(<HomeScreen route={route} />);
     await waitFor(() => expect(getByText('No upcoming appointments')).toBeTruthy());
   });
