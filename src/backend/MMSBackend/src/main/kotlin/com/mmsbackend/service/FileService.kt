@@ -32,7 +32,7 @@ class FileService(
         return tableRows.drop(1).map { row ->
             // TODO: Decide whether to fail all patients or only some lines
             val mappedPatients = userMapper.mapHtmlPatient(rowString = row, columns = columns)
-            mappedPatients.persist(userEntityRepository, userMapper, encoder).patientId
+            mappedPatients.persist(userEntityRepository, userMapper).patientId
         }
     }
 

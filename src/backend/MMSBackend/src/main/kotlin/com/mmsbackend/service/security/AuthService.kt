@@ -1,33 +1,36 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.exception.MissingPatientByUsernameException
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.config.JwtProperties
+import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class AuthService(
     val userEntityRepository: UserEntityRepository,
-    val jwtService: TokenService,
+    val tokenService: TokenService,
+    val authManager: AuthenticationManager,
+    val userDetailsService: CustomUserDetailsService,
+    val jwtProperties: JwtProperties
 ) {
 
-    fun authenticate(username: String, password: String): String? {
+    fun authenticate(request: LoginRequest): String? {
+        try {
+            println(request)
+            authManager.authenticate(UsernamePasswordAuthenticationToken(request.username, request.password))
+        } catch (e: Exception) {
+            println("FAILURE")
+            println(e.message)
+            return null
+        }
 
-        val patient = userEntityRepository.findByUsername(username) ?:
-            throw MissingPatientByUsernameException(username)
-        
-        return if (patient.password == password) generateJwt(patient) else null
-    }
-    
-    private fun generateJwt(patient: PatientEntity): String {
-
-        val subject = patient.patientId.toString()
-        val now = Date()
-        val (jwt, expiryDate) = jwtService.generateJwt(subject, now)
-
-        jwtService.persistJwt(patient = patient, token = jwt, expiry = expiryDate)
-
-        return jwt
+        val user = userDetailsService.loadUserByUsername(request.username)
+        return tokenService.generate(
+            userDetails = user,
+            expiry = Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
+        )
     }
 }

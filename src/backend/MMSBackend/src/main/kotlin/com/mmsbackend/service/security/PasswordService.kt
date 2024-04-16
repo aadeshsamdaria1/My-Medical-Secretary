@@ -23,7 +23,9 @@ class PasswordService(
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
             .joinToString("")
 
-        return encoder.encode(securePassword)
+        // TODO: Consider whether or not to encode here
+        return securePassword
+//        return encoder.encode(securePassword)
     }
 
     fun generateUsernameFromName(name: Name): String {

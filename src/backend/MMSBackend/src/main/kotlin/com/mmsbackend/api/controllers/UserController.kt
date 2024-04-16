@@ -19,7 +19,6 @@ class UserController(
     val userEntityRepository: UserEntityRepository,
     val userValidation: UserValidation,
     val userMapper: UserMapper,
-    val encoder: PasswordEncoder
 ) {
     @GetMapping("/get_patient/{id}")
     fun getPatient(@PathVariable id: Int): PatientEntity? {
@@ -39,7 +38,7 @@ class UserController(
             return ResponseEntity.badRequest().body("Could not create patient. Missing ID.")
         }
 
-        val savedPatient = patient.persist(userEntityRepository, userMapper, encoder)
+        val savedPatient = patient.persist(userEntityRepository, userMapper)
         return ResponseEntity.ok("Successfully created / updated patient with " +
                 "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
     }

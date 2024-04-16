@@ -1,7 +1,6 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
-import com.mmsbackend.exception.MissingPatientByUsernameException
 import com.mmsbackend.service.security.AuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,11 +17,8 @@ class AuthController(
 
     @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): ResponseEntity<String> {
-        val token = try {
-            authService.authenticate(request.username, request.password)
-        } catch (mpe: MissingPatientByUsernameException) {
-            return ResponseEntity.badRequest().body("Patient with username ${request.username} does not exist.")
-        }
+
+        val token = authService.authenticate(request)
 
         return if (token != null){
             ResponseEntity.ok(token)

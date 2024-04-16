@@ -1,7 +1,6 @@
 package com.mmsbackend.service.security
 
 import com.mmsbackend.exception.MissingPatientByUsernameException
-import com.mmsbackend.jpa.entity.JwtEntity
 import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import io.mockk.every

@@ -1,7 +1,6 @@
 package com.mmsbackend.config
 
 import com.mmsbackend.jpa.repository.UserEntityRepository
-import com.mmsbackend.service.security.
 import com.mmsbackend.service.security.CustomUserDetailsService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean

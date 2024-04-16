@@ -8,7 +8,6 @@ import com.mmsbackend.jpa.repository.PatientResourceEntityRepository
 import com.mmsbackend.jpa.repository.ResourceEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.ResourceMapper
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

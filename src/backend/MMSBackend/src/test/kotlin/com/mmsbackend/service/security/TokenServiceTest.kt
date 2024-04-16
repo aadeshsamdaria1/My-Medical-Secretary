@@ -1,8 +1,6 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.jpa.entity.JwtEntity
 import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.jpa.repository.JwtEntityRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
