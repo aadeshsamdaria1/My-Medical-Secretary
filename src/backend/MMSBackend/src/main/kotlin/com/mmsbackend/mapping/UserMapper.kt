@@ -7,6 +7,7 @@ import com.mmsbackend.jpa.entity.AdminEntity
 import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.service.security.PasswordService
 import com.mmsbackend.util.mapAddress
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDate
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter
 @Service
 class UserMapper(
     val passwordService: PasswordService,
+    val encoder: PasswordEncoder
 ) {
 
     fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
@@ -35,10 +37,11 @@ class UserMapper(
             state = patientDTO.state,
             patientId = patientDTO.patientId,
 
-            // Randomly Generated
+            // Generated
             mmsId = 0,
-            password = passwordService.generateAndEncodeSecurePassword(),
-            username = passwordService.generateUsernameFromName(name)
+            username = passwordService.generateUsernameFromName(name),
+            password = encoder.encode(passwordService.generateSecurePassword()),
+            temporaryPassword = null
         )
     }
 
@@ -49,7 +52,7 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateAndEncodeSecurePassword()
+            password = passwordService.generateSecurePassword()
         )
     }
 
@@ -69,8 +72,9 @@ class UserMapper(
             email = existingPatient.email,
             patientId = existingPatient.patientId,
             mmsId = existingPatient.mmsId,
+            username = existingPatient.username,
             password = existingPatient.password,
-            username = existingPatient.username
+            temporaryPassword = updatedPatient.temporaryPassword
         )
     }
 
@@ -81,6 +85,8 @@ class UserMapper(
         val firstname = extractFromRow(columns, rowString, FIRST_NAME)
         val surname = extractFromRow(columns, rowString, SURNAME)
         val name = Name(firstname = firstname, surname = surname)
+
+        val plainTextPassword = passwordService.generateSecurePassword()
 
         return PatientEntity(
 
@@ -102,8 +108,9 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateAndEncodeSecurePassword(),
-            username = passwordService.generateUsernameFromName(name)
+            username = passwordService.generateUsernameFromName(name),
+            password = encoder.encode(plainTextPassword),
+            temporaryPassword = plainTextPassword
         )
     }
 

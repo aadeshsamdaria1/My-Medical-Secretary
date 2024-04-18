@@ -48,7 +48,7 @@ class FileServiceTest {
 
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper(passwordService)
+        userMapper = UserMapper(passwordService, encoder)
         appointmentMapper = AppointmentMapper(
             userEntityRepository, doctorEntityRepository
         )
@@ -72,12 +72,13 @@ class FileServiceTest {
             every { userEntityRepository.findByPatientId(patientId1) } returns null
             every { userEntityRepository.findByPatientId(patientId2) } returns null
             every { userEntityRepository.save( any() ) } answers { invocation.args[0] as PatientEntity }
-            every { passwordService.generateAndEncodeSecurePassword() } returns UUID.randomUUID().toString()
+            every { passwordService.generateSecurePassword() } returns UUID.randomUUID().toString()
             every { passwordService.generateUsernameFromName(any()) } returns UUID.randomUUID().toString()
         }
 
         @Test
         fun `Successfully read and upload a user file`() {
+            every { encoder.encode(any()) } returns "An encoded password"
             val userIds = fileService.readAndUploadUserFile(userBytes)
             assertThat(userIds).isEqualTo(listOf(patientId1, patientId2))
         }

@@ -9,22 +9,18 @@ import java.security.SecureRandom
 @Service
 class PasswordService(
     val userEntityRepository: UserEntityRepository,
-    val encoder: PasswordEncoder
 ) {
 
-    fun generateAndEncodeSecurePassword(): String {
+    fun generateSecurePassword(): String {
         val secureRandom = SecureRandom()
         val allowedChars =
             ('a'..'z') +
-            ('A'..'Z') +
-            ('0'..'9')
+                    ('A'..'Z') +
+                    ('0'..'9')
 
-        val securePassword = (1..PASSWORD_LENGTH)
+        return (1..PASSWORD_LENGTH)
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
             .joinToString("")
-
-        // TODO: Persist this as a temp password in plaintext
-        return encoder.encode(securePassword)
     }
 
     fun generateUsernameFromName(name: Name): String {

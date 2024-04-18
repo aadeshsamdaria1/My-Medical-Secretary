@@ -21,7 +21,7 @@ class CustomUserDetailsService(
             ?: throw UsernameNotFoundException("Username not found!")
     }
 
-    fun UserEntity.mapToUserDetails(): UserDetails {
+    private fun UserEntity.mapToUserDetails(): UserDetails {
         return User.builder()
             .username(this.username)
             .password(this.password)

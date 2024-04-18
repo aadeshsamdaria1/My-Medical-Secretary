@@ -26,7 +26,9 @@ class PatientEntity(
     val dob: Instant?,
     val address: String?,
     val suburb: String?,
-    val state: String?
+    val state: String?,
+
+    val temporaryPassword: String?
 
 ): UserEntity(
     mmsId = mmsId,

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -29,13 +30,16 @@ class UserMapperTest {
     @MockK
     private lateinit var passwordService: PasswordService
 
+    @MockK
+    private lateinit var encoder: PasswordEncoder
+
     private val password = UUID.randomUUID().toString()
     private val username = UUID.randomUUID().toString()
 
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper(passwordService)
-        every { passwordService.generateAndEncodeSecurePassword() } returns password
+        userMapper = UserMapper(passwordService, encoder)
+        every { passwordService.generateSecurePassword() } returns password
         every { passwordService.generateUsernameFromName(any()) } returns username
     }
 
@@ -51,6 +55,7 @@ class UserMapperTest {
         private val address = UUID.randomUUID().toString()
         private val suburb = UUID.randomUUID().toString()
         private val state = UUID.randomUUID().toString()
+        private val temporaryPassword = UUID.randomUUID().toString()
 
         private val patientDTO = PatientDTO(
             patientId, firstname, middleName, surname, dob, email, address, suburb, state
@@ -80,14 +85,19 @@ class UserMapperTest {
             patientId = correctId,
             mmsId = correctMmsId,
             password = password,
-            username = username
+            username = username,
+            temporaryPassword = temporaryPassword
         )
 
         @Test
         fun `Map a patient DTO to user entity`() {
+            every { passwordService.generateSecurePassword() } returns temporaryPassword
+            every { encoder.encode(any() ) } returns password
+
             val patient = userMapper.mapPatientDTO(patientDTO)
             val mappedPatient = PatientEntity(
-                0, email, password, username, patientId, firstname, middleName, surname, dob, address, suburb, state
+                0, email, password, username, patientId, firstname,
+                middleName, surname, dob, address, suburb, state, null
             )
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(patient)
         }
@@ -104,6 +114,7 @@ class UserMapperTest {
                 address = "Incorrect address",
                 suburb = "Incorrect suburb",
                 state = "Incorrect state",
+                temporaryPassword = "Incorrect temp",
 
                 // These fields should appear in final object
                 email = "Correct email",
@@ -129,6 +140,7 @@ class UserMapperTest {
                 address = "Correct address",
                 suburb = "Correct suburb",
                 state = "Correct state",
+                temporaryPassword = temporaryPassword
             )
 
             val mappedPatient = userMapper.updateExistingPatient(oldPatient, newPatient)
@@ -137,6 +149,10 @@ class UserMapperTest {
 
         @Test
         fun `Map a patient from HTML`() {
+
+            every { passwordService.generateSecurePassword() } returns temporaryPassword
+            every { encoder.encode(any() ) } returns password
+
             val rowString = listOf(
                 "Correct email", "Correct first name", "Correct middle name",
                 "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",

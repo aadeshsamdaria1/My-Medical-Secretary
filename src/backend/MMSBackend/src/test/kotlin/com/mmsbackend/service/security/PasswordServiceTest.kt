@@ -20,18 +20,14 @@ class PasswordServiceTest {
     @MockK
     private lateinit var userEntityRepository: UserEntityRepository
 
-    @MockK
-    private lateinit var encoder: PasswordEncoder
-
     @BeforeEach
     fun setup() {
-        passwordService = PasswordService(userEntityRepository, encoder)
-        every { encoder.encode(any() ) } returns "a_good_password"
+        passwordService = PasswordService(userEntityRepository)
     }
 
     @Test
     fun `Successfully generate a secure password`() {
-        val password = passwordService.generateAndEncodeSecurePassword()
+        val password = passwordService.generateSecurePassword()
         assertThat(password.length == PasswordService.PASSWORD_LENGTH)
     }
 
