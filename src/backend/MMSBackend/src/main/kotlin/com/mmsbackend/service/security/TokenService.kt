@@ -10,7 +10,7 @@ import java.util.*
 
 @Service
 class TokenService(
-    private val jwtProperties: JwtProperties
+    private final val jwtProperties: JwtProperties
 ) {
 
     private val secretKey = Keys.hmacShaKeyFor(

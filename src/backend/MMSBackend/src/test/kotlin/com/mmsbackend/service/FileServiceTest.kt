@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.io.File
 import java.util.*
 
@@ -42,6 +43,9 @@ class FileServiceTest {
     @MockK
     private lateinit var passwordService: PasswordService
 
+    @MockK
+    private lateinit var encoder: PasswordEncoder
+
     @BeforeEach
     fun setup() {
         userMapper = UserMapper(passwordService)
@@ -49,7 +53,7 @@ class FileServiceTest {
             userEntityRepository, doctorEntityRepository
         )
         fileService = FileService(
-            userMapper, userEntityRepository, appointmentMapper, appointmentEntityRepository
+            userMapper, userEntityRepository, appointmentMapper, appointmentEntityRepository, encoder
         )
     }
 

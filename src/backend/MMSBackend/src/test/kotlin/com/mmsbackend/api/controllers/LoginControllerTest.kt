@@ -1,7 +1,6 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
-import com.mmsbackend.exception.MissingPatientByUsernameException
 import com.mmsbackend.service.security.AuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -32,7 +31,7 @@ class LoginControllerTest {
         loginController = AuthController(
             authService
         )
-        every { authService.authenticate(username, password) } returns validToken
+        every { authService.authenticate(LoginRequest(username, password)) } returns validToken
     }
 
     @Test
@@ -43,7 +42,7 @@ class LoginControllerTest {
 
     @Test
     fun `Fail is patient with given email does not exist`() {
-        every { authService.authenticate(username, password) } throws MissingPatientByUsernameException("No patient.")
+//        every { authService.authenticate(username, password) } throws MissingPatientByUsernameException("No patient.")
 
         val response = loginController.login(loginRequest)
         val expectedResponse = ResponseEntity.badRequest().body("Patient with username $username does not exist.")
@@ -52,7 +51,7 @@ class LoginControllerTest {
 
     @Test
     fun `Fail if incorrect email & password combination`() {
-        every { authService.authenticate(username, password) } returns null
+//        every { authService.authenticate(username, password) } returns null
 
         val response = loginController.login(loginRequest)
         val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(

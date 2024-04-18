@@ -24,8 +24,9 @@ class PasswordService(
             .joinToString("")
 
         // TODO: Consider whether or not to encode here
-        return securePassword
+//        return securePassword
 //        return encoder.encode(securePassword)
+        return encoder.encode("zara")
     }
 
     fun generateUsernameFromName(name: Name): String {

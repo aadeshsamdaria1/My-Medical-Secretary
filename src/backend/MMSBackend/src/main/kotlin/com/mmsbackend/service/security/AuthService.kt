@@ -19,11 +19,8 @@ class AuthService(
 
     fun authenticate(request: LoginRequest): String? {
         try {
-            println(request)
             authManager.authenticate(UsernamePasswordAuthenticationToken(request.username, request.password))
         } catch (e: Exception) {
-            println("FAILURE")
-            println(e.message)
             return null
         }
 

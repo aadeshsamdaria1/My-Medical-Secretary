@@ -35,7 +35,7 @@ class JwtAuthenticationFilter(
 
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
             val user = userDetailsService.loadUserByUsername(username)
-
+            println("Loaded user ${user.username}")
             if (tokenService.isValid(jwtToken, user)) {
                 updateContext(user, request)
             }
