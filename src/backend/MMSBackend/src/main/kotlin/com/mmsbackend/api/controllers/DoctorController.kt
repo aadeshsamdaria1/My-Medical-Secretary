@@ -39,6 +39,12 @@ class DoctorController(
         }.toSet().toList()
     }
 
+    @GetMapping("/get_all")
+    fun getAllDoctors(): List<DoctorEntity> {
+        val allDoctors = doctorEntityRepository.findAll()
+        return allDoctors.toSet().toList()
+    }
+
     @PostMapping("/create")
     fun createDoctor(@RequestBody doctorDTO: DoctorDTO): ResponseEntity<String> {
         val doctor = doctorMapper.mapDoctorDTO(doctorDTO)

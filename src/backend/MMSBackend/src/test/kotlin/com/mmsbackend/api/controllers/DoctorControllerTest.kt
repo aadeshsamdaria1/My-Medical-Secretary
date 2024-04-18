@@ -13,6 +13,8 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.justRun
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import io.mockk.runs
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -131,6 +133,18 @@ class DoctorControllerTest {
 
         assertEquals(2, response.size)
         assertEquals(listOf(expectedResponse[0], expectedResponse[1]), response)
+    }
+
+    @Test
+    fun `Get all doctors returns unique list of doctors`() {
+        val doctorList = listOf(doctorEntity, doctor2, doctor3, doctorEntity)
+        every { doctorEntityRepository.findAll() } returns doctorList
+
+        val response = doctorController.getAllDoctors()
+        val expectedResponse = listOf(doctorEntity, doctor2, doctor3)
+
+        assertEquals(3, response.size, "Should return a unique list of doctors")
+        assertTrue(response.containsAll(expectedResponse), "The returned list should contain all unique doctors")
     }
 
     @Test
