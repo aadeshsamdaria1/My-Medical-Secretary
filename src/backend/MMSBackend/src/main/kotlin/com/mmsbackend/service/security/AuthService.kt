@@ -1,6 +1,6 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.config.JwtProperties
+import com.mmsbackend.config.security.JwtProperties
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.security.authentication.AuthenticationManager

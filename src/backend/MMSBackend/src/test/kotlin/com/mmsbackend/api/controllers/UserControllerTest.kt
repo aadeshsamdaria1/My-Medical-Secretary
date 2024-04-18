@@ -3,8 +3,8 @@ package com.mmsbackend.api.controllers
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.jpa.entity.AdminEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.AdminEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.UserMapper
 import io.mockk.every

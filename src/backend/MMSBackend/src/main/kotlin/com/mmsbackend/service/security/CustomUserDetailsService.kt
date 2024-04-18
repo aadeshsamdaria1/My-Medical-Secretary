@@ -1,8 +1,8 @@
 package com.mmsbackend.service.security
 
 import com.mmsbackend.enums.Role
-import com.mmsbackend.jpa.entity.PatientEntity
-import com.mmsbackend.jpa.entity.UserEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
+import com.mmsbackend.jpa.entity.user.UserEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails

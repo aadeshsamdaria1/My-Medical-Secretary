@@ -2,7 +2,7 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.ResourceValidation
 import com.mmsbackend.dto.user.ResourceDTO
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.entity.PatientResourceEntity
 import com.mmsbackend.jpa.entity.ResourceEntity
 import com.mmsbackend.jpa.repository.PatientResourceEntityRepository

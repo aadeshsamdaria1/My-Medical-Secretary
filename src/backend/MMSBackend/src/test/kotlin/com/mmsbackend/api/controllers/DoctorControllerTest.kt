@@ -4,16 +4,13 @@ import com.mmsbackend.api.validation.DoctorValidation
 import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
-import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.mapping.DoctorMapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.just
 import io.mockk.justRun
-import io.mockk.runs
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach

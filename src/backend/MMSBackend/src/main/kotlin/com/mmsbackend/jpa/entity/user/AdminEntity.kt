@@ -1,7 +1,6 @@
-package com.mmsbackend.jpa.entity
+package com.mmsbackend.jpa.entity.user
 
 import jakarta.persistence.Entity
-import java.util.*
 
 @Entity
 class AdminEntity (

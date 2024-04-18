@@ -1,4 +1,4 @@
-package com.mmsbackend.config
+package com.mmsbackend.config.security
 
 import com.mmsbackend.service.security.CustomUserDetailsService
 import com.mmsbackend.service.security.TokenService
@@ -35,7 +35,6 @@ class JwtAuthenticationFilter(
 
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
             val user = userDetailsService.loadUserByUsername(username)
-            println("Loaded user ${user.username}")
             if (tokenService.isValid(jwtToken, user)) {
                 updateContext(user, request)
             }
@@ -52,6 +51,6 @@ class JwtAuthenticationFilter(
     }
 
     private fun String.extractTokenValue(): String {
-        return this.substringAfter("Bearer")
+        return this.substringAfter("Bearer ")
     }
 }

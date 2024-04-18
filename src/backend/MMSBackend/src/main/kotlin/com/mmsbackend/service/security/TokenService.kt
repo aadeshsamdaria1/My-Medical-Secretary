@@ -1,6 +1,6 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.config.JwtProperties
+import com.mmsbackend.config.security.JwtProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

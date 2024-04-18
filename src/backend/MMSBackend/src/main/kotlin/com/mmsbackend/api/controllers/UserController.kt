@@ -3,13 +3,13 @@ package com.mmsbackend.api.controllers
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.jpa.entity.AdminEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.exception.AdminPatientUsernameMatchException
+import com.mmsbackend.jpa.entity.user.AdminEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
 import org.springframework.http.ResponseEntity
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -47,7 +47,11 @@ class UserController(
     fun createAdmin(@RequestBody adminDTO: AdminDTO): ResponseEntity<String> {
         val admin = userMapper.mapAdminDTO(adminDTO)
 
-        userEntityRepository.save(admin)
-        return ResponseEntity.ok("Successfully added new admin with mms ID: ${admin.mmsId}.")
+        return try {
+            val savedAdmin = admin.persist(userEntityRepository, userMapper)
+            ResponseEntity.ok("Successfully added / updated admin with mms ID: ${savedAdmin.mmsId}.")
+        } catch (ape: AdminPatientUsernameMatchException) {
+            ResponseEntity.badRequest().body(ape.message)
+        }
     }
 }

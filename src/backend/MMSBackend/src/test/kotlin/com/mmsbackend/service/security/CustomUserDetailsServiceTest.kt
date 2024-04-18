@@ -1,7 +1,7 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.jpa.entity.AdminEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.AdminEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

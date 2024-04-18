@@ -1,6 +1,6 @@
 package com.mmsbackend.service.security
 
-import com.mmsbackend.config.JwtProperties
+import com.mmsbackend.config.security.JwtProperties
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension

@@ -1,5 +1,6 @@
-package com.mmsbackend.config
+package com.mmsbackend.config.security
 
+import com.mmsbackend.config.admin.RootAdminProperties
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.service.security.CustomUserDetailsService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -14,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
-@EnableConfigurationProperties(JwtProperties::class)
+@EnableConfigurationProperties(JwtProperties::class, RootAdminProperties::class)
 class Configuration {
 
     @Bean

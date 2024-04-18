@@ -1,5 +1,6 @@
-package com.mmsbackend.config
+package com.mmsbackend.config.security
 
+import com.mmsbackend.enums.Role
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -24,13 +25,29 @@ class SecurityConfiguration(
         return http.csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    // TODO: Pick actual security configs
-                    .requestMatchers("/api/login", "/api/login/refresh", "/error")
+                    // Open to anyone
+                    .requestMatchers(
+                        "/api/login",
+                        "/api/login/refresh",
+                        "/error"
+                    )
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/users/create_admin")
-                    .permitAll()
-//                    .requestMatchers("/api/users")
-//                    .hasRole("ADMIN")
+
+                    // Open to admins only
+                    .requestMatchers("" +
+                        "/api/users/create_admin",
+                        "/api/users/create_patient",
+                        "/api/users/get_admin/**",
+                    )
+                    .hasRole(Role.ADMIN.toString())
+
+                    // Open to patients and admins
+                    .requestMatchers(
+                        "/api/users/get_patient/**"
+                    )
+                    .hasAnyRole(Role.ADMIN.toString(), Role.PATIENT.toString())
+
+                    // Fully authenticate all requests
                     .anyRequest()
                     .fullyAuthenticated()
             }
