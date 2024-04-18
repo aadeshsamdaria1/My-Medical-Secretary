@@ -1,5 +1,6 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
@@ -9,8 +10,12 @@ import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import kotlin.jvm.optionals.getOrNull
 
 @RestController
@@ -19,10 +24,18 @@ class UserController(
     val userEntityRepository: UserEntityRepository,
     val userValidation: UserValidation,
     val userMapper: UserMapper,
+    val generalValidation: GeneralValidation
 ) {
     @GetMapping("/get_patient/{id}")
     fun getPatient(@PathVariable id: Int): PatientEntity? {
-        return userEntityRepository.findByPatientId(id)
+        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+
+        val patient = userEntityRepository.findByPatientId(id) ?: return null
+        return if (generalValidation.isAdminOrSpecificPatientUsername(userDetails, patient.username)) {
+            patient
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN)
+        }
     }
 
     @GetMapping("/get_admin/{id}")
