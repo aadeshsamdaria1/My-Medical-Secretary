@@ -15,7 +15,6 @@ class FileService(
     val userEntityRepository: UserEntityRepository,
     val appointmentMapper: AppointmentMapper,
     val appointmentEntityRepository: AppointmentEntityRepository,
-    val encoder: PasswordEncoder
 ) {
 
     fun readAndUploadUserFile(fileBytes: String): List<Int> {

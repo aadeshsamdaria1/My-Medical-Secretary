@@ -53,7 +53,7 @@ class FileServiceTest {
             userEntityRepository, doctorEntityRepository
         )
         fileService = FileService(
-            userMapper, userEntityRepository, appointmentMapper, appointmentEntityRepository, encoder
+            userMapper, userEntityRepository, appointmentMapper, appointmentEntityRepository
         )
     }
 
