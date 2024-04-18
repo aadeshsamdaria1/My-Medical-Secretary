@@ -1,5 +1,6 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
@@ -10,6 +11,8 @@ import com.mmsbackend.mapping.UserMapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockkClass
+import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -17,6 +20,10 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 import kotlin.random.Random
 
@@ -32,13 +39,17 @@ class UserControllerTest {
     @MockK
     private lateinit var userMapper: UserMapper
 
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
     @BeforeEach
     fun setup() {
         userValidation = UserValidation()
         userController = UserController(
             userEntityRepository = userEntityRepository,
             userValidation = userValidation,
-            userMapper = userMapper
+            userMapper = userMapper,
+            generalValidation = generalValidation
         )
     }
 
@@ -48,6 +59,7 @@ class UserControllerTest {
         private val patientId = Random.nextInt()
         private val missingPatientId = patientId + 1
         private val mmsId = missingPatientId + 1
+        private val username = UUID.randomUUID().toString()
 
         @MockK
         private lateinit var patientEntity: PatientEntity
@@ -55,8 +67,24 @@ class UserControllerTest {
         @MockK
         private lateinit var patientDTO: PatientDTO
 
+        @MockK
+        private lateinit var securityContext: SecurityContext
+
+        @MockK
+        private lateinit var authentication: Authentication
+
+        @MockK
+        private lateinit var userDetails: UserDetails
+
         @BeforeEach
         fun setup() {
+            mockkStatic(SecurityContextHolder::class)
+            every { SecurityContextHolder.getContext() } returns securityContext
+            every { authentication.principal } returns userDetails
+            every { securityContext.authentication } returns authentication
+            every { patientEntity.username } returns username
+            every { generalValidation.isAdminOrSpecificPatientUsername(userDetails, username) } returns true
+
             every { userEntityRepository.findByPatientId(patientId) } returns patientEntity
             every { userEntityRepository.findByPatientId(missingPatientId) } returns null
             every { patientEntity.patientId } returns patientId

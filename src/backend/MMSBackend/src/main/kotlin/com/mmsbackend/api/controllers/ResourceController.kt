@@ -1,5 +1,6 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.ResourceValidation
 import com.mmsbackend.dto.user.ResourceDTO
 import com.mmsbackend.jpa.entity.PatientResourceEntity
@@ -8,7 +9,10 @@ import com.mmsbackend.jpa.repository.PatientResourceEntityRepository
 import com.mmsbackend.jpa.repository.ResourceEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.ResourceMapper
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import kotlin.jvm.optionals.getOrNull
 
 @RestController
@@ -25,7 +30,8 @@ class ResourceController (
     val resourceValidation: ResourceValidation,
     val resourceMapper: ResourceMapper,
     val patientResourceEntityRepository: PatientResourceEntityRepository,
-    val userEntityRepository: UserEntityRepository
+    val userEntityRepository: UserEntityRepository,
+    val generalValidation: GeneralValidation
 ){
     @GetMapping("/get/{id}")
     fun getResource(@PathVariable id: Int): ResourceEntity? {
@@ -34,10 +40,19 @@ class ResourceController (
 
     @GetMapping("/get_all/{userId}")
     fun getAllResourcesForUser(@PathVariable userId: Int): List<ResourceEntity>? {
-        return patientResourceEntityRepository.findAll()
-            .filter { it.patient.patientId == userId }
-            .map { it.resource }
+
+        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+
+        return if (generalValidation.isAdminOrSpecificPatientId(userDetails, userId)) {
+            getAllResourcesById(userId)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN)
+        }
     }
+
+    private fun getAllResourcesById(userId: Int) = patientResourceEntityRepository.findAll()
+        .filter { it.patient.patientId == userId }
+        .map { it.resource }
 
     @PostMapping("/create")
     fun createResource(@RequestBody resourceDTO: ResourceDTO): ResponseEntity<String>{

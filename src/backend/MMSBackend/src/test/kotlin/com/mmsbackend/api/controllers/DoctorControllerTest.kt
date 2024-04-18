@@ -1,6 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.DoctorValidation
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
@@ -11,6 +12,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.justRun
+import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import io.mockk.runs
@@ -20,6 +22,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.Optional
 import kotlin.random.Random
 
@@ -68,6 +74,17 @@ class DoctorControllerTest {
     @MockK
     private lateinit var appointment3: AppointmentEntity
 
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContext: SecurityContext
+
+    @MockK
+    private lateinit var authentication: Authentication
+
+    @MockK
+    private lateinit var userDetails: UserDetails
 
     @BeforeEach
     fun setup() {
@@ -76,7 +93,8 @@ class DoctorControllerTest {
             doctorEntityRepository = doctorEntityRepository,
             doctorValidation = doctorValidation,
             doctorMapper = doctorMapper,
-            appointmentEntityRepository = appointmentEntityRepository
+            appointmentEntityRepository = appointmentEntityRepository,
+            generalValidation = generalValidation
         )
 
         every { doctorEntityRepository.findById(doctorId) } returns Optional.of(doctorEntity)
@@ -95,6 +113,11 @@ class DoctorControllerTest {
         every { doctor2.id } returns doctorId2
         every { doctor3.id } returns doctorId3
 
+        mockkStatic(SecurityContextHolder::class)
+        every { SecurityContextHolder.getContext() } returns securityContext
+        every { authentication.principal } returns userDetails
+        every { securityContext.authentication } returns authentication
+        every { generalValidation.isAdminOrSpecificPatientId(userDetails, any()) } returns true
     }
 
     @Test
@@ -116,7 +139,6 @@ class DoctorControllerTest {
             appointment2,
             appointment3
         )
-        every { appointmentEntityRepository.findAll() } returns appointments
 
         val doctors = listOf(
             doctorEntity,
@@ -124,6 +146,7 @@ class DoctorControllerTest {
             doctor3
         )
         every { doctorEntityRepository.findAll() } returns doctors
+        every { appointmentEntityRepository.findAll() } returns appointments
 
         val response = doctorController.getAllDoctorsByPatientId(patientId)
         val expectedResponse = listOf(

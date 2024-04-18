@@ -1,5 +1,6 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.ResourceValidation
 import com.mmsbackend.dto.user.ResourceDTO
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -13,12 +14,17 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.justRun
+import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 import kotlin.random.Random
 
@@ -42,6 +48,8 @@ class ResourceControllerTest {
     private val patientResourceId = Random.nextInt()
     private val patientResourceId2 = patientResourceId + 1
     private val patientResourceId3 = patientResourceId + 2
+
+    private val username = UUID.randomUUID().toString()
 
     @MockK
     private lateinit var resourceEntity: ResourceEntity
@@ -85,6 +93,18 @@ class ResourceControllerTest {
     @MockK
     private lateinit var resourceDTO: ResourceDTO
 
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContext: SecurityContext
+
+    @MockK
+    private lateinit var authentication: Authentication
+
+    @MockK
+    private lateinit var userDetails: UserDetails
+
     @BeforeEach
     fun setup() {
         resourceController = ResourceController(
@@ -92,7 +112,8 @@ class ResourceControllerTest {
             resourceValidation = resourceValidation,
             resourceMapper = resourceMapper,
             patientResourceEntityRepository = patientResourceEntityRepository,
-            userEntityRepository = userEntityRepository
+            userEntityRepository = userEntityRepository,
+            generalValidation = generalValidation
         )
 
         every { resourceValidation.isValidResource(any()) } returns true
@@ -142,6 +163,14 @@ class ResourceControllerTest {
         every { userEntityRepository.findByPatientId(patientId3) } returns patient3
 
         justRun { patientResourceEntityRepository.deleteById(any()) }
+
+        mockkStatic(SecurityContextHolder::class)
+        every { SecurityContextHolder.getContext() } returns securityContext
+        every { authentication.principal } returns userDetails
+        every { securityContext.authentication } returns authentication
+        every { patient1.username } returns username
+        every { generalValidation.isAdminOrSpecificPatientUsername(userDetails, username) } returns true
+        every { generalValidation.isAdminOrSpecificPatientId(userDetails, any()) } returns true
     }
 
     @Test

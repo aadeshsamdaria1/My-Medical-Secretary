@@ -1,6 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.AppointmentValidation
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.dto.appointment.UserNoteDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
@@ -14,12 +15,17 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.justRun
+import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.Instant
 import java.util.*
 import kotlin.random.Random
@@ -36,6 +42,7 @@ class AppointmentControllerTest {
     private val newAppointmentId = Random.nextInt()
     private val newAppointmentDTOId = Random.nextInt()
     private val updateAppointmentId = Random.nextInt()
+    private val username = UUID.randomUUID().toString()
 
     @MockK
     private lateinit var appointmentEntityRepository: AppointmentEntityRepository
@@ -76,6 +83,18 @@ class AppointmentControllerTest {
     @MockK
     private lateinit var updateAppointment: AppointmentEntity
 
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContext: SecurityContext
+
+    @MockK
+    private lateinit var authentication: Authentication
+
+    @MockK
+    private lateinit var userDetails: UserDetails
+
     @BeforeEach
     fun setup() {
         appointmentController = AppointmentController(
@@ -83,7 +102,8 @@ class AppointmentControllerTest {
             appointmentMapper,
             userEntityRepository,
             doctorEntityRepository,
-            appointmentValidation
+            appointmentValidation,
+            generalValidation
         )
 
         every { appointmentEntityRepository.findById(appointmentId1) } returns Optional.of(appointment1)
@@ -117,10 +137,20 @@ class AppointmentControllerTest {
         every { appointmentEntityRepository.save(updateAppointment) } returns updateAppointment
 
         justRun { updateAppointment.userNote = any() }
+
+        mockkStatic(SecurityContextHolder::class)
+        every { SecurityContextHolder.getContext() } returns securityContext
+        every { authentication.principal } returns userDetails
+        every { securityContext.authentication } returns authentication
+        every { generalValidation.isAdminOrSpecificPatientUsername(userDetails, any()) } returns true
+        every { generalValidation.isAdminOrSpecificPatientId(userDetails, any()) } returns true
+        every { patient.username } returns username
     }
 
     @Test
     fun `Get an appointment from id`() {
+        every { appointment1.patient } returns patient
+
         val appointment = appointmentController.getAppointment(appointmentId1)
         assertEquals(appointmentId1, appointment?.id)
     }
@@ -189,6 +219,8 @@ class AppointmentControllerTest {
 
     @Test
     fun `Successfully update a user note`() {
+        every { updateAppointment.patient } returns patient
+
         val userNoteDTO = UserNoteDTO(updateAppointmentId, "A new user note")
         val response = appointmentController.updateUserNote(userNoteDTO)
         val expectedResponse = ResponseEntity.ok("Successfully updated user note for " +
