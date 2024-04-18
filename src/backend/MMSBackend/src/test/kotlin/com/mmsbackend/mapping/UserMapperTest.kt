@@ -97,7 +97,7 @@ class UserMapperTest {
             val patient = userMapper.mapPatientDTO(patientDTO)
             val mappedPatient = PatientEntity(
                 0, email, password, username, patientId, firstname,
-                middleName, surname, dob, address, suburb, state, null
+                middleName, surname, dob, address, suburb, state, temporaryPassword
             )
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(patient)
         }
@@ -203,10 +203,12 @@ class UserMapperTest {
         private val username = UUID.randomUUID().toString()
         private val email = UUID.randomUUID().toString()
 
-        private val adminDTO = AdminDTO(username, email)
+        private val adminDTO = AdminDTO(username, email, password)
 
         @Test
         fun `Map Admin DTO to User Entity`() {
+            every { encoder.encode(any()) } returns password
+
             val admin = userMapper.mapAdminDTO(adminDTO)
             val expectedAdmin = AdminEntity(
                 mmsId = 0,

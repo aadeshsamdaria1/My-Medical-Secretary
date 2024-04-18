@@ -96,17 +96,6 @@ class UserControllerTest {
                 "Could not create patient. Missing ID.")
             assertEquals(response, expectedResponse)
         }
-
-//        @Test
-//        fun `Fail to create new patient if patient already exists`() {
-//
-//            every { patientEntity.patientId } returns 0
-//
-//            val response = userController.createPatient(patientDTO)
-//            val expectedResponse = ResponseEntity.badRequest().body(
-//                "Could not create patient. Missing ID.")
-//            assertEquals(response, expectedResponse)
-//        }
     }
 
     @Nested
@@ -114,6 +103,7 @@ class UserControllerTest {
 
         private val mmsId = Random.nextInt()
         private val missingMmsId = Random.nextInt() + 1
+        private val username = UUID.randomUUID().toString()
 
         @MockK
         private lateinit var adminEntity: AdminEntity
@@ -128,6 +118,9 @@ class UserControllerTest {
             every { userEntityRepository.findById(missingMmsId) } returns Optional.empty()
             every { userMapper.mapAdminDTO(adminDTO) } returns adminEntity
             every { userEntityRepository.save(any()) } returns adminEntity
+            every { adminEntity.username } returns username
+            every { userEntityRepository.findByUsername(username) } returns adminEntity
+            every { userMapper.updateExistingAdmin(adminEntity, adminEntity) } returns adminEntity
         }
 
         @Test
@@ -146,7 +139,7 @@ class UserControllerTest {
         fun `Create admin from valid DTO`() {
             val response = userController.createAdmin(adminDTO)
             val expectedResponse = ResponseEntity.ok("" +
-                    "Successfully added new admin with mms ID: $mmsId.")
+                    "Successfully added / updated admin with mms ID: $mmsId.")
             assertEquals(response, expectedResponse)
         }
     }

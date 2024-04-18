@@ -1,6 +1,9 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
+import com.mmsbackend.data.LoginResponse
+import com.mmsbackend.data.RefreshTokenRequest
+import com.mmsbackend.data.RefreshTokenResponse
 import com.mmsbackend.service.security.AuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,14 +19,29 @@ class AuthController(
 ) {
 
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): ResponseEntity<String> {
+    fun login(@RequestBody request: LoginRequest): ResponseEntity<Any> {
 
-        val token = authService.authenticate(request)
+        val response = authService.authenticate(request)
 
-        return if (token != null){
-            ResponseEntity.ok(token)
+        return if (response != null){
+            ResponseEntity.ok().body(
+                LoginResponse(
+                    jwtToken = response.first,
+                    refreshToken = response.second
+                )
+            )
         } else {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password.")
         }
+    }
+
+    @PostMapping("/refresh")
+    fun refreshToken(@RequestBody request: RefreshTokenRequest): ResponseEntity<Any> {
+        return ResponseEntity.ok().body(
+            RefreshTokenResponse(
+                authService.refreshAccessToken(request.token)
+                    ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token.")
+            )
+        )
     }
 }

@@ -1,6 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
+import com.mmsbackend.data.LoginResponse
 import com.mmsbackend.service.security.AuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -14,7 +15,7 @@ import org.springframework.http.ResponseEntity
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
-class LoginControllerTest {
+class AuthControllerTest {
 
     private lateinit var loginController: AuthController
 
@@ -22,6 +23,7 @@ class LoginControllerTest {
     private val password = UUID.randomUUID().toString()
     private val loginRequest = LoginRequest(username, password)
     private val validToken = UUID.randomUUID().toString()
+    private val refreshToken = UUID.randomUUID().toString()
 
     @MockK
     private lateinit var authService: AuthService
@@ -31,13 +33,14 @@ class LoginControllerTest {
         loginController = AuthController(
             authService
         )
-        every { authService.authenticate(LoginRequest(username, password)) } returns validToken
+        every { authService.authenticate(LoginRequest(username, password)) } returns Pair(validToken, refreshToken)
     }
 
     @Test
     fun `Successfully log in and retrieve jwt token`() {
         val token = loginController.login(loginRequest).body
-        assertEquals(validToken, token)
+        val expectedResponse = LoginResponse(validToken, refreshToken)
+        assertEquals(expectedResponse, token)
     }
 
     @Test
