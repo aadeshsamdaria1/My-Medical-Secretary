@@ -1,49 +1,46 @@
 package com.mmsbackend.service.security
 
 import com.mmsbackend.config.JwtProperties
-import com.mmsbackend.jpa.entity.PatientEntity
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.Instant
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
 class TokenServiceTest {
 
-    private lateinit var jwtService: TokenService
+    private lateinit var tokenService: TokenService
 
-    private val patientId = 3
-    private val validJwt = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxLCJleHAiOjM2MDF9." +
-            "RATq_9JLEvkpCsXSYgruWa0kVOKUFns82stGuhOJvlw"
-
-    private val date = Date.from(Instant.ofEpochMilli(1000))
-
-    @MockK
-    private lateinit var patient: PatientEntity
-
-    @MockK
     private lateinit var jwtProperties: JwtProperties
+
+    private val jwtStart = "eyJhbGciOiJIUzUxMiJ9"
+    private val expiry = Date.from(Instant.ofEpochMilli(1000))
+    private val username = UUID.randomUUID().toString()
+
+
+    @MockK
+    private lateinit var userDetails: UserDetails
 
     @BeforeEach
     fun setup() {
-        jwtService = TokenService(jwtProperties)
-
-        every { patient.patientId } returns patientId
+        jwtProperties = JwtProperties(
+            key = "Secret key - a_very_very_very_very_very_very_very_very_very_secret_key",
+            accessTokenExpiration = 300_000,
+            refreshTokenExpiration = 600_000
+        )
+        tokenService = TokenService(jwtProperties)
+        every { userDetails.username } returns username
     }
 
-//    @Test
-//    fun `Successfully generate a jwt`() {
-//        val (jwt, expiry) = jwtService.generate()
-//        assert(expiry.after(date))
-//        assertEquals(validJwt, jwt)
-//    }
-
-//    @Test
-//    fun `Persist a jwt`() {
-//        jwtService.persistJwt(patient, validJwt, date)
-//        verify (exactly = 1) { jwtEntityRepository.save(JwtEntity(0, patient, validJwt, date)) }
-//    }
+    @Test
+    fun `Generate a jwt`() {
+        val claims = mapOf("Claim" to "Hello")
+        val jwt = tokenService.generate(userDetails, expiry, claims)
+        assert( jwt.startsWith(jwtStart))
+    }
 }

@@ -26,6 +26,7 @@ class PasswordServiceTest {
     @BeforeEach
     fun setup() {
         passwordService = PasswordService(userEntityRepository, encoder)
+        every { encoder.encode(any() ) } returns "a_good_password"
     }
 
     @Test

@@ -23,10 +23,8 @@ class PasswordService(
             .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
             .joinToString("")
 
-        // TODO: Consider whether or not to encode here
-//        return securePassword
-//        return encoder.encode(securePassword)
-        return encoder.encode("zara")
+        // TODO: Persist this as a temp password in plaintext
+        return encoder.encode(securePassword)
     }
 
     fun generateUsernameFromName(name: Name): String {

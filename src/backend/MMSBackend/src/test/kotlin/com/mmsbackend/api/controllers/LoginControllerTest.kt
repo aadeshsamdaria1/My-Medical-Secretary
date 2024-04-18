@@ -35,27 +35,17 @@ class LoginControllerTest {
     }
 
     @Test
-    fun `successfully log in and retrieve jwt token`() {
+    fun `Successfully log in and retrieve jwt token`() {
         val token = loginController.login(loginRequest).body
         assertEquals(validToken, token)
     }
 
     @Test
-    fun `Fail is patient with given email does not exist`() {
-//        every { authService.authenticate(username, password) } throws MissingPatientByUsernameException("No patient.")
+    fun `Fail if patient authentication is unsuccessful`() {
+        every { authService.authenticate(LoginRequest(username, password)) } returns null
 
         val response = loginController.login(loginRequest)
-        val expectedResponse = ResponseEntity.badRequest().body("Patient with username $username does not exist.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Fail if incorrect email & password combination`() {
-//        every { authService.authenticate(username, password) } returns null
-
-        val response = loginController.login(loginRequest)
-        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-            "Incorrect username or password.")
+        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password.")
         assertEquals(expectedResponse, response)
     }
 }
