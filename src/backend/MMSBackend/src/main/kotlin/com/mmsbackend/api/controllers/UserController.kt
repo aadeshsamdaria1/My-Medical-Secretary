@@ -13,8 +13,6 @@ import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import kotlin.jvm.optionals.getOrNull
@@ -38,6 +36,11 @@ class UserController(
         } else {
             throw ResponseStatusException(HttpStatus.FORBIDDEN)
         }
+    }
+
+    @GetMapping("/get_all_patients")
+    fun getAllPatients(): List<PatientEntity> {
+        return userEntityRepository.findAll().filterIsInstance<PatientEntity>()
     }
 
     @GetMapping("/get_admin/{id}")
