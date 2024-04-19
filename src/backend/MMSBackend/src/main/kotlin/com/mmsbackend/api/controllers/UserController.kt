@@ -40,6 +40,11 @@ class UserController(
         }
     }
 
+    @GetMapping("/get_all_patients")
+    fun getAllPatients(): List<PatientEntity> {
+        return userEntityRepository.findAll().filterIsInstance<PatientEntity>()
+    }
+
     @GetMapping("/get_admin/{id}")
     fun getAdmin(@PathVariable id: Int): AdminEntity? {
         return userEntityRepository.findById(id).getOrNull() as? AdminEntity

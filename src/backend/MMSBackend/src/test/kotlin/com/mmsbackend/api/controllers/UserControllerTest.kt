@@ -43,6 +43,9 @@ class UserControllerTest {
     @MockK
     private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
 
+    @MockK
+    private lateinit var adminEntity: AdminEntity
+
     @BeforeEach
     fun setup() {
         userValidation = UserValidation()
@@ -93,12 +96,19 @@ class UserControllerTest {
             every { userMapper.mapPatientDTO(patientDTO) } returns patientEntity
             every { userMapper.updateExistingPatient(patientEntity, patientEntity) } returns patientEntity
             every { userEntityRepository.save(any()) } returns patientEntity
+            every { userEntityRepository.findAll() } returns listOf(patientEntity, adminEntity)
         }
 
         @Test
         fun `Get a patient from id`() {
             val patient = userController.getPatient(patientId)
             assertEquals(patientId, patient?.patientId)
+        }
+
+        @Test
+        fun `Get all patients`() {
+            val patients = userController.getAllPatients()
+            assertEquals(patients, listOf(patientEntity))
         }
 
         @Test
@@ -133,9 +143,6 @@ class UserControllerTest {
         private val mmsId = Random.nextInt()
         private val missingMmsId = Random.nextInt() + 1
         private val username = UUID.randomUUID().toString()
-
-        @MockK
-        private lateinit var adminEntity: AdminEntity
 
         @MockK
         private lateinit var adminDTO: AdminDTO
