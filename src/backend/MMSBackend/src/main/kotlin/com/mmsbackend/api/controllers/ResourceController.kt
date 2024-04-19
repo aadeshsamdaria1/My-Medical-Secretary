@@ -8,6 +8,7 @@ import com.mmsbackend.jpa.entity.ResourceEntity
 import com.mmsbackend.jpa.repository.PatientResourceEntityRepository
 import com.mmsbackend.jpa.repository.ResourceEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.ResourceMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -31,7 +32,8 @@ class ResourceController (
     val resourceMapper: ResourceMapper,
     val patientResourceEntityRepository: PatientResourceEntityRepository,
     val userEntityRepository: UserEntityRepository,
-    val generalValidation: GeneralValidation
+    val generalValidation: GeneralValidation,
+    val securityContextHolderRetriever: SecurityContextHolderRetriever
 ){
     @GetMapping("/get/{id}")
     fun getResource(@PathVariable id: Int): ResourceEntity? {
@@ -41,7 +43,7 @@ class ResourceController (
     @GetMapping("/get_all/{userId}")
     fun getAllResourcesForUser(@PathVariable userId: Int): List<ResourceEntity>? {
 
-        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
 
         return if (generalValidation.isAdminOrSpecificPatientId(userDetails, userId)) {
             getAllResourcesById(userId)

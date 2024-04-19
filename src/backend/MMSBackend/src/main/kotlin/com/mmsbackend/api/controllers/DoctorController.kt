@@ -6,6 +6,7 @@ import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.DoctorMapper
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -29,7 +30,8 @@ class DoctorController(
     val doctorMapper: DoctorMapper,
     val doctorValidation: DoctorValidation,
     val appointmentEntityRepository: AppointmentEntityRepository,
-    val generalValidation: GeneralValidation
+    val generalValidation: GeneralValidation,
+    val securityContextHolderRetriever: SecurityContextHolderRetriever
 ) {
     @GetMapping("/get/{id}")
     fun getDoctor(@PathVariable id: Int): DoctorEntity? {
@@ -38,7 +40,7 @@ class DoctorController(
 
     @GetMapping("/get_by_patient_id/{id}")
     fun getAllDoctorsByPatientId(@PathVariable id: Int): List<DoctorEntity> {
-        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
         return if (generalValidation.isAdminOrSpecificPatientId(userDetails, id)) {
             getDoctorsByPatientId(id)
         } else {

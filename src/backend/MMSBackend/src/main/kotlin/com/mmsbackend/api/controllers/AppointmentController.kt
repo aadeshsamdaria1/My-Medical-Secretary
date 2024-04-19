@@ -8,6 +8,7 @@ import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.AppointmentMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,11 +26,12 @@ class AppointmentController (
     val userEntityRepository: UserEntityRepository,
     val doctorEntityRepository: DoctorEntityRepository,
     val appointmentValidation: AppointmentValidation,
-    val generalValidation: GeneralValidation
+    val generalValidation: GeneralValidation,
+    val securityContextHolderRetriever: SecurityContextHolderRetriever
 ) {
     @GetMapping("/get/{id}")
     fun getAppointment(@PathVariable id: Int): AppointmentEntity? {
-        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
 
         val appointment = appointmentEntityRepository.findById(id).getOrNull()
         return if (generalValidation.isAdminOrSpecificPatientUsername(userDetails, appointment?.patient?.username)) {
@@ -41,7 +43,7 @@ class AppointmentController (
 
     @GetMapping("/get_all/{userId}")
     fun getAllAppointmentsForUser(@PathVariable userId: Int): List<AppointmentEntity>? {
-        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
         return if (generalValidation.isAdminOrSpecificPatientId(userDetails, userId)) {
             getAppointmentsById(userId)
         } else{
@@ -86,7 +88,7 @@ class AppointmentController (
 
     @PostMapping("/user_note/update")
     fun updateUserNote(@RequestBody userNoteDTO: UserNoteDTO): ResponseEntity<String> {
-        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
 
         val appointment = appointmentEntityRepository.findById(userNoteDTO.appointmentId).getOrNull()
             ?: return ResponseEntity.badRequest().body("Could not update user note for appointment with ID " +

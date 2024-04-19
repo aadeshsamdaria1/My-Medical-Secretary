@@ -9,12 +9,12 @@ import com.mmsbackend.jpa.entity.ResourceEntity
 import com.mmsbackend.jpa.repository.PatientResourceEntityRepository
 import com.mmsbackend.jpa.repository.ResourceEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.ResourceMapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.justRun
-import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -23,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 import kotlin.random.Random
@@ -105,6 +104,9 @@ class ResourceControllerTest {
     @MockK
     private lateinit var userDetails: UserDetails
 
+    @MockK
+    private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
+
     @BeforeEach
     fun setup() {
         resourceController = ResourceController(
@@ -113,7 +115,8 @@ class ResourceControllerTest {
             resourceMapper = resourceMapper,
             patientResourceEntityRepository = patientResourceEntityRepository,
             userEntityRepository = userEntityRepository,
-            generalValidation = generalValidation
+            generalValidation = generalValidation,
+            securityContextHolderRetriever = securityContextHolderRetriever
         )
 
         every { resourceValidation.isValidResource(any()) } returns true
@@ -164,9 +167,7 @@ class ResourceControllerTest {
 
         justRun { patientResourceEntityRepository.deleteById(any()) }
 
-        mockkStatic(SecurityContextHolder::class)
-        every { SecurityContextHolder.getContext() } returns securityContext
-        every { authentication.principal } returns userDetails
+        every { securityContextHolderRetriever.getSecurityContext() } returns userDetails
         every { securityContext.authentication } returns authentication
         every { patient1.username } returns username
         every { generalValidation.isAdminOrSpecificPatientUsername(userDetails, username) } returns true

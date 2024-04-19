@@ -8,6 +8,7 @@ import com.mmsbackend.exception.AdminPatientUsernameMatchException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
 import org.springframework.http.HttpStatus
@@ -24,11 +25,12 @@ class UserController(
     val userEntityRepository: UserEntityRepository,
     val userValidation: UserValidation,
     val userMapper: UserMapper,
-    val generalValidation: GeneralValidation
+    val generalValidation: GeneralValidation,
+    val securityContextHolderRetriever: SecurityContextHolderRetriever
 ) {
     @GetMapping("/get_patient/{id}")
     fun getPatient(@PathVariable id: Int): PatientEntity? {
-        val userDetails = SecurityContextHolder.getContext().authentication.principal as UserDetails
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
 
         val patient = userEntityRepository.findByPatientId(id) ?: return null
         return if (generalValidation.isAdminOrSpecificPatientUsername(userDetails, patient.username)) {
