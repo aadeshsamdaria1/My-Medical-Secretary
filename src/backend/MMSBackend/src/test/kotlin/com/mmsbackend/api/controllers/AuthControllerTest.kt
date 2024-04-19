@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import java.util.*
+import kotlin.random.Random
 
 @ExtendWith(MockKExtension::class)
 class AuthControllerTest {
@@ -24,6 +25,7 @@ class AuthControllerTest {
     private val loginRequest = LoginRequest(username, password)
     private val validToken = UUID.randomUUID().toString()
     private val refreshToken = UUID.randomUUID().toString()
+    private val userId = Random.nextInt()
 
     @MockK
     private lateinit var authService: AuthService
@@ -33,13 +35,13 @@ class AuthControllerTest {
         loginController = AuthController(
             authService
         )
-        every { authService.authenticate(LoginRequest(username, password)) } returns Pair(validToken, refreshToken)
+        every { authService.authenticate(LoginRequest(username, password)) } returns Triple(validToken, refreshToken, userId)
     }
 
     @Test
     fun `Successfully log in and retrieve jwt token`() {
         val token = loginController.login(loginRequest).body
-        val expectedResponse = LoginResponse(validToken, refreshToken)
+        val expectedResponse = LoginResponse(validToken, refreshToken, userId)
         assertEquals(expectedResponse, token)
     }
 
