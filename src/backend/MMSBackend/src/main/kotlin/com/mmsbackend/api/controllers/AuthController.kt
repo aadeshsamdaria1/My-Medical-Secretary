@@ -27,7 +27,8 @@ class AuthController(
             ResponseEntity.ok().body(
                 LoginResponse(
                     jwtToken = response.first,
-                    refreshToken = response.second
+                    refreshToken = response.second,
+                    userId = response.third
                 )
             )
         } else {
