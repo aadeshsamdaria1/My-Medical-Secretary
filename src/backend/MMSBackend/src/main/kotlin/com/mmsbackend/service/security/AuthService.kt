@@ -3,6 +3,7 @@ package com.mmsbackend.service.security
 import com.mmsbackend.config.security.JwtProperties
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.jpa.entity.RefreshTokenEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.entity.user.UserEntity
 import com.mmsbackend.jpa.repository.RefreshTokenEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
@@ -23,7 +24,7 @@ class AuthService(
     val refreshTokenEntityRepository: RefreshTokenEntityRepository
 ) {
 
-    fun authenticate(request: LoginRequest): Pair<String, String>? {
+    fun authenticate(request: LoginRequest): Triple<String, String, Int>? {
         try {
             authManager.authenticate(UsernamePasswordAuthenticationToken(request.username, request.password))
         } catch (e: Exception) {
@@ -38,8 +39,17 @@ class AuthService(
         val refreshToken = getRefreshToken(userDetails)
 
         persistRefreshToken(refreshToken, user)
+        val userId = patientIdOrAdminMmsId(user)
 
-        return Pair(token, refreshToken)
+        return Triple(token, refreshToken, userId)
+    }
+
+    private fun patientIdOrAdminMmsId(user: UserEntity): Int {
+        return if (user is PatientEntity) {
+            user.patientId
+        } else{
+            user.mmsId
+        }
     }
 
     private fun persistRefreshToken(refreshToken: String, user: UserEntity) {

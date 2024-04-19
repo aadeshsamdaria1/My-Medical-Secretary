@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
+import kotlin.random.Random
 
 @ExtendWith(MockKExtension::class)
 class AuthServiceTest {
@@ -29,6 +30,7 @@ class AuthServiceTest {
     private val password = UUID.randomUUID().toString()
     private val validJwt = UUID.randomUUID().toString()
     private val expiry = 123456
+    private val mmsId = Random.nextInt()
 
     @MockK
     private lateinit var userEntityRepository: UserEntityRepository
@@ -73,8 +75,9 @@ class AuthServiceTest {
     @Test
     fun `Successfully authenticate an email and password`() {
         every { jwtProperties.refreshTokenExpiration } returns 1000
+        every { user.mmsId } returns mmsId
         val jwt = authService.authenticate(LoginRequest(username, password))
-        val expectedResponse = Pair(validJwt, validJwt)
+        val expectedResponse = Triple(validJwt, validJwt, mmsId)
         assertEquals(expectedResponse, jwt)
     }
 
