@@ -19,4 +19,3 @@ data class FacilityEntity (
     val website: String?,
     val facilityType: FacilityType
 )
-

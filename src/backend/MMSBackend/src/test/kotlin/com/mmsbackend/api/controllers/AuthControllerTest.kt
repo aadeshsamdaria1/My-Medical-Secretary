@@ -1,7 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.LoginRequest
-import com.mmsbackend.exception.MissingPatientByUsernameException
+import com.mmsbackend.data.LoginResponse
 import com.mmsbackend.service.security.AuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
-class LoginControllerTest {
+class AuthControllerTest {
 
     private lateinit var loginController: AuthController
 
@@ -23,6 +23,7 @@ class LoginControllerTest {
     private val password = UUID.randomUUID().toString()
     private val loginRequest = LoginRequest(username, password)
     private val validToken = UUID.randomUUID().toString()
+    private val refreshToken = UUID.randomUUID().toString()
 
     @MockK
     private lateinit var authService: AuthService
@@ -32,31 +33,22 @@ class LoginControllerTest {
         loginController = AuthController(
             authService
         )
-        every { authService.authenticate(username, password) } returns validToken
+        every { authService.authenticate(LoginRequest(username, password)) } returns Pair(validToken, refreshToken)
     }
 
     @Test
-    fun `successfully log in and retrieve jwt token`() {
+    fun `Successfully log in and retrieve jwt token`() {
         val token = loginController.login(loginRequest).body
-        assertEquals(validToken, token)
+        val expectedResponse = LoginResponse(validToken, refreshToken)
+        assertEquals(expectedResponse, token)
     }
 
     @Test
-    fun `Fail is patient with given email does not exist`() {
-        every { authService.authenticate(username, password) } throws MissingPatientByUsernameException("No patient.")
+    fun `Fail if patient authentication is unsuccessful`() {
+        every { authService.authenticate(LoginRequest(username, password)) } returns null
 
         val response = loginController.login(loginRequest)
-        val expectedResponse = ResponseEntity.badRequest().body("Patient with username $username does not exist.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Fail if incorrect email & password combination`() {
-        every { authService.authenticate(username, password) } returns null
-
-        val response = loginController.login(loginRequest)
-        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-            "Incorrect username or password.")
+        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password.")
         assertEquals(expectedResponse, response)
     }
 }

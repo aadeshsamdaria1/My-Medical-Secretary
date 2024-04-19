@@ -1,6 +1,6 @@
 package com.mmsbackend.api.validation
 
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import org.springframework.stereotype.Service
 
 @Service

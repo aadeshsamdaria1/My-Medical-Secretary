@@ -1,5 +1,6 @@
 package com.mmsbackend.jpa.entity
 
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import jakarta.persistence.*
 
 @Entity

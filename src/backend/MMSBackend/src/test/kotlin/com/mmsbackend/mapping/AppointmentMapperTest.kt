@@ -3,7 +3,7 @@ package com.mmsbackend.mapping
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import io.mockk.every
@@ -15,10 +15,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.sql.Time
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
-import java.util.Date
 import java.text.SimpleDateFormat
 import java.time.*
 
@@ -58,7 +56,8 @@ class AppointmentMapperTest {
                 dob = Instant.now(),
                 address = "123 Correct Street",
                 suburb = "Correct Suburb",
-                state = "Correct State"
+                state = "Correct State",
+                temporaryPassword = "Correct temp"
         )
 
         doctor = DoctorEntity(
@@ -137,7 +136,8 @@ class AppointmentMapperTest {
                         dob = Instant.ofEpochMilli(Random.nextLong()),
                         address = "Incorrect address",
                         suburb = "Incorrect Suburb",
-                        state = "Incorrect State"
+                        state = "Incorrect State",
+                        temporaryPassword = "Incorrect temp"
                 ),
                 doctor = DoctorEntity(
                         id = doctorId + 1,
@@ -195,8 +195,3 @@ class AppointmentMapperTest {
         assertThat(mappedAppointment).usingRecursiveComparison().isEqualTo(expectedAppointment)
     }
 }
-
-
-
-
-

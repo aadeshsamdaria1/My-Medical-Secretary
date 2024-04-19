@@ -1,12 +1,8 @@
-package com.mmsbackend.jpa.entity
+package com.mmsbackend.jpa.entity.user
 
-import com.mmsbackend.jpa.repository.UserEntityRepository
-import com.mmsbackend.mapping.UserMapper
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import org.jetbrains.annotations.NotNull
 import java.time.Instant
-import java.util.*
 
 @Entity
 class PatientEntity(
@@ -26,7 +22,9 @@ class PatientEntity(
     val dob: Instant?,
     val address: String?,
     val suburb: String?,
-    val state: String?
+    val state: String?,
+
+    val temporaryPassword: String?
 
 ): UserEntity(
     mmsId = mmsId,

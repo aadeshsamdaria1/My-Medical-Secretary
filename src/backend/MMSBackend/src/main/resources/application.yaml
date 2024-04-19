@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: MMSBackend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/my_medical_secretary
+    username: root
+    password: password
+#    username: mmsadmin
+#    password: Password123!
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 250MB
+      max-request-size: 250MB
+
+jwt:
+#  key: ${JWT_KEY}
+# Create a key as an environment variable!
+  key: "Secret key - a_very_very_very_very_very_very_very_very_very_secret_key"
+  access-token-expiration: 3600000
+  refresh-token-expiration: 86400000
+
+admin:
+# Store these on the server!
+  defaultEmail: "https://mymedicalsecretary.com.au/"
+  default-username: "admin"
+  default-password: "password"

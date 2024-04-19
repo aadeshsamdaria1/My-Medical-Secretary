@@ -3,10 +3,11 @@ package com.mmsbackend.mapping
 import com.mmsbackend.data.Name
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.jpa.entity.AdminEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.AdminEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.service.security.PasswordService
 import com.mmsbackend.util.mapAddress
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDate
@@ -15,14 +16,17 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class UserMapper(
-    val passwordService: PasswordService
+    val passwordService: PasswordService,
+    val encoder: PasswordEncoder
 ) {
 
-    fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
+    fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity {
         val name = Name(
             firstname = patientDTO.firstname,
             surname = patientDTO.surname
         )
+
+        val plaintextPassword = passwordService.generateSecurePassword()
 
         return PatientEntity(
             firstname = patientDTO.firstname,
@@ -35,10 +39,11 @@ class UserMapper(
             state = patientDTO.state,
             patientId = patientDTO.patientId,
 
-            // Randomly Generated
+            // Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword(),
-            username = passwordService.generateUsernameFromName(name)
+            username = passwordService.generateUsernameFromName(name),
+            password = encoder.encode(plaintextPassword),
+            temporaryPassword = plaintextPassword
         )
     }
 
@@ -49,11 +54,11 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword()
+            password = encoder.encode(adminDTO.password)
         )
     }
 
-    fun updateExistingPatient(existingPatient: PatientEntity, updatedPatient: PatientEntity): PatientEntity{
+    fun updateExistingPatient(existingPatient: PatientEntity, updatedPatient: PatientEntity): PatientEntity {
         return PatientEntity(
 
             // Updated fields
@@ -64,13 +69,27 @@ class UserMapper(
             address = updatedPatient.address,
             suburb = updatedPatient.suburb,
             state = updatedPatient.state,
+            temporaryPassword = updatedPatient.temporaryPassword,
 
             // Unchanged fields
             email = existingPatient.email,
             patientId = existingPatient.patientId,
             mmsId = existingPatient.mmsId,
+            username = existingPatient.username,
             password = existingPatient.password,
-            username = existingPatient.username
+        )
+    }
+
+    fun updateExistingAdmin(existingAdmin: AdminEntity, updatedAdmin: AdminEntity): AdminEntity {
+        return AdminEntity(
+
+            // Updated fields
+            email = updatedAdmin.email,
+
+            // Unchanged fields
+            password = existingAdmin.password,
+            mmsId = existingAdmin.mmsId,
+            username = existingAdmin.username
         )
     }
 
@@ -81,6 +100,8 @@ class UserMapper(
         val firstname = extractFromRow(columns, rowString, FIRST_NAME)
         val surname = extractFromRow(columns, rowString, SURNAME)
         val name = Name(firstname = firstname, surname = surname)
+
+        val plainTextPassword = passwordService.generateSecurePassword()
 
         return PatientEntity(
 
@@ -102,8 +123,9 @@ class UserMapper(
 
             // Randomly Generated
             mmsId = 0,
-            password = passwordService.generateSecurePassword(),
-            username = passwordService.generateUsernameFromName(name)
+            username = passwordService.generateUsernameFromName(name),
+            password = encoder.encode(plainTextPassword),
+            temporaryPassword = plainTextPassword
         )
     }
 

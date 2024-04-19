@@ -1,25 +1,30 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.DoctorValidation
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
-import com.mmsbackend.jpa.entity.PatientEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.DoctorMapper
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.just
-import io.mockk.justRun
-import io.mockk.runs
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.Optional
 import kotlin.random.Random
 
@@ -36,7 +41,6 @@ class DoctorControllerTest {
     private val doctorId3 = Random.nextInt()
 
     private val patientId = Random.nextInt()
-    private val missingPatientId = patientId + 1
 
     @MockK
     private lateinit var doctorEntityRepository: DoctorEntityRepository
@@ -68,6 +72,20 @@ class DoctorControllerTest {
     @MockK
     private lateinit var appointment3: AppointmentEntity
 
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContext: SecurityContext
+
+    @MockK
+    private lateinit var authentication: Authentication
+
+    @MockK
+    private lateinit var userDetails: UserDetails
+
+    @MockK
+    private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
 
     @BeforeEach
     fun setup() {
@@ -76,7 +94,9 @@ class DoctorControllerTest {
             doctorEntityRepository = doctorEntityRepository,
             doctorValidation = doctorValidation,
             doctorMapper = doctorMapper,
-            appointmentEntityRepository = appointmentEntityRepository
+            appointmentEntityRepository = appointmentEntityRepository,
+            generalValidation = generalValidation,
+            securityContextHolderRetriever = securityContextHolderRetriever
         )
 
         every { doctorEntityRepository.findById(doctorId) } returns Optional.of(doctorEntity)
@@ -111,25 +131,27 @@ class DoctorControllerTest {
 
     @Test
     fun `Get all doctors by patient ID`() {
+
         val appointments = listOf(
             appointment1,
             appointment2,
             appointment3
         )
-        every { appointmentEntityRepository.findAll() } returns appointments
 
         val doctors = listOf(
             doctorEntity,
             doctor2,
             doctor3
         )
-        every { doctorEntityRepository.findAll() } returns doctors
 
+        every { securityContextHolderRetriever.getSecurityContext() } returns userDetails
+        every { securityContext.authentication } returns authentication
+        every { generalValidation.isAdminOrSpecificPatientId(userDetails, any()) } returns true
+        every { doctorEntityRepository.findAll() } returns doctors
+        every { appointmentEntityRepository.findAll() } returns appointments
+
+        val expectedResponse = listOf(doctorEntity, doctor2)
         val response = doctorController.getAllDoctorsByPatientId(patientId)
-        val expectedResponse = listOf(
-            doctorEntity,
-            doctor2
-        )
 
         assertEquals(2, response.size)
         assertEquals(listOf(expectedResponse[0], expectedResponse[1]), response)

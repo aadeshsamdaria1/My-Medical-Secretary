@@ -2,7 +2,7 @@ package com.mmsbackend.service
 
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.io.File
 import java.util.*
 
@@ -42,9 +43,12 @@ class FileServiceTest {
     @MockK
     private lateinit var passwordService: PasswordService
 
+    @MockK
+    private lateinit var encoder: PasswordEncoder
+
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper(passwordService)
+        userMapper = UserMapper(passwordService, encoder)
         appointmentMapper = AppointmentMapper(
             userEntityRepository, doctorEntityRepository
         )
@@ -74,6 +78,7 @@ class FileServiceTest {
 
         @Test
         fun `Successfully read and upload a user file`() {
+            every { encoder.encode(any()) } returns "An encoded password"
             val userIds = fileService.readAndUploadUserFile(userBytes)
             assertThat(userIds).isEqualTo(listOf(patientId1, patientId2))
         }

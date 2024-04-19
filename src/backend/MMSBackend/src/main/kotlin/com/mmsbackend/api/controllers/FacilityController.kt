@@ -4,7 +4,6 @@ import com.mmsbackend.jpa.entity.FacilityEntity
 import com.mmsbackend.api.validation.FacilityValidation
 import com.mmsbackend.dto.user.FacilityDTO
 import com.mmsbackend.enums.FacilityType
-import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.repository.FacilityEntityRepository
 import com.mmsbackend.mapping.FacilityMapper
 import org.springframework.web.bind.annotation.GetMapping

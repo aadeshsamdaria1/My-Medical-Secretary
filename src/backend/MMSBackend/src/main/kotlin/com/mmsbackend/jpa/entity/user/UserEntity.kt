@@ -1,4 +1,4 @@
-package com.mmsbackend.jpa.entity
+package com.mmsbackend.jpa.entity.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*

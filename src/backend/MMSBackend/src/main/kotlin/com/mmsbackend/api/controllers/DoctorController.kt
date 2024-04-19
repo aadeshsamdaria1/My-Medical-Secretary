@@ -1,12 +1,15 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.DoctorValidation
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.doctor.DoctorDTO
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.DoctorMapper
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.web.server.ResponseStatusException
 import kotlin.jvm.optionals.getOrNull
 
 @RestController
@@ -23,7 +29,9 @@ class DoctorController(
     val doctorEntityRepository: DoctorEntityRepository,
     val doctorMapper: DoctorMapper,
     val doctorValidation: DoctorValidation,
-    val appointmentEntityRepository: AppointmentEntityRepository
+    val appointmentEntityRepository: AppointmentEntityRepository,
+    val generalValidation: GeneralValidation,
+    val securityContextHolderRetriever: SecurityContextHolderRetriever
 ) {
     @GetMapping("/get/{id}")
     fun getDoctor(@PathVariable id: Int): DoctorEntity? {
@@ -32,12 +40,19 @@ class DoctorController(
 
     @GetMapping("/get_by_patient_id/{id}")
     fun getAllDoctorsByPatientId(@PathVariable id: Int): List<DoctorEntity> {
-        return appointmentEntityRepository.findAll().filter {
-            it.patient.patientId == id
-        }.flatMap { appointment ->
-            doctorEntityRepository.findAll().filter { it.id == appointment.doctor.id }
-        }.toSet().toList()
+        val userDetails = securityContextHolderRetriever.getSecurityContext()
+        return if (generalValidation.isAdminOrSpecificPatientId(userDetails, id)) {
+            getDoctorsByPatientId(id)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN)
+        }
     }
+
+    private fun getDoctorsByPatientId(id: Int) = appointmentEntityRepository.findAll().filter {
+        it.patient.patientId == id
+    }.flatMap { appointment ->
+        doctorEntityRepository.findAll().filter { it.id == appointment.doctor.id }
+    }.toSet().toList()
 
     @GetMapping("/get_all")
     fun getAllDoctors(): List<DoctorEntity> {

@@ -2,12 +2,13 @@ package com.mmsbackend.service.security
 
 import com.mmsbackend.data.Name
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.security.SecureRandom
 
 @Service
 class PasswordService(
-    val userEntityRepository: UserEntityRepository
+    val userEntityRepository: UserEntityRepository,
 ) {
 
     fun generateSecurePassword(): String {

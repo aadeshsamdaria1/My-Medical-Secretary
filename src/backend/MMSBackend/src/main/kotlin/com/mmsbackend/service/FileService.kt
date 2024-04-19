@@ -6,6 +6,7 @@ import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
 import org.jsoup.Jsoup
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,7 +14,7 @@ class FileService(
     val userMapper: UserMapper,
     val userEntityRepository: UserEntityRepository,
     val appointmentMapper: AppointmentMapper,
-    val appointmentEntityRepository: AppointmentEntityRepository
+    val appointmentEntityRepository: AppointmentEntityRepository,
 ) {
 
     fun readAndUploadUserFile(fileBytes: String): List<Int> {
