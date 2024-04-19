@@ -1,3 +1,29 @@
+*{margin:0; padding:0}
+
+.navbar{
+  display:flex;
+  justify-content: space-between;
+  background: #06B4FF;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+}
+
+.navbar-logo{
+  color: white;
+  font-size: 20px;
+}
+
+.navbar-menu{
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  align-items: center;
+}
+
+.navbar-menu li a{
+  text-decoration: none;
+  color: white;
+}
 .App {
   text-align: center;
 }
