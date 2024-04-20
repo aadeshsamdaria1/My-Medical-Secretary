@@ -1,10 +1,10 @@
 import React from "react";
-import "../styles/PatientList.css"; // Make sure the CSS file is correctly linked
+import "../styles/Patients.css"; // Make sure the CSS file is correctly linked
 
 const PatientList = ({ patients, onSelectPatient }) => {
   return (
-    <div className="patient-list-container">
-      <table className="patient-table">
+    <div className="patients-list">
+      <table className="patients-table">
         <thead>
           <tr>
             <th>ID</th>

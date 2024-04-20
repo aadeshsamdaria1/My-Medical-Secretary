@@ -1,12 +1,17 @@
-import React from 'react';
+import React from "react";
+import "../styles/Patients.css";
 
 const SearchBar = ({ onSearchChange }) => {
   return (
-    <input
-      type="text"
-      placeholder="Search patients..."
-      onChange={(e) => onSearchChange(e.target.value)}
-    />
+    <div className="patients-search-bar">
+      <h2>Patients</h2>
+      <input
+        className="patients-search-input"
+        type="text"
+        placeholder="Search patients..."
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
+    </div>
   );
 };
 
