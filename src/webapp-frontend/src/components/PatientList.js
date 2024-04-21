@@ -9,7 +9,7 @@ const PatientList = ({ patients, onSelectPatient }) => {
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>DOB</th>
+            <th>Date of Birth</th>
             <th>Account Status</th>
           </tr>
         </thead>

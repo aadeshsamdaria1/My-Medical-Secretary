@@ -4,7 +4,6 @@ import "../styles/Patients.css";
 const SearchBar = ({ onSearchChange }) => {
   return (
     <div className="patients-search-bar">
-      <h2>Patients</h2>
       <input
         className="patients-search-input"
         type="text"

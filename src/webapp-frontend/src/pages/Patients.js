@@ -9,19 +9,25 @@ import "../styles/Patients.css";
 function Patients() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [appointments, setAppointments] = useState([]); // Add this line
+  const [appointments, setAppointments] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  
 
-  const handleEditPatient = (patient) => {
-    // Handle editing the patient here
-  }
+  const handleSavePatient = (updatedPatientData) => {
+    // Here you would make an API call to update the patient data
+    console.log('Updated Patient Data:', updatedPatientData);
+    const updatedPatients = patients.map((patient) =>
+      patient.patientId === updatedPatientData.patientId ? updatedPatientData : patient
+    );
+    setPatients(updatedPatients);
+
+    // Deselect the current patient, or reselect to force details to update
+    setSelectedPatient(null);
+    setSelectedPatient(updatedPatientData);
+  };
 
   const handleDeletePatient = (patientId) => {
     // Handle deleting the patient here
-  }
-
-  
+  };
 
   useEffect(() => {
     // Fetch the patient data from an API endpoint here.
@@ -48,35 +54,36 @@ function Patients() {
         street: "456 Oak Lane",
         suburb: "Springfield",
         state: "Oregon",
-      } 
+      },
     ];
-    
+
     // Simulate an API call with a hardcoded delay
     setTimeout(() => setPatients(patientData), 1000);
   }, []);
 
   useEffect(() => {
-      if (selectedPatient){
-        const appointmentData = [
-          {
-            "id": 3,
-            "detail": "Routine checkup",
-            "reason": "General health.",
-            "note": "No specific notes",
-            "dateCreate": "2022-04-08T10:30:00Z",
-            "lastUpdated": "2022-04-08T12:45:00Z",
-            "startTime": "10:30:00",
-            "startDate": "2022-04-15",
-            "duration": 60,
-            "patientId": 3,
-            "providerId": 3
-          } 
-        ];
-        const patientAppointments = appointmentData.filter((a) => a.patientId === selectedPatient.patientId);
-        setAppointments(patientAppointments);
-      }
-    }, [selectedPatient]);
-
+    if (selectedPatient) {
+      const appointmentData = [
+        {
+          id: 3,
+          detail: "Routine checkup",
+          reason: "General health.",
+          note: "No specific notes",
+          dateCreate: "2022-04-08T10:30:00Z",
+          lastUpdated: "2022-04-08T12:45:00Z",
+          startTime: "10:30:00",
+          startDate: "2022-04-15",
+          duration: 60,
+          patientId: 3,
+          providerId: 3,
+        },
+      ];
+      const patientAppointments = appointmentData.filter(
+        (a) => a.patientId === selectedPatient.patientId
+      );
+      setAppointments(patientAppointments);
+    }
+  }, [selectedPatient]);
 
   const handleSearchChange = (query) => {
     setSearchQuery(query.toLowerCase());
@@ -91,6 +98,10 @@ function Patients() {
     }
   };
 
+  const handleCreatePatient = () => {
+    // Handle creating a new patient here
+  };
+
   const filteredPatients = searchQuery
     ? patients.filter(
         (p) =>
@@ -100,22 +111,36 @@ function Patients() {
       )
     : patients;
 
-    return (
-      <div>
-        <NavBar />
-        <div className="patients-container">
-          <div className="patients-detail">
-            <PatientDetail patient={selectedPatient} onEdit={handleEditPatient} onDelete={handleDeletePatient} />
-            {selectedPatient && <AppointmentsTable appointments={appointments} />}
+  return (
+    <div>
+      <NavBar />
+      <div className="patients-container">
+      <div className="patients-detail">
+          <PatientDetail
+            patient={selectedPatient}
+            onSave={handleSavePatient}
+            onDelete={handleDeletePatient}
+          />
+          {selectedPatient && <AppointmentsTable appointments={appointments} />}
+        </div>
+        <div className="patients-list">
+          <div className="patients-list-header">
+            <h2>Patients</h2>
+            <div className="patients-search-bar">
+              <SearchBar onSearchChange={handleSearchChange} />
+            </div>
           </div>
-          <div className="patients-list">
-            <SearchBar onSearchChange={handleSearchChange} />
-            <PatientList patients={filteredPatients} onSelectPatient={handleSelectPatient} />
-          </div>
+          <PatientList
+            patients={filteredPatients}
+            onSelectPatient={handleSelectPatient}
+          />
+          <button onClick={handleCreatePatient} className="create-patient-btn">
+            Create New Patient
+          </button>
         </div>
       </div>
-    );
-  }
-
+    </div>
+  );
+}
 
 export default Patients;

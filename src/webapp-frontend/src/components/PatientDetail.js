@@ -1,50 +1,86 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const PatientDetail = ({ patient, onEdit, onDelete }) => {
-  // Determine if any patient data exists
-  const hasPatientData = patient != null;
+const PatientDetail = ({ patient, onSave, onDelete }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    firstname: '',
+    middleName: '',
+    surname: '',
+    dob: '',
+    email: '',
+    phone: '',
+    accountStatus: '',
+    password: '',
+  });
 
-  // Function to display data or 'N/A'
-  const displayData = (data) => hasPatientData ? data : '';
+  useEffect(() => {
+    if (patient) {
+      setEditFormData({
+        firstname: patient.firstname || '',
+        middleName: patient.middleName || '',
+        surname: patient.surname || '',
+        dob: patient.dob || '',
+        email: patient.email || '',
+        phone: patient.phone || '',
+        accountStatus: patient.accountStatus || '',
+        password: patient.password || '',
+      });
+    }
+  }, [patient]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({ ...editFormData, [name]: value });
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+  };
+
+  const handleSaveClick = () => {
+    onSave(editFormData);
+    setIsEditing(false);
+  };
 
   return (
     <div className="patients-detail-card">
       <h2>Patient Details</h2>
-      <div className="patients-detail-row">
-        <label>First Name</label>
-        <input type="text" value={displayData(patient?.firstname)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>Middle Name</label>
-        <input type="text" value={displayData(patient?.middleName)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>Last Name</label>
-        <input type="text" value={displayData(patient?.surname)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>DOB</label>
-        <input type="text" value={displayData(patient?.dob)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>Email</label>
-        <input type="text" value={displayData(patient?.email)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>Phone</label>
-        <input type="text" value={displayData(patient?.phone)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>Account Status</label>
-        <input type="text" value={displayData(patient?.accountStatus)} readOnly />
-      </div>
-      <div className="patients-detail-row">
-        <label>Password</label>
-        <input type="password" value={displayData(patient?.password)} readOnly />
-      </div>
+      {Object.entries(editFormData).map(([key, value]) => (
+        <div className="patients-detail-row" key={key}>
+          <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+          <input
+            type={key === 'password' ? 'password' : 'text'}
+            name={key}
+            value={value}
+            onChange={handleInputChange}
+            readOnly={!isEditing}
+          />
+        </div>
+      ))}
       <div className="patients-detail-actions">
-        <button onClick={() => onEdit(patient)} className="patients-edit-btn">Edit</button>
-        <button onClick={() => onDelete(patient?.patientId)} className="patients-delete-btn">Delete</button>
+        {isEditing ? (
+          <>
+            <button onClick={handleSaveClick} className="patients-save-btn">
+              Save
+            </button>
+            <button onClick={handleCancelClick} className="patients-cancel-btn">
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={handleEditClick} className="patients-edit-btn">
+              Edit
+            </button>
+            <button onClick={() => onDelete(patient?.patientId)} className="patients-delete-btn">
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

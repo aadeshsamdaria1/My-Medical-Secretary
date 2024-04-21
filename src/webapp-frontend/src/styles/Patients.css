@@ -2,14 +2,15 @@
 body {
   font-family: "Arial", sans-serif;
   background-color: #f4f4f4;
+  color: #333;
 }
 
 /* Main Patients Page Layout */
 .patients-container {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
-  gap: 10px;
+  gap: 5px;
+  padding: 5px;
 }
 
 /* Patient Detail Component */
@@ -17,28 +18,25 @@ body {
   background-color: #fff;
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 8px;
+  border-radius: 4px;
   width: 35%;
-  border: none;
 }
 
 .patients-detail-card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 5px;
 }
 
 .patients-detail-card h2 {
   border-bottom: 2px solid #06b4ff;
   color: #06b4ff;
-  padding-bottom: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .patients-detail-row {
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   align-items: center;
 }
 
@@ -59,12 +57,14 @@ body {
 .patients-detail-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 4px;
 }
 
 .patients-edit-btn,
-.patients-delete-btn {
-  padding: 8px 12px;
+.patients-delete-btn,
+.patients-save-btn,
+.patients-cancel-btn {
+  padding: 6px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -81,6 +81,21 @@ body {
   background-color: #dc3545;
   color: #fff;
 }
+
+.patients-save-btn {
+  background-color: green;
+  color: #fff;
+}
+
+.patients-cancel-btn {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.patients-save-btn:hover {
+  background-color: darken(green, 10%);
+}
+
 .patients-edit-btn:hover {
   background-color: darken(#e0a800, 10%);
 }
@@ -89,19 +104,37 @@ body {
   background-color: darken(#c82333, 10%);
 }
 
+.patients-cancel-btn:hover {
+  background-color: darken(#5a6268, 10%);
+}
+
 /* Patient List Component */
 .patients-list {
   background-color: #fff;
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 4px;
+  padding: 5px;
   width: 65%;
-  border: none;
+  position: relative;
+  margin-bottom: 10px;
 }
 
 .patients-list th {
   background-color: #06b4ff;
   color: white;
 }
+
+.patients-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.patients-list-header h2 {
+  border-bottom: 2px solid #06b4ff;
+  color: #06b4ff;
+}
+
 
 .patients-table {
   border-collapse: collapse;
@@ -117,7 +150,7 @@ body {
 
 .patients-table th,
 .patients-table td {
-  padding: 6px;
+  padding: 4px;
   border: 1px solid #ddd;
   text-align: left;
   text-size-adjust: 80%;
@@ -145,29 +178,36 @@ body {
 /* Search Bar Component */
 .patients-search-bar {
   display: flex;
-  align-items: center;
-  margin-bottom: 0px;
+  align-items: flex-end;
+  padding: 4px;
+  margin-bottom: 10px;
+  margin-right: 20px
 }
 
 .patients-search-input {
   flex-grow: 1;
-  padding: 8px;
+  padding: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
   position: relative;
   width: calc(100% - 30px);
-  max-width: 300px;
+  max-width: 200px;
 }
+
 
 /* Appointments Table Styles */
 .appointments-container {
-  margin-top: 20px; /* Spacing between patient details and appointments */
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+  border: none;
 }
 
-.appointment-title{
+.appointment-title {
   color: #06b4ff;
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 10px;
 }
 
@@ -193,13 +233,25 @@ body {
 }
 
 .create-appointment-btn {
-  padding: 6px 12px;
+  padding: 8px 16px;
   background-color: #06b4ff; /* Color to match your theme */
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
+}
+
+.create-patient-btn {
+  padding: 8px 16px;
+  background-color: #06b4ff; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;  
+  margin-left: 10px;
 }
 
 /* Responsive Design */
