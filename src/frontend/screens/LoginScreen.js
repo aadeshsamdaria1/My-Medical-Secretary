@@ -14,7 +14,7 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert('Error', 'Invalid username or password');
     }
   };
-
+  // Login screen UI
   return (
     <KeyboardAvoidingView
     style={styles.container}
@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
+// Login screen styling
 const styles = StyleSheet.create({
     container: {
         flex: 1,

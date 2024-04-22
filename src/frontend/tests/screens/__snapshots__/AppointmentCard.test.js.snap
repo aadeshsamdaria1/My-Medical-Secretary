@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppointmentCard matches snapshot 1`] = `
+<div
+  onClick={[Function]}
+>
+  <View
+    style={
+      {
+        "backgroundColor": "#fff",
+        "borderRadius": 20,
+        "elevation": 3,
+        "flexDirection": "row",
+        "marginHorizontal": 16,
+        "marginVertical": 8,
+        "padding": 16,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 2,
+          "width": 0,
+        },
+        "shadowOpacity": 0.1,
+        "shadowRadius": 4,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#000",
+            "fontSize": 16,
+            "fontWeight": "600",
+            "marginBottom": 6,
+          }
+        }
+      >
+        Meet with Dr.
+        John
+      </Text>
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "color": "#333",
+              "fontSize": 16,
+              "marginRight": 8,
+            }
+          }
+        >
+          Wed, April 24, 2024
+        </Text>
+        <Text
+          style={
+            {
+              "color": "#333",
+              "fontSize": 16,
+            }
+          }
+        >
+          10:00:00
+        </Text>
+      </View>
+    </View>
+  </View>
+</div>
+`;

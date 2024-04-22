@@ -1,12 +1,10 @@
 package com.mmsbackend.jpa.entity
 
-import com.mmsbackend.jpa.repository.AppointmentEntityRepository
-import com.mmsbackend.mapping.AppointmentMapper
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import jakarta.persistence.*
 import java.sql.Time
 import java.time.Instant
 import java.util.Date
-import kotlin.jvm.optionals.getOrNull
 
 @Entity
 data class AppointmentEntity(
@@ -37,13 +35,3 @@ data class AppointmentEntity(
     @JoinColumn(name = "providerId")
     val doctor: DoctorEntity
 )
-
-fun AppointmentEntity.persist(repository: AppointmentEntityRepository, mapper: AppointmentMapper): AppointmentEntity {
-
-    val existingAppointment = repository.findById(this.id).getOrNull()
-    return if (existingAppointment != null) {
-        repository.save(mapper.updateExistingAppointment(existingAppointment, this))
-    } else{
-        repository.save(this)
-    }
-}

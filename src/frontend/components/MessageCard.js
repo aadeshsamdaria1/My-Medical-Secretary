@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types"; 
 import { View, Text, StyleSheet } from "react-native";
 
 const MessageCard = ({ sender, message, time }) => {
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 16,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -58,5 +59,11 @@ const styles = StyleSheet.create({
     color: "#000",
   },
 });
+
+MessageCard.propTypes = {
+  sender: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  time: PropTypes.string.isRequired,
+};
 
 export default MessageCard;

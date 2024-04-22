@@ -1,10 +1,13 @@
 package com.mmsbackend.mapping
 
+import com.mmsbackend.data.Name
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.jpa.entity.AdminEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.AdminEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
+import com.mmsbackend.service.security.PasswordService
 import com.mmsbackend.util.mapAddress
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDate
@@ -12,9 +15,19 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @Service
-class UserMapper {
+class UserMapper(
+    val passwordService: PasswordService,
+    val encoder: PasswordEncoder
+) {
 
-    fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity{
+    fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity {
+        val name = Name(
+            firstname = patientDTO.firstname,
+            surname = patientDTO.surname
+        )
+
+        val plaintextPassword = passwordService.generateSecurePassword()
+
         return PatientEntity(
             firstname = patientDTO.firstname,
             middleName = patientDTO.middleName,
@@ -26,8 +39,11 @@ class UserMapper {
             state = patientDTO.state,
             patientId = patientDTO.patientId,
 
-            // Randomly Generated
-            mmsId = 0
+            // Generated
+            mmsId = 0,
+            username = passwordService.generateUsernameFromName(name),
+            password = encoder.encode(plaintextPassword),
+            temporaryPassword = plaintextPassword
         )
     }
 
@@ -37,11 +53,12 @@ class UserMapper {
             username = adminDTO.username,
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            password = encoder.encode(adminDTO.password)
         )
     }
 
-    fun updateExistingPatient(existingPatient: PatientEntity, updatedPatient: PatientEntity): PatientEntity{
+    fun updateExistingPatient(existingPatient: PatientEntity, updatedPatient: PatientEntity): PatientEntity {
         return PatientEntity(
 
             // Updated fields
@@ -52,32 +69,63 @@ class UserMapper {
             address = updatedPatient.address,
             suburb = updatedPatient.suburb,
             state = updatedPatient.state,
+            temporaryPassword = updatedPatient.temporaryPassword,
 
             // Unchanged fields
             email = existingPatient.email,
             patientId = existingPatient.patientId,
-            mmsId = existingPatient.mmsId
+            mmsId = existingPatient.mmsId,
+            username = existingPatient.username,
+            password = existingPatient.password,
+        )
+    }
+
+    fun updateExistingAdmin(existingAdmin: AdminEntity, updatedAdmin: AdminEntity): AdminEntity {
+        return AdminEntity(
+
+            // Updated fields
+            email = updatedAdmin.email,
+
+            // Unchanged fields
+            password = existingAdmin.password,
+            mmsId = existingAdmin.mmsId,
+            username = existingAdmin.username
         )
     }
 
     fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): PatientEntity {
 
+        // TODO: Decide which fields are actually necessary, and allow others to be missing
+
+        val firstname = extractFromRow(columns, rowString, FIRST_NAME)
+        val surname = extractFromRow(columns, rowString, SURNAME)
+        val name = Name(firstname = firstname, surname = surname)
+
+        val plainTextPassword = passwordService.generateSecurePassword()
+
         return PatientEntity(
-            firstname = extractFromRow(columns, rowString, FIRST_NAME),
-            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
-            surname = extractFromRow(columns, rowString, SURNAME),
-            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
+
+            // Compulsory columns
+            firstname = firstname,
+            surname = surname,
             email = extractFromRow(columns, rowString, EMAIL),
+            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
+            patientId = extractFromRow(columns, rowString, ID).toInt(),
+
+            // Optional columns
+            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
             suburb = extractFromRow(columns, rowString, SUBURB),
             state = extractFromRow(columns, rowString, STATE),
-            patientId = extractFromRow(columns, rowString, ID).toInt(),
             address = mapAddress(
                 extractFromRow(columns, rowString, ADDRESS1),
                 extractFromRow(columns, rowString, ADDRESS2),
             ),
 
             // Randomly Generated
-            mmsId = 0
+            mmsId = 0,
+            username = passwordService.generateUsernameFromName(name),
+            password = encoder.encode(plainTextPassword),
+            temporaryPassword = plainTextPassword
         )
     }
 

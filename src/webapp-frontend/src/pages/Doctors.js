@@ -3,6 +3,8 @@ import NavBar from '../components/NavBar';
 import '../styles/Doctors.css';
 import deleteIcon from '../assets/delete-icon.png'; // Import the delete icon
 import doctorsIcon from '../assets/doctors-logo.jpg'; // Import the doctors icon
+import { fetchDoctors, addDoctor, deleteDoctor, updateDoctor } from '../utils/doctorsAPI';
+import AddDoctorForm from '../components/AddDoctorForm';
 
 const DoctorsPage = () => {
   const [doctors, setDoctors] = useState([]);
@@ -10,30 +12,10 @@ const DoctorsPage = () => {
   const [filterOption, setFilterOption] = useState('name');
   const [filterCount, setFilterCount] = useState(null);
   const [filterValue, setFilterValue] = useState('');
+  const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
 
   useEffect(() => {
-    // Fetch doctors data from an API or a mock data source
-    const fetchedDoctors = [
-        {
-          id: 1,
-          name: 'John Doe',
-          address: '123 Main St',
-          contact: '555-1234',
-          email: 'john.doe@example.com',
-          expertise: 'Cardiology',
-          website: 'johndoe.com'
-        },
-        {
-          id: 2,
-          name: 'Jane Smith',
-          address: '456 Oak Ave',
-          contact: '555-5678',
-          email: 'jane.smith@example.com',
-          expertise: 'Pediatrics',
-          website: 'janesmith.com'
-        },
-        // Add more doctor objects as needed
-      ];
+    const fetchedDoctors = fetchDoctors();
     setDoctors(fetchedDoctors);
   }, []);
 
@@ -54,22 +36,42 @@ const DoctorsPage = () => {
   };
 
   const handleAddDoctor = () => {
-    // Implement logic to add a new doctor
-    console.log('Add doctor');
+    setShowAddDoctorForm(true);
+    setSelectedDoctor(null);
   };
-
+  
   const handleDeleteDoctor = () => {
-    // Implement logic to delete the selected doctor
-    console.log('Delete doctor');
+    if (selectedDoctor) {
+      deleteDoctor(selectedDoctor.id);
+      setSelectedDoctor(null);
+      setDoctors(doctors.filter((doctor) => doctor.id !== selectedDoctor.id));
+    }
   };
-
+  
   const handleEditDoctor = () => {
-    // Implement logic to edit the selected doctor
-    console.log('Edit doctor');
+    if (selectedDoctor) {
+      const updatedDoctor = {
+        ...selectedDoctor,
+        name: selectedDoctor.name,
+        expertise: selectedDoctor.expertise,
+        address: selectedDoctor.address,
+        contact: selectedDoctor.contact,
+        email: selectedDoctor.email,
+        website: selectedDoctor.website,
+      };
+      updateDoctor(updatedDoctor);
+      setSelectedDoctor(updatedDoctor);
+    }
   };
 
   const handleCloseDoctor = () => {
     setSelectedDoctor(null);
+  };
+
+  const handleSaveNewDoctor = (newDoctor) => {
+    addDoctor(newDoctor);
+    setDoctors([...doctors, newDoctor]);
+    setShowAddDoctorForm(false);
   };
 
   const filteredDoctors = filterCount
@@ -162,7 +164,7 @@ const DoctorsPage = () => {
                     />
                 </div>
                 </div>
-         
+        
           <div className="table-container">
             <table className="doctors-table">
                 <thead>
@@ -196,7 +198,10 @@ const DoctorsPage = () => {
           </button>
         </div>
         <div className="doctor-details">
-            {selectedDoctor ? (
+            {
+            showAddDoctorForm ? (
+              <AddDoctorForm onCancel={() => setShowAddDoctorForm(false)} onSave={handleSaveNewDoctor} />
+            ) : selectedDoctor ? (
                 <>
                 <h2>Doctor Details</h2>
                 <div className="doctor-info">

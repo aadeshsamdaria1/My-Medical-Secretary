@@ -1,11 +1,13 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.jpa.entity.AdminEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.AdminEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.mapping.UserMapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,6 +19,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 import kotlin.random.Random
 
@@ -32,13 +37,24 @@ class UserControllerTest {
     @MockK
     private lateinit var userMapper: UserMapper
 
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
+
+    @MockK
+    private lateinit var adminEntity: AdminEntity
+
     @BeforeEach
     fun setup() {
         userValidation = UserValidation()
         userController = UserController(
             userEntityRepository = userEntityRepository,
             userValidation = userValidation,
-            userMapper = userMapper
+            userMapper = userMapper,
+            generalValidation = generalValidation,
+            securityContextHolderRetriever = securityContextHolderRetriever
         )
     }
 
@@ -48,6 +64,7 @@ class UserControllerTest {
         private val patientId = Random.nextInt()
         private val missingPatientId = patientId + 1
         private val mmsId = missingPatientId + 1
+        private val username = UUID.randomUUID().toString()
 
         @MockK
         private lateinit var patientEntity: PatientEntity
@@ -55,8 +72,23 @@ class UserControllerTest {
         @MockK
         private lateinit var patientDTO: PatientDTO
 
+        @MockK
+        private lateinit var securityContext: SecurityContext
+
+        @MockK
+        private lateinit var authentication: Authentication
+
+        @MockK
+        private lateinit var userDetails: UserDetails
+
         @BeforeEach
         fun setup() {
+
+            every { securityContextHolderRetriever.getSecurityContext() } returns userDetails
+            every { securityContext.authentication } returns authentication
+            every { patientEntity.username } returns username
+            every { generalValidation.isAdminOrSpecificPatientUsername(userDetails, username) } returns true
+
             every { userEntityRepository.findByPatientId(patientId) } returns patientEntity
             every { userEntityRepository.findByPatientId(missingPatientId) } returns null
             every { patientEntity.patientId } returns patientId
@@ -64,12 +96,19 @@ class UserControllerTest {
             every { userMapper.mapPatientDTO(patientDTO) } returns patientEntity
             every { userMapper.updateExistingPatient(patientEntity, patientEntity) } returns patientEntity
             every { userEntityRepository.save(any()) } returns patientEntity
+            every { userEntityRepository.findAll() } returns listOf(patientEntity, adminEntity)
         }
 
         @Test
         fun `Get a patient from id`() {
             val patient = userController.getPatient(patientId)
             assertEquals(patientId, patient?.patientId)
+        }
+
+        @Test
+        fun `Get all patients`() {
+            val patients = userController.getAllPatients()
+            assertEquals(patients, listOf(patientEntity))
         }
 
         @Test
@@ -103,9 +142,7 @@ class UserControllerTest {
 
         private val mmsId = Random.nextInt()
         private val missingMmsId = Random.nextInt() + 1
-
-        @MockK
-        private lateinit var adminEntity: AdminEntity
+        private val username = UUID.randomUUID().toString()
 
         @MockK
         private lateinit var adminDTO: AdminDTO
@@ -117,6 +154,9 @@ class UserControllerTest {
             every { userEntityRepository.findById(missingMmsId) } returns Optional.empty()
             every { userMapper.mapAdminDTO(adminDTO) } returns adminEntity
             every { userEntityRepository.save(any()) } returns adminEntity
+            every { adminEntity.username } returns username
+            every { userEntityRepository.findByUsername(username) } returns adminEntity
+            every { userMapper.updateExistingAdmin(adminEntity, adminEntity) } returns adminEntity
         }
 
         @Test
@@ -135,7 +175,7 @@ class UserControllerTest {
         fun `Create admin from valid DTO`() {
             val response = userController.createAdmin(adminDTO)
             val expectedResponse = ResponseEntity.ok("" +
-                    "Successfully added new admin with mms ID: $mmsId.")
+                    "Successfully added / updated admin with mms ID: $mmsId.")
             assertEquals(response, expectedResponse)
         }
     }

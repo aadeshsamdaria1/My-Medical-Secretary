@@ -2,12 +2,13 @@ package com.mmsbackend.service
 
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
-import com.mmsbackend.jpa.entity.PatientEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
+import com.mmsbackend.service.security.PasswordService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.io.File
 import java.util.*
 
@@ -38,9 +40,15 @@ class FileServiceTest {
     @MockK
     private lateinit var appointmentEntityRepository: AppointmentEntityRepository
 
+    @MockK
+    private lateinit var passwordService: PasswordService
+
+    @MockK
+    private lateinit var encoder: PasswordEncoder
+
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper()
+        userMapper = UserMapper(passwordService, encoder)
         appointmentMapper = AppointmentMapper(
             userEntityRepository, doctorEntityRepository
         )
@@ -64,10 +72,13 @@ class FileServiceTest {
             every { userEntityRepository.findByPatientId(patientId1) } returns null
             every { userEntityRepository.findByPatientId(patientId2) } returns null
             every { userEntityRepository.save( any() ) } answers { invocation.args[0] as PatientEntity }
+            every { passwordService.generateSecurePassword() } returns UUID.randomUUID().toString()
+            every { passwordService.generateUsernameFromName(any()) } returns UUID.randomUUID().toString()
         }
 
         @Test
         fun `Successfully read and upload a user file`() {
+            every { encoder.encode(any()) } returns "An encoded password"
             val userIds = fileService.readAndUploadUserFile(userBytes)
             assertThat(userIds).isEqualTo(listOf(patientId1, patientId2))
         }

@@ -1,80 +1,44 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import CalendarScreen from "../components/Calendar";
+import AppointmentCalendar from "../components/Calendar";
 import AppointmentCard from "../components/AppointmentCard";
+import { useUserDetails } from "../utils/useUserDetails";
+import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
-const AppointmentScreen = () => {
-  const today = new Date().toISOString().split('T')[0];
+const AppointmentScreen = ({route}) => {
+  const today = new Date().toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState("");
 
-  const appointments = {
-    "2024-03-13": {
-      initials: "AA",
-      doctorName: "Dr. AaaAaa",
-      doctorSpecialty: "Oncologist",
-      clinicName: "City Health Clinic",
-      clinicAddress: "123 Health Street",
-      clinicSuburb: 'Melbourne',
-      clinicState: 'Victoria',
-      title: "Chemothrapy Treatment",
-      dateString: "Wednesday, 13th March",
-      date: "2024-03-13",
-      time: "10:00 AM",
-      task: "Take medication",
-      documents: [
-        {
-          name: "Pre-Treatment Guidelines",
-          url: "https://www.google.com/",
-        },
-        {
-          name: "Medication List",
-          url: "https://www.google.com/",
-        },
-      ],
-    },
-    "2024-04-20": {
-      initials: "BB",
-      doctorName: "Dr. BbbBbb",
-      doctorSpecialty: "Oncologist",
-      clinicName: "City Health Clinic",
-      clinicAddress: "123 Health Street",
-      clinicSuburb: 'Melbourne',
-      clinicState: 'Victoria',
-      title: "Chemothrapy",
-      dateString: "Monday, 20th April",
-      date: "2024-04-20",
-      time: "10:00 AM",
-      task: "Take medication",
-      documents: [
-        {
-          name: "Pre-Treatment Guidelines",
-          url: "https://www.google.com/",
-        },
-        {
-          name: "Medication List",
-          url: "https://www.google.com/",
-        },
-      ],
-    },
-    // Add more appointments here
-  };
+  const userId = route.params.userId;
+  // const userDetails = useUserDetails(userId);
+  const appointmentsFromApi = useUpcomingAppointments(userId);
 
   const onDaySelect = (day) => {
     setSelectedDate(day.dateString);
   };
 
-  // Determine what to display based on the selected date
   const displayAppointments = () => {
-    if (selectedDate && appointments[selectedDate]) {
-      // If a specific date with an appointment is selected, prepare to display only that appointment
+    const formattedAppointments = appointmentsFromApi.map((appointment) => ({
+      date: appointment.startDate.split("T")[0], 
+      ...appointment,
+    }));
+
+    if (selectedDate) {
+      const appointmentDetails = formattedAppointments.filter(
+        (appointment) => appointment.date === selectedDate
+      );
       return {
-        appointmentDetails: [appointments[selectedDate]],
-        displayOnlyDetails: true,
+        appointmentDetails,
+        displayOnlyDetails: appointmentDetails.length > 0,
       };
     } else {
-      // If no specific date is selected or the selected date has no appointments, show upcoming and past appointments
-      const upcomingAppointments = Object.entries(appointments).filter(([date, _]) => date >= today);
-      const pastAppointments = Object.entries(appointments).filter(([date, _]) => date < today);
+      const upcomingAppointments = formattedAppointments.filter(
+        ({ date }) => date >= today
+      );
+      const pastAppointments = formattedAppointments.filter(
+        ({ date }) => date < today
+      );
       return {
         upcomingAppointments,
         pastAppointments,
@@ -83,42 +47,52 @@ const AppointmentScreen = () => {
     }
   };
 
-  const { appointmentDetails, upcomingAppointments, pastAppointments, displayOnlyDetails } = displayAppointments();
+  const {
+    appointmentDetails,
+    upcomingAppointments,
+    pastAppointments,
+    displayOnlyDetails,
+  } = displayAppointments();
 
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <Text style={styles.title}>Calendar</Text>
-        <CalendarScreen markedDates={appointments} onDaySelect={onDaySelect} />
+        <AppointmentCalendar
+          appointmentsFromApi={appointmentsFromApi}
+          onDaySelect={onDaySelect}
+          testID="calendar"
+        />
 
-        {/* Display only the Appointment Details section if a date with an appointment is selected */}
         {displayOnlyDetails ? (
           <>
             <Text style={styles.title}>Appointment Details</Text>
             {appointmentDetails.map((appointment, index) => (
-              <AppointmentCard key={index} appointment={appointment} />
+              <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
             ))}
           </>
         ) : (
           <>
-            {/* Upcoming Appointments Section */}
             <Text style={styles.title}>Upcoming Appointments</Text>
             {upcomingAppointments.length > 0 ? (
-              upcomingAppointments.map(([date, appointment]) => (
-                <AppointmentCard key={date} appointment={appointment} />
+              upcomingAppointments.map((appointment, index) => (
+                <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
               ))
             ) : (
-              <Text style={styles.noAppointments}>You have no upcoming appointments.</Text>
+              <Text style={styles.noAppointments}>
+                You have no upcoming appointments.
+              </Text>
             )}
 
-            {/* Past Appointments Section */}
             <Text style={styles.title}>Past Appointments</Text>
             {pastAppointments.length > 0 ? (
-              pastAppointments.map(([date, appointment]) => (
-                <AppointmentCard key={date} appointment={appointment} />
+              pastAppointments.map((appointment, index) => (
+                <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
               ))
             ) : (
-              <Text style={styles.noAppointments}>You have no past appointments.</Text>
+              <Text style={styles.noAppointments}>
+                You have no past appointments.
+              </Text>
             )}
           </>
         )}
@@ -127,7 +101,6 @@ const AppointmentScreen = () => {
   );
 };
 
-export default AppointmentScreen;
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -139,21 +112,28 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     marginTop: 16,
     alignSelf: "flex-start",
     marginLeft: 20,
   },
   noAppointments: {
-    fontSize: 18, // Larger font for legibility
-    color: "#6e6e72", // Subtle gray color used in iOS for informational text
-    marginVertical: 20, // More vertical spacing
+    fontSize: 16, 
+    color: "#6e6e72", 
+    marginVertical: 10, 
     alignSelf: "flex-start",
-    marginLeft: 20, // Consistent margin with titles
+    marginLeft: 20, 
   },
 });
 
+AppointmentScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      userId: PropTypes.number.isRequired, 
+    }).isRequired
+  }).isRequired,
+};
 
 
-
+export default AppointmentScreen;
