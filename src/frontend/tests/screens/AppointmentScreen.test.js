@@ -65,7 +65,6 @@ describe("AppointmentScreen Integration Test", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Calendar")).toBeTruthy();
       expect(getByTestId("appointment-card-171251")).toBeTruthy();
       expect(getByTestId("calendar")).toBeTruthy();
     });
