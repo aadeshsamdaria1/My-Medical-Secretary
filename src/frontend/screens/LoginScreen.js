@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { API_ENDPOINT, login } from '../api';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = () => {
-    // Perform sign-in logic here
-    // You can check the username and password against your backend or local data
-    if (username === 'admin' && password === 'password') {
-      // Successful login, navigate to the next screen
-      const userId = 421; // or any other user ID you want to fetch
-      navigation.navigate('TabNavigator', { userId});
-    } else {
-      // Display an error message
+  const handleSignIn = async () => {
+    try {
+      const token = await login(username, password);
+      navigation.navigate('TabNavigator', { token });
+    } catch (error) {
       Alert.alert('Error', 'Invalid username or password');
     }
   };

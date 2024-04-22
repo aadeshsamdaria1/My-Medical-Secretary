@@ -23,18 +23,19 @@
       "@react-navigation/native": "<rootDir>/__mocks__/@react-navigation/native.js",
       "@react-navigation/stack": "<rootDir>/__mocks__/@react-navigation/stack.js",
       "@react-navigation/bottom-tabs": "<rootDir>/__mocks__/@react-navigation/bottom-tabs.js"
-
     },
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ]
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/datetimepicker": "^7.6.3",
     "@react-native-picker/picker": "^2.7.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
+    "axios": "^1.6.8",
     "expo": "~50.0.14",
     "expo-calendar": "~12.2.1",
     "expo-dev-client": "~3.3.11",
