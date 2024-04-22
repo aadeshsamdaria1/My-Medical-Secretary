@@ -16,11 +16,10 @@ export const login = async (username, password) => {
       username,
       password
     });
-    const { jwtToken, refreshToken } = response.data;
+    const { jwtToken, refreshToken, userId } = response.data;
     await AsyncStorage.setItem('jwtToken', jwtToken);
     await AsyncStorage.setItem('refreshToken', refreshToken);
-    console.log('Login successful:', jwtToken);
-    return jwtToken;
+    return [jwtToken, userId];
   } catch (error) {
     console.error('Login failed:', error);
     throw error;

@@ -10,8 +10,8 @@ import AppointmentStack from './AppointmentStack';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({ route, navigation }) {
-    // const userId = route.params?.userId;
-    userId = '421';
+    const userId = route.params?.userId;
+    // console.log('userId in TabNavigator:', userId)
     return (
             <Tab.Navigator 
                 screenOptions={{

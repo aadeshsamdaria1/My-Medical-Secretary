@@ -8,8 +8,9 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSignIn = async () => {
     try {
-      const token = await login(username, password);
-      navigation.navigate('TabNavigator', { token });
+      const [token, userId] = await login(username, password);
+      // console.log('Login successful:', token, userId);
+      navigation.navigate('TabNavigator', { token, userId });
     } catch (error) {
       Alert.alert('Error', 'Invalid username or password');
     }
