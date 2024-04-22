@@ -3,7 +3,6 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
 import ProfileIcon from '../components/ProfileIcon';
 import HomeScreen from '../screens/HomeScreen';
-import AppointmentScreen from '../screens/AppointmentScreen';
 import MessageScreen from '../screens/MessageScreen';
 import ResourceNavigator from './ResourceNavigator';
 import AppointmentStack from './AppointmentStack';
@@ -12,6 +11,7 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({ route, navigation }) {
     const userId = route.params?.userId;
+    // console.log('userId in TabNavigator:', userId)
     return (
             <Tab.Navigator 
                 screenOptions={{
@@ -51,8 +51,7 @@ export default function TabNavigator({ route, navigation }) {
                 <Tab.Screen 
                     name="AppointmentScreen" 
                     component={AppointmentStack} 
-                    options={{
-                        headerShown: false,
+                    options={{   
                         title: 'Appointments',
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="calendar" size={size} color={color} />

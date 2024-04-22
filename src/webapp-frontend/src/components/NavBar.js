@@ -13,6 +13,11 @@ export default function NavBar () {
         <li><a href='/doctors'>Doctors</a></li>
         <li><a href='/facilities'>Facilities</a></li> 
       </ul>
+
     </div>
+
+
+
   );
 }
+
