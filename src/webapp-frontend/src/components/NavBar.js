@@ -7,17 +7,13 @@ export default function NavBar () {
         My Medical Secretary
       </div>
       <ul className='navbar-menu'>
-        <li><a href='/'>Home</a></li>
+        <li><a href='/home'>Home</a></li>
         <li><a href='/file_upload'>File Upload</a></li>
         <li><a href='/patients'>Patients</a></li>
         <li><a href='/doctors'>Doctors</a></li>
         <li><a href='/facilities'>Facilities</a></li> 
       </ul>
-
     </div>
-
-
-
   );
 }
 
