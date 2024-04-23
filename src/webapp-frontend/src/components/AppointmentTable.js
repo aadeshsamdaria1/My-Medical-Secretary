@@ -11,7 +11,7 @@ const AppointmentsTable = ({ appointments }) => (
         <thead>
           <tr>
             <th>ID</th>
-            <th>Doctor</th>
+            <th>Doctor ID</th>
             <th>Title</th>
             <th>Date</th>
           </tr>
@@ -20,7 +20,7 @@ const AppointmentsTable = ({ appointments }) => (
           {appointments.map((appointment) => (
             <tr key={appointment.id}>
               <td>{appointment.id}</td>
-              <td>{appointment.providerId}</td>
+              <td>{appointment.doctor.id}</td>
               <td>{appointment.detail}</td>
               <td>{appointment.startDate}</td>
             </tr>
