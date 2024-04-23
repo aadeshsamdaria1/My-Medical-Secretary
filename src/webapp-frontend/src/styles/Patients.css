@@ -1,9 +1,19 @@
 /* General Page Styles */
 body {
   font-family: "Arial", sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
+  background-color: #f5f5f7;
+  color: #1c1c1e;
 }
+
+:root {
+  --primary-color: #06b4ff;
+  --text-color: #1c1c1e;
+  --button-text-color: #fff;
+  --input-background: #fff;
+  --input-border-color: #d2d2d7;
+  --button-hover-color: #0a84ff;
+}
+
 
 /* Main Patients Page Layout */
 .patients-container {
@@ -15,61 +25,75 @@ body {
 
 /* Patient Detail Component */
 .patients-detail {
-  background-color: #fff;
+  background-color: var(--input-background);
   padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 35%;
 }
 
 .patients-detail-card {
-  border-radius: 4px;
+  border: none;
   padding: 8px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .patients-detail-card h2 {
-  border-bottom: 2px solid #06b4ff;
-  color: #06b4ff;
-  margin-bottom: 6px;
+  border-bottom: none;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .patients-detail-row {
   display: flex;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   align-items: center;
 }
 
 .patients-detail-row label {
   width: 30%;
-  font-weight: bold;
+  font-weight: 500;
   padding-right: 5px;
+  color: var(--text-color);
 }
 
 .patients-detail-row input[type="text"],
 .patients-detail-row input[type="password"] {
   flex-grow: 1;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 6px;
+  background-color: var(--input-background);
+  font-size: 14px;
 }
 
 .patients-detail-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 6px;
 }
 
 .patients-edit-btn,
 .patients-delete-btn,
 .patients-save-btn,
 .patients-cancel-btn {
-  padding: 6px 10px;
+  padding: 8px 15px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
+  color: var(--button-text-color);
+  background-color: var(--primary-color);
+  font-weight: 500;
+}
+
+.patients-edit-btn:hover,
+.patients-delete-btn:hover,
+.patients-save-btn:hover,
+.patients-cancel-btn:hover {
+  background-color: var(--button-hover-color);
 }
 
 .patients-edit-btn {
@@ -78,12 +102,12 @@ body {
 }
 
 .patients-delete-btn {
-  background-color: #dc3545;
+  background-color: #ff3b30;
   color: #fff;
 }
 
 .patients-save-btn {
-  background-color: green;
+  background-color: #34c759;
   color: #fff;
 }
 
@@ -92,60 +116,43 @@ body {
   color: #fff;
 }
 
-.patients-save-btn:hover {
-  background-color: darken(green, 10%);
-}
-
-.patients-edit-btn:hover {
-  background-color: darken(#e0a800, 10%);
-}
-
-.patients-delete-btn:hover {
-  background-color: darken(#c82333, 10%);
-}
-
-.patients-cancel-btn:hover {
-  background-color: darken(#5a6268, 10%);
-}
-
 /* Patient List Component */
 .patients-list {
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 5px;
+  background-color: var(--input-background);
+  border-radius: 12px;
+  padding: 10px;
   width: 65%;
-  position: relative;
   margin-bottom: 10px;
+  margin-left: 6px;
 }
 
 .patients-list th {
-  background-color: #06b4ff;
-  color: white;
+  background-color: #f5f5f7;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
 .patients-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 12px;
 }
 
 .patients-list-header h2 {
-  border-bottom: 2px solid #06b4ff;
-  color: #06b4ff;
+  border-bottom: none;
+  color: var(--primary-color);
+  font-weight: 600;
 }
-
 
 .patients-table {
   border-collapse: collapse;
   width: 100%;
-  text-align: left;
-  box-shadow: none;
 }
 
 .patients-table thead {
-  background-color: #06b4ff; /* Color for the header */
-  color: white; /* Text color for the header */
+  background-color: #f5f5f7;
+  color: var(--text-color);
 }
 
 .patients-table th,
@@ -163,32 +170,31 @@ body {
 }
 
 .patients-table tbody tr {
-  cursor: pointer; /* Indicates that rows are clickable */
-  background-color: #fff; /* Background color for the body rows */
+  cursor: pointer;
+  background-color: #fff; 
 }
 
 .patients-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9; /* Zebra striping for rows */
+  background-color: #f9f9f9;
 }
 
 .patients-table tbody tr:hover {
-  background-color: #eaeaea; /* Hover state color */
+  background-color: #eaeaea;
 }
 
 /* Search Bar Component */
 .patients-search-bar {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   padding: 4px;
-  margin-bottom: 10px;
-  margin-right: 20px
+  margin-right: 20px;
 }
 
 .patients-search-input {
   flex-grow: 1;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 6px;
   font-size: 14px;
   position: relative;
   width: calc(100% - 30px);
@@ -199,15 +205,16 @@ body {
 /* Appointments Table Styles */
 .appointments-container {
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 10px;
-  width: 100%;
+  width: 98%;
   border: none;
 }
 
 .appointment-title {
-  color: #06b4ff;
+  color: var(--primary-color);
   font-size: 12px;
+  font-weight: 600;
   margin-bottom: 10px;
 }
 
@@ -221,39 +228,138 @@ body {
 
 .appointments-table th,
 .appointments-table td {
-  padding: 4px;
+  padding: 6px;
   border: 1px solid #ddd;
   text-align: left;
-  text-size-adjust: 80%;
+  font-size: 14px;
 }
 
 .appointments-table th {
-  background-color: #06b4ff; /* Color to match your theme */
-  color: white;
+  background-color: #f5f5f7;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
-.create-appointment-btn {
-  padding: 8px 16px;
-  background-color: #06b4ff; /* Color to match your theme */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
+.create-appointment-btn,
 .create-patient-btn {
-  padding: 8px 16px;
-  background-color: #06b4ff; 
+  padding: 10px 16px;
+  background-color: var(--primary-color); 
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  position: relative;  
-  margin-left: 10px;
+  font-weight: 500;
+  margin-left: 12px;
 }
 
+.create-appointment-btn:hover,
+.create-patient-btn:hover {
+  background-color: var(--button-hover-color);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+}
+
+/* Modal Box */
+.modal-box {
+  background: var(--input-background);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001; /* Above the overlay */
+  width: 90%;
+  max-width: 500px; /* Adjust the max-width as needed */
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-close-btn {
+  padding: 5px 10px;
+  border: none;
+  background-color: #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 10px;
+  row-gap: 15px;
+}
+
+.modal-form input,
+.modal-form button {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border-color);
+  font-size: 14px;
+}
+
+.modal-form-button-container {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 10px;
+}
+
+/* Button styles */
+.modal-form-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+.modal-form-button.cancel {
+  background-color: #ccc;
+  color: #333; /* Change color as needed */
+}
+
+/* Hover effects for buttons */
+.modal-form-button:hover {
+  opacity: 0.8;
+}
 /* Responsive Design */
 @media screen and (max-width: 768px) {
   .patients-container {

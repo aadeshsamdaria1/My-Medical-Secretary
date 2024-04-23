@@ -5,18 +5,22 @@ import PatientDetail from "../components/PatientDetail";
 import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
 import "../styles/Patients.css";
+import CreatePatientModal from "../components/CreatePatientModal";
 
 function Patients() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   const handleSavePatient = (updatedPatientData) => {
     // Here you would make an API call to update the patient data
-    console.log('Updated Patient Data:', updatedPatientData);
+    console.log("Updated Patient Data:", updatedPatientData);
     const updatedPatients = patients.map((patient) =>
-      patient.patientId === updatedPatientData.patientId ? updatedPatientData : patient
+      patient.patientId === updatedPatientData.patientId
+        ? updatedPatientData
+        : patient
     );
     setPatients(updatedPatients);
 
@@ -27,6 +31,23 @@ function Patients() {
 
   const handleDeletePatient = (patientId) => {
     // Handle deleting the patient here
+  };
+
+  const handleCreatePatient = () => {
+    setCreateModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setCreateModalOpen(false);
+  };
+
+  const handleNewPatientData = (newPatient) => {
+    // Here you would send the new patient data to the backend
+    // For now, we'll just console log it and pretend we're submitting it
+    console.log(newPatient);
+    // After submission, you might want to close the modal and refresh the patient list
+    handleCloseModal();
+    // fetch new list or add to current list
   };
 
   useEffect(() => {
@@ -98,10 +119,6 @@ function Patients() {
     }
   };
 
-  const handleCreatePatient = () => {
-    // Handle creating a new patient here
-  };
-
   const filteredPatients = searchQuery
     ? patients.filter(
         (p) =>
@@ -115,7 +132,7 @@ function Patients() {
     <div>
       <NavBar />
       <div className="patients-container">
-      <div className="patients-detail">
+        <div className="patients-detail">
           <PatientDetail
             patient={selectedPatient}
             onSave={handleSavePatient}
@@ -137,6 +154,13 @@ function Patients() {
           <button onClick={handleCreatePatient} className="create-patient-btn">
             Create New Patient
           </button>
+          {isCreateModalOpen && (
+            <CreatePatientModal
+              isVisible={isCreateModalOpen}
+              onClose={handleCloseModal}
+              onCreate={handleNewPatientData}
+            />
+          )}
         </div>
       </div>
     </div>
