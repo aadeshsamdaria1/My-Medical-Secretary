@@ -6,11 +6,13 @@ import '../styles/Facilities.css';
 import doctorsLogo from '../assets/doctors-logo.jpg';
 
 import {
-  addFacility,
-  fetchFacilities,
-  deleteFacility,
   updateFacility,
+  createFacility,
+  getAllFacilities,
+  deleteFacilityById
 } from '../utils/facilitiesAPI';
+
+
 
 const Facilities = () => {
   const [facilities, setFacilities] = useState([]);
@@ -21,9 +23,18 @@ const Facilities = () => {
   const [showAddFacilityForm, setShowAddFacilityForm] = useState(false);
 
   useEffect(() => {
-    const fetchedFacilities = fetchFacilities();
-    setFacilities(fetchedFacilities);
-  }, []);
+    fetchFacilities(); // Initial fetch on component mount
+  }, []); // Empty dependency array, so it only runs once on component mount
+
+  const fetchFacilities = async () => {
+    try {
+      const fetchedFacilities = await getAllFacilities();
+      setFacilities(fetchedFacilities);
+    } catch (error) {
+      console.error('Failed to fetch facilities:', error);
+    }
+  };
+
 
   const handleFilterCountChange = (count) => {
     setFilterCount(count);
@@ -46,15 +57,19 @@ const Facilities = () => {
     setSelectedFacility(null);
   };
 
-  const handleDeleteFacility = () => {
+  const handleDeleteFacility = async () => {
     if (selectedFacility) {
-      deleteFacility(selectedFacility.name);
-      setSelectedFacility(null);
-      setFacilities(facilities.filter((facility) => facility.name !== selectedFacility.name));
+      try {
+        await deleteFacilityById(selectedFacility.id);
+        fetchFacilities();
+        setSelectedFacility(null);
+      } catch (error) {
+      console.error("failed to delete facility:", error)
     }
+  }
   };
 
-  const handleEditFacility = () => {
+  const handleEditFacility = async () => {
     if (selectedFacility) {
       const updatedFacility = {
         ...selectedFacility,
@@ -65,8 +80,15 @@ const Facilities = () => {
         website: selectedFacility.website,
         facilityType: selectedFacility.facilityType,
       };
-      updateFacility(updatedFacility);
-      setSelectedFacility(updatedFacility);
+      try {
+        await updateFacility(selectedFacility.id, updatedFacility);
+        setSelectedFacility(null);
+        fetchFacilities();
+        
+      } catch (error) {
+        console.error("failed to updatee facility:", error)
+      }
+
     }
   };
 
@@ -74,10 +96,14 @@ const Facilities = () => {
     setSelectedFacility(null);
   };
 
-  const handleSaveNewFacility = (newFacility) => {
-    addFacility(newFacility);
-    setFacilities([...facilities, newFacility]);
-    setShowAddFacilityForm(false);
+  const handleSaveNewFacility = async (newFacility) => {
+    try {
+      await createFacility(newFacility);
+      setShowAddFacilityForm(false);
+      fetchFacilities(); // Refetch facilities after creating
+    } catch (error) {
+      console.error('Failed to save new facility:', error);
+    }
   };
 
   const filteredFacilities = filterCount

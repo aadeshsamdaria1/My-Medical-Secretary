@@ -11,11 +11,16 @@ import Doctors from './pages/Doctors';
 import Patients from './pages/Patients';
 import Facilities from './pages/Facilities';
 import FileUpload from './pages/FileUpload';
+import HomePage from './pages/HomePage';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App/>,
+  },
+  {
+    path: "home",
+    element: <HomePage/>
   },
   {
     path: "doctors",

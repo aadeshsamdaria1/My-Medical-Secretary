@@ -20,6 +20,10 @@ const AddFacilityForm = ({ onCancel, onSave }) => {
       setError('Facility name is required');
       return;
     }
+    if (!newFacility.facilityType) {
+      setError('Facility type is required');
+      return;
+    }
     onSave(newFacility);
     onCancel();
   };
@@ -27,7 +31,7 @@ const AddFacilityForm = ({ onCancel, onSave }) => {
   return (
     <div>
       <h2>Add New Facility</h2>
-      {error && <div className="error">{error}</div>}
+      {error && <div className="error" style={{ color: 'red' }}>{error}</div>}
       <div className="facility-info">
         <div className="facility-info-row">
           <label>Name:</label>
@@ -81,13 +85,17 @@ const AddFacilityForm = ({ onCancel, onSave }) => {
         </div>
         <div className="facility-info-row">
           <label>Facility Type:</label>
-          <input
-            type="text"
+          <select
             name="facilityType"
             value={newFacility.facilityType}
             onChange={handleInputChange}
             className="facility-input"
-          />
+          >
+            <option value="">Select Facility Type</option>
+            <option value="HOSPITAL">Hospital</option>
+            <option value="PATHOLOGY">Pathology</option>
+            <option value="RADIOLOGY">Radiology</option>
+          </select>
         </div>
       </div>
       <div className="facility-actions">
