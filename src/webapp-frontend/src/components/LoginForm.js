@@ -1,21 +1,21 @@
 // LoginForm.js
 import React, { useState } from 'react';
+import { login } from '../api'
 
 const LoginForm = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can perform form validation
-    // and send a request to your backend for authentication
-
-    // Simulating successful login
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    // Call the onLoginSuccess callback function after successful login
-    onLoginSuccess();
+    
+    try {
+        const token = await login(username, password);
+        console.log(token)
+        onLoginSuccess();
+    } catch (error) {
+        console.error('Login error:', error);
+    }
   };
 
   return (
