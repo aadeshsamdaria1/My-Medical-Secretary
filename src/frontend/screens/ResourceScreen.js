@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import useFacilitiesDetails from '../utils/useFacilitiesDetails'; // Correct the import statement
 
 const ResourceScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { category } = route.params;
-  const facilities = useFacilitiesDetails(); // This hook will fetch and provide the facilities data
+  const {facilities} = route.params;
   const [filteredFacilities, setFilteredFacilities] = useState([]);
 
   useEffect(() => {
     // Filter facilities based on the selected category
-    const filtered = facilities.filter(facility => facility.facilityType === category.toUpperCase());
+    const filtered = facilities.filter(facility => facility.facilityType.toUpperCase() === category.toUpperCase());
     setFilteredFacilities(filtered);
     // Update navigation header title
     navigation.setOptions({ title: `${category}` });

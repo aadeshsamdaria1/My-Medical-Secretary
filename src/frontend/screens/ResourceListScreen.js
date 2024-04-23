@@ -6,16 +6,18 @@ import hospitalIcon from '../assets/hospital.png'
 import radiologyIcon from '../assets/radiology.png';
 import pathologyIcon from '../assets/pathology.png';
 import doctorsIcon from '../assets/doctor.png';
+import useFacilitiesDetails from '../utils/useFacilitiesDetails';
 
 const categories = [
-  { name: "Hospitals", icon: hospitalIcon },
-  { name: "Radiology", icon: radiologyIcon },
-  { name: "Pathology", icon: pathologyIcon },
-  { name: "Doctors", icon: doctorsIcon },
+  { name: "Hospitals", icon: hospitalIcon , identifier: "HOSPITAL"},
+  { name: "Radiology", icon: radiologyIcon, identifier: "RADIOLOGY" },
+  { name: "Pathology", icon: pathologyIcon, identifier: "PATHOLOGY" },
+  { name: "Doctors", icon: doctorsIcon, identifier: "DOCTOR" },
 ];
 
 const ResourceListScreen = ( {route} ) => {
   const navigation = useNavigation();
+  const facilities = useFacilitiesDetails();
 
   const userId = route.params?.userId;
 
@@ -24,8 +26,9 @@ const ResourceListScreen = ( {route} ) => {
       navigation.navigate('DoctorsScreen', {userId:userId});
     } else {
       navigation.navigate('ResourceDetail', {
-        category: category.name,
-        options: { headerTitle: category.name }
+        category: category.identifier,
+        options: { headerTitle: category.name },
+        facilities: facilities
       });
     }
 
