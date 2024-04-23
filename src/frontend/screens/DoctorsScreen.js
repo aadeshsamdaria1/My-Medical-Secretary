@@ -1,32 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { getDoctorsByUserEndpoint } from '../api';
 
-
-const DoctorsScreen = ( ) => {
+const DoctorsScreen = () => {
+  console.log("doctor")
   const route = useRoute();
   const navigation = useNavigation();
-  const { userId } = route.params;
-  const [doctors, setDoctors] = useState([]);
-
-  useEffect(() => {
-    // Fetch doctors for the user using the userId
-    const fetchDoctors = async () => {
-      try {
-        const response = await fetch(getDoctorsByUserEndpoint(userId));
-        const data = await response.json();
-        setDoctors(data);
-      } catch (error) {
-        console.error('Error fetching doctors:', error);
-      }
-    };
-
-    fetchDoctors();
-  }, [userId]);
+  const doctors = route.params.doctors;
+  console.log(doctors)
 
   const handleDoctorPress = (doctor) => {
-    // Navigate to DoctorDetailScreen with doctor details
     navigation.navigate('DoctorDetailScreen', { doctor });
   };
 
@@ -37,7 +20,6 @@ const DoctorsScreen = ( ) => {
     >
       <Text style={styles.doctorName}>{item.name}</Text>
       <Text style={styles.doctorExpertise}>{item.expertise}</Text>
-      
     </TouchableOpacity>
   );
 
@@ -74,6 +56,5 @@ const styles = StyleSheet.create({
     marginBottom: 5
   }
 });
-
 
 export default DoctorsScreen;

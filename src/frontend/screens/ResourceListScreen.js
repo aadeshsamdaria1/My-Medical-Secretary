@@ -7,6 +7,7 @@ import radiologyIcon from '../assets/radiology.png';
 import pathologyIcon from '../assets/pathology.png';
 import doctorsIcon from '../assets/doctor.png';
 import useFacilitiesDetails from '../utils/useFacilitiesDetails';
+import useDoctorsByUser from '../utils/useDoctorsByUser';
 
 const categories = [
   { name: "Hospitals", icon: hospitalIcon , identifier: "HOSPITAL"},
@@ -18,12 +19,15 @@ const categories = [
 const ResourceListScreen = ( {route} ) => {
   const navigation = useNavigation();
   const facilities = useFacilitiesDetails();
-
   const userId = route.params?.userId;
+  const doctors = useDoctorsByUser(userId);
 
   const handleCategoryPress = (category) => {
     if (category.name == "Doctors") {
-      navigation.navigate('DoctorsScreen', {userId:userId});
+      navigation.navigate('DoctorsScreen', {
+        userId:userId,
+        doctors:doctors
+      });
     } else {
       navigation.navigate('ResourceDetail', {
         category: category.identifier,
