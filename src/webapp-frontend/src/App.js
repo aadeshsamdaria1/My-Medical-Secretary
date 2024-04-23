@@ -1,13 +1,12 @@
 import './App.css';
-import NavBar from './components/NavBar';
+import LoginPage from './pages/LoginPage';
 
 
 
 function App() {
   return (
     <div>
-      <NavBar></NavBar>
-      <h1>Hello World!</h1>
+      <LoginPage/>
     </div>
   );
 }

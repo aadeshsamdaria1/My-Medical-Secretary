@@ -64,3 +64,17 @@
   justify-content: center;
   margin-top: 1rem;
 }
+
+.success-message {
+  color: green;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.progress-message {
+  color: #06B4FF;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
