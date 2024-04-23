@@ -4,6 +4,7 @@ import PatientList from "../components/PatientList";
 import PatientDetail from "../components/PatientDetail";
 import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
+import {getAllPatients} from "../utils/patientsAPI"
 import "../styles/Patients.css";
 
 function Patients() {
