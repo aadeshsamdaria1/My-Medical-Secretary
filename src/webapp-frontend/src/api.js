@@ -14,9 +14,10 @@ export const login = async (username, password) => {
       username,
       password
     });
-    const { jwtToken, refreshToken } = response.data;
+    const { jwtToken, refreshToken, userId } = response.data;
     localStorage.setItem('jwtToken', jwtToken);
     localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('userId', userId)
     return jwtToken;
   } catch (error) {
     console.error('Login failed:', error);
