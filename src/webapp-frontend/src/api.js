@@ -9,6 +9,8 @@ export const refreshTokenEndpoint = `${API_ENDPOINT}/refresh`;
 export const deleteFacilityEndpoint = `${API_ENDPOINT}/facilities/delete`;
 export const createFacilityEndpoint = `${API_ENDPOINT}/facilities/create`;
 export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
+export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
+export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
 
 
 // Login function
@@ -62,4 +64,3 @@ export const handleRequestError = async (error, requestFunction, ...args) => {
     throw error;
   }
 };
-

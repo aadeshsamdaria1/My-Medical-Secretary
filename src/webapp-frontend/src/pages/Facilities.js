@@ -84,7 +84,7 @@ const Facilities = () => {
         await updateFacility(selectedFacility.id, updatedFacility);
         setSelectedFacility(null);
         fetchFacilities();
-        
+
       } catch (error) {
         console.error("failed to updatee facility:", error)
       }
@@ -294,6 +294,7 @@ const Facilities = () => {
               <img src={doctorsLogo} alt="Facility Logo" />
             </div>
           )}
+
         </div>
       </div>
     </div>
@@ -301,5 +302,4 @@ const Facilities = () => {
 };
 
 export default Facilities;
-
 
