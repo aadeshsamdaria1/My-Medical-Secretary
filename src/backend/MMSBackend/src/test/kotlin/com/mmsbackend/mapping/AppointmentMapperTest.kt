@@ -1,6 +1,10 @@
 package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.enums.StatusType
+import com.mmsbackend.exception.ColumnError
+import com.mmsbackend.exception.IdException
+import com.mmsbackend.exception.ValueException
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -12,6 +16,7 @@ import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import java.sql.Time
 import java.time.format.DateTimeFormatter
@@ -192,6 +197,158 @@ class AppointmentMapperTest {
                 "ProviderID" to 10
         )
         val mappedAppointment = appointmentMapper.mapHtmlAppointment(rowString, cols)
-        assertThat(mappedAppointment).usingRecursiveComparison().isEqualTo(expectedAppointment)
+        assertThat(mappedAppointment).usingRecursiveComparison().isEqualTo(Pair(StatusType.SUCCESS,expectedAppointment))
+    }
+
+    @Test
+    fun `Throw column exception if missing required column`() {
+        val rowString = listOf(
+            appointmentId.toString(),
+            "Correct Detail",
+            "Correct Reason",
+            "Correct Note",
+            "20200415123000",
+            "10:00:00",
+            "30",
+            "7/02/2024", // StartDate
+            "10/01/2024", // CreationDate
+            patientId.toString()
+        )
+        val cols = mapOf(
+            "Id" to 0,
+            "Name" to 1,
+            "Reason" to 2,
+            "Note" to 3,
+            "LastUpdated" to 4,
+            "StartTime" to 5,
+            "ApptDuration" to 6,
+            "StartDate" to 7,
+            "CreationDate" to 8,
+            "PT_Id_Fk" to 9
+        )
+        assertThrows<ColumnError> { appointmentMapper.mapHtmlAppointment(rowString, cols) }
+    }
+
+    @Test
+    fun `Throw column exception if missing required id column`() {
+        val rowString = listOf(
+            appointmentId.toString(),
+            "Correct Detail",
+            "Correct Reason",
+            "Correct Note",
+            "20200415123000",
+            "10:00:00",
+            "30",
+            "7/02/2024", // StartDate
+            "10/01/2024", // CreationDate
+            patientId.toString()
+        )
+        val cols = mapOf(
+            "" to 0,
+            "Name" to 1,
+            "Reason" to 2,
+            "Note" to 3,
+            "LastUpdated" to 4,
+            "StartTime" to 5,
+            "ApptDuration" to 6,
+            "StartDate" to 7,
+            "CreationDate" to 8,
+            "PT_Id_Fk" to 9
+        )
+        assertThrows<ColumnError> { appointmentMapper.mapHtmlAppointment(rowString, cols) }
+    }
+
+    @Test
+    fun `Throw id exception if missing required id value`() {
+        val rowString = listOf(
+            "",
+            "",
+            "Correct Reason",
+            "Correct Note",
+            "20200415123000",
+            "10:00:00",
+            "30",
+            "7/02/2024", // StartDate
+            "10/01/2024", // CreationDate
+            patientId.toString(),
+            doctorId.toString()
+        )
+        val cols = mapOf(
+            "Id" to 0,
+            "Name" to 1,
+            "Reason" to 2,
+            "Note" to 3,
+            "LastUpdated" to 4,
+            "StartTime" to 5,
+            "ApptDuration" to 6,
+            "StartDate" to 7,
+            "CreationDate" to 8,
+            "PT_Id_Fk" to 9,
+            "ProviderID" to 10
+        )
+        assertThrows<IdException> { appointmentMapper.mapHtmlAppointment(rowString, cols) }
+    }
+    @Test
+    fun `Throw id exception if id value is non-Integer`() {
+        val rowString = listOf(
+            "abcs",
+            "",
+            "Correct Reason",
+            "Correct Note",
+            "20200415123000",
+            "10:00:00",
+            "30",
+            "7/02/2024", // StartDate
+            "10/01/2024", // CreationDate
+            patientId.toString(),
+            doctorId.toString()
+        )
+        val cols = mapOf(
+            "Id" to 0,
+            "Name" to 1,
+            "Reason" to 2,
+            "Note" to 3,
+            "LastUpdated" to 4,
+            "StartTime" to 5,
+            "ApptDuration" to 6,
+            "StartDate" to 7,
+            "CreationDate" to 8,
+            "PT_Id_Fk" to 9,
+            "ProviderID" to 10
+        )
+        assertThrows<IdException> { appointmentMapper.mapHtmlAppointment(rowString, cols) }
+    }
+
+    @Test
+    fun `Return failed status if an appointment from HTML has missing value`() {
+        val rowString = listOf(
+            appointmentId.toString(),
+            "",
+            "Correct Reason",
+            "Correct Note",
+            "20200415123000",
+            "10:00:00",
+            "30",
+            "7/02/2024", // StartDate
+            "10/01/2024", // CreationDate
+            patientId.toString(),
+            doctorId.toString()
+        )
+        val cols = mapOf(
+            "Id" to 0,
+            "Name" to 1,
+            "Reason" to 2,
+            "Note" to 3,
+            "LastUpdated" to 4,
+            "StartTime" to 5,
+            "ApptDuration" to 6,
+            "StartDate" to 7,
+            "CreationDate" to 8,
+            "PT_Id_Fk" to 9,
+            "ProviderID" to 10
+        )
+        val mappedAppointment = appointmentMapper.mapHtmlAppointment(rowString, cols)
+        assertThat(mappedAppointment).usingRecursiveComparison()
+            .isEqualTo(Pair(StatusType.FAILURE,appointmentId.toString()))
     }
 }

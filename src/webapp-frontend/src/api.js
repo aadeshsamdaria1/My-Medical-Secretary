@@ -12,6 +12,7 @@ export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
 export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
 
+
 // Login function
 export const login = async (username, password) => {
   try {
@@ -45,6 +46,7 @@ export const refreshToken = async () => {
     throw error;
   }
 };
+
 
 // Function to handle API request errors
 export const handleRequestError = async (error, requestFunction, ...args) => {

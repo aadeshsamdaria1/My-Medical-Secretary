@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getAppointmentsByUserEndpoint } from '../api';
+import { getFacilitiesEndpoint } from '../api';
 
-export const useUpcomingAppointments = (userId) => {
-  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+const useFacilitiesDetails = () => {
+  const [facilities, setFacilities] = useState([]);
 
   useEffect(() => {
-    const fetchUpcomingAppointments = async () => {
-      if (!userId) return;
-
+    const fetchAllFacilities = async () => {
       try {
         const token = await AsyncStorage.getItem('jwtToken');
         if (!token) {
@@ -16,7 +14,7 @@ export const useUpcomingAppointments = (userId) => {
           return;
         }
 
-        const response = await fetch(getAppointmentsByUserEndpoint(userId), {
+        const response = await fetch(getFacilitiesEndpoint, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -29,14 +27,16 @@ export const useUpcomingAppointments = (userId) => {
         }
 
         const data = await response.json();
-        setUpcomingAppointments(data);
+        setFacilities(data);
       } catch (error) {
-        console.error('Error fetching upcoming appointments:', error.message);
+        console.error('Error fetching facilities:', error.message);
       }
     };
 
-    fetchUpcomingAppointments();
-  }, [userId]);
+    fetchAllFacilities();
+  }, []);
 
-  return upcomingAppointments;
+  return facilities;
 };
+
+export default useFacilitiesDetails;

@@ -294,10 +294,12 @@ const Facilities = () => {
               <img src={doctorsLogo} alt="Facility Logo" />
             </div>
           )}
+
         </div>
-        </div>
+      </div>
     </div>
   );
 };
 
 export default Facilities;
+

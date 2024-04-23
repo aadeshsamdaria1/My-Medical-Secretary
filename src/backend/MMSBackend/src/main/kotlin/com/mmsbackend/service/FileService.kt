@@ -1,5 +1,8 @@
 package com.mmsbackend.service
 
+import com.mmsbackend.enums.StatusType
+import com.mmsbackend.jpa.entity.AppointmentEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.jpa.util.persist
@@ -17,7 +20,7 @@ class FileService(
     val appointmentEntityRepository: AppointmentEntityRepository,
 ) {
 
-    fun readAndUploadUserFile(fileBytes: String): List<Int> {
+    fun readAndUploadUserFile(fileBytes: String): Pair<List<Int>, List<Int>> {
 
         val tableRows = Jsoup.parse(fileBytes)
             .getElementsByTag(TR_TAG)
@@ -28,14 +31,33 @@ class FileService(
             .withIndex()
             .associate { (index, columnName) -> columnName to index }
 
-        return tableRows.drop(1).map { row ->
-            // TODO: Decide whether to fail all patients or only some lines
-            val mappedPatients = userMapper.mapHtmlPatient(rowString = row, columns = columns)
-            mappedPatients.persist(userEntityRepository, userMapper).patientId
+        val patientResults = tableRows.drop(1).map { row ->
+                userMapper.mapHtmlPatient(
+                    rowString = row,
+                    columns = columns
+                )
         }
+
+        // These are PatientIDs
+        val failedPatientID = patientResults
+            .filter { it.first == StatusType.FAILURE }
+            .map { it.second.toString().toInt()}
+
+        // These are PatientEntities
+        val successPatients = patientResults
+            .filter { it.first == StatusType.SUCCESS }
+            .map { it.second as PatientEntity }
+
+        successPatients.forEach { patientEntity ->
+            (patientEntity).persist(userEntityRepository, userMapper).patientId
+        }
+
+        val successPatientId = (successPatients).map {it.patientId}
+
+        return Pair(failedPatientID, successPatientId)
     }
 
-    fun readAndUploadAppointmentFile(fileBytes: String): List<Int> {
+    fun readAndUploadAppointmentFile(fileBytes: String): Pair<List<Int>, List<Int>> {
 
         val tableRows = Jsoup.parse(fileBytes)
             .getElementsByTag(TR_TAG)
@@ -46,12 +68,31 @@ class FileService(
             .withIndex()
             .associate { (index, columnName) -> columnName to index }
 
-        return tableRows.drop(1).mapNotNull { row ->
+        val appointmentResults = tableRows.drop(1).mapNotNull { row ->
             appointmentMapper.mapHtmlAppointment(
                 rowString = row,
                 columns = columns
-            )?.persist(appointmentEntityRepository, appointmentMapper)?.id
+            )
         }
+
+        // TODO: Should also include appointment that isn't properly link to patient and doctor
+        // These are AppointmentIds
+        val failedAppointmentID = appointmentResults
+            .filter { it.first == StatusType.FAILURE }
+            .map { it.second.toString().toInt()}
+
+        // These are AppointmentEntities
+        val successAppointments = appointmentResults
+            .filter { it.first == StatusType.SUCCESS }
+            .map { it.second as AppointmentEntity }
+
+        successAppointments.forEach { appointmentEntity ->
+            (appointmentEntity).persist(appointmentEntityRepository, appointmentMapper).id
+        }
+
+        val successAppointmentId = (successAppointments).map {it.id}
+
+        return Pair(failedAppointmentID, successAppointmentId)
     }
 
     companion object {
