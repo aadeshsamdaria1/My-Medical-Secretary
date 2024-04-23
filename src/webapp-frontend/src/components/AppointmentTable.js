@@ -2,10 +2,11 @@ import React from "react";
 import "../styles/Patients.css";
 
 const AppointmentsTable = ({ appointments }) => (
-    <div className="appointments-container">
-        <div className="appointment-title">
-            <h1>Upcoming Appointments</h1>
-        </div>
+  <div className="appointments-container">
+    <div className="appointment-title">
+      <h1>Upcoming Appointments</h1>
+    </div>
+    {appointments.length > 0 ? (
       <table className="appointments-table">
         <thead>
           <tr>
@@ -26,9 +27,14 @@ const AppointmentsTable = ({ appointments }) => (
           ))}
         </tbody>
       </table>
-      {/* <button className="create-appointment-btn">Create New Appointment</button> */}
-    </div>
-  );
+    ) : (
+      <div className="no-appointments">
+        <p>No upcoming appointments</p>
+      </div>
+    )}
+  </div>
+);
 
 export default AppointmentsTable;
+
   
