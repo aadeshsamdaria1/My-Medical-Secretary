@@ -161,3 +161,11 @@
     background-color: #6c757d;
     color: #fff;
   }
+
+  .selected-row {
+    background-color: #06b4ff5d; /* Choose your preferred color */
+  }
+
+  .table-header {
+    background-color: #ccc;
+  }

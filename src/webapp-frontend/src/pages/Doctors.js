@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 import '../styles/Doctors.css';
 import deleteIcon from '../assets/delete-icon.png'; // Import the delete icon
 import doctorsIcon from '../assets/doctors-logo.jpg'; // Import the doctors icon
-import { fetchDoctors, addDoctor, deleteDoctor, updateDoctor } from '../utils/doctorsAPI';
+import { getAllDoctors, addDoctor, deleteDoctor, updateDoctor } from '../utils/doctorsAPI';
 import AddDoctorForm from '../components/AddDoctorForm';
 
 const DoctorsPage = () => {
@@ -15,9 +15,17 @@ const DoctorsPage = () => {
   const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
 
   useEffect(() => {
-    const fetchedDoctors = fetchDoctors();
-    setDoctors(fetchedDoctors);
+    fetchDoctors();
   }, []);
+
+  const fetchDoctors = async () => {
+    try {
+      const fetchedDoctors = await getAllDoctors();
+      setDoctors(fetchedDoctors);
+    } catch (error) {
+      console.error('Failed to fetch doctors:', error)
+    }
+  };
 
   const handleFilterChange = (option) => {
     setFilterOption(option);
@@ -40,15 +48,21 @@ const DoctorsPage = () => {
     setSelectedDoctor(null);
   };
   
-  const handleDeleteDoctor = () => {
+  const handleDeleteDoctor = async () => {
     if (selectedDoctor) {
-      deleteDoctor(selectedDoctor.id);
-      setSelectedDoctor(null);
-      setDoctors(doctors.filter((doctor) => doctor.id !== selectedDoctor.id));
+      try {
+        await deleteDoctor(selectedDoctor.id);
+        setSelectedDoctor(null);
+        fetchDoctors();
+      } catch (error) {
+        console.error("Failed to delete doctor:", error);
+      }
+      
+      
     }
   };
   
-  const handleEditDoctor = () => {
+  const handleEditDoctor = async () => {
     if (selectedDoctor) {
       const updatedDoctor = {
         ...selectedDoctor,
@@ -59,8 +73,14 @@ const DoctorsPage = () => {
         email: selectedDoctor.email,
         website: selectedDoctor.website,
       };
-      updateDoctor(updatedDoctor);
-      setSelectedDoctor(updatedDoctor);
+      try {
+        await updateDoctor(updatedDoctor);
+        setSelectedDoctor(null);
+        fetchDoctors();
+      } catch (error) {
+        console.error("Failed to update doctor:", error);
+      }
+
     }
   };
 
@@ -68,10 +88,16 @@ const DoctorsPage = () => {
     setSelectedDoctor(null);
   };
 
-  const handleSaveNewDoctor = (newDoctor) => {
-    addDoctor(newDoctor);
-    setDoctors([...doctors, newDoctor]);
-    setShowAddDoctorForm(false);
+  const handleSaveNewDoctor = async (newDoctor) => {
+    try {
+      await addDoctor(newDoctor);
+      setShowAddDoctorForm(false);
+      // setSelectedDoctor(null)
+      fetchDoctors();
+    } catch (error) {
+      console.error("Failed to save new doctor:", error);
+    }
+
   };
 
   const filteredDoctors = filterCount
@@ -167,7 +193,7 @@ const DoctorsPage = () => {
         
           <div className="table-container">
             <table className="doctors-table">
-                <thead>
+                <thead className='table-header'>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -181,7 +207,7 @@ const DoctorsPage = () => {
                     onClick={() => handleDoctorSelect(doctor)}
                     className={
                         selectedDoctor && selectedDoctor.id === doctor.id
-                        ? 'selected'
+                        ? 'selected-row'
                         : ''
                     }
                     >
