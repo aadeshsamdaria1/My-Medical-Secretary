@@ -10,6 +10,7 @@ export const deleteFacilityEndpoint = `${API_ENDPOINT}/facilities/delete`;
 export const createFacilityEndpoint = `${API_ENDPOINT}/facilities/create`;
 export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 
+
 // Login function
 export const login = async (username, password) => {
   try {
@@ -44,6 +45,7 @@ export const refreshToken = async () => {
   }
 };
 
+
 // Function to handle API request errors
 export const handleRequestError = async (error, requestFunction, ...args) => {
   // If token expired, try refreshing token and retry the request
@@ -60,3 +62,4 @@ export const handleRequestError = async (error, requestFunction, ...args) => {
     throw error;
   }
 };
+

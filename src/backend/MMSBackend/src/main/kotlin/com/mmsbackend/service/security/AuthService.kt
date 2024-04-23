@@ -10,6 +10,8 @@ import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
@@ -21,7 +23,8 @@ class AuthService(
     val authManager: AuthenticationManager,
     val userDetailsService: CustomUserDetailsService,
     val jwtProperties: JwtProperties,
-    val refreshTokenEntityRepository: RefreshTokenEntityRepository
+    val refreshTokenEntityRepository: RefreshTokenEntityRepository,
+    val passwordEncoder: PasswordEncoder
 ) {
 
     fun authenticate(request: LoginRequest): Triple<String, String, Int>? {
@@ -85,5 +88,17 @@ class AuthService(
                 null
             }
         }
+    }
+
+    fun updatePassword(username: String, oldPassword: String, newPassword: String): Boolean {
+        val user = userEntityRepository.findByUsername(username) ?: return false
+
+        if (!passwordEncoder.matches(oldPassword, user.password)) {
+            return false
+        }
+
+        user.password = passwordEncoder.encode(newPassword)
+        userEntityRepository.save(user)
+        return true
     }
 }

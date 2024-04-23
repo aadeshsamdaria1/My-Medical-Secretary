@@ -1,16 +1,10 @@
 package com.mmsbackend.api.controllers
 
-import com.mmsbackend.data.LoginRequest
-import com.mmsbackend.data.LoginResponse
-import com.mmsbackend.data.RefreshTokenRequest
-import com.mmsbackend.data.RefreshTokenResponse
+import com.mmsbackend.data.*
 import com.mmsbackend.service.security.AuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api")
@@ -44,5 +38,14 @@ class AuthController(
                     ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token.")
             )
         )
+    }
+
+    @PutMapping("/update_password")
+    fun updatePassword(@RequestBody request: UpdatePasswordRequest): ResponseEntity<Any> {
+        return if (authService.updatePassword(request.username, request.oldPassword, request.newPassword)) {
+            ResponseEntity.ok().body("Password updated successfully.")
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed. Check your credentials and try again.")
+        }
     }
 }

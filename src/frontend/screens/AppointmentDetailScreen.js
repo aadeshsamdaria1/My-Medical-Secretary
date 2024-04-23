@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -278,31 +277,6 @@ const styles = StyleSheet.create({
   },
 });
 
-AppointmentDetailScreen.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      appointmentDetails: PropTypes.shape({
-        doctor: PropTypes.shape({
-          name: PropTypes.string,
-          expertise: PropTypes.string,
-          address: PropTypes.string,
-        }),
-        status: PropTypes.string,
-        startDate: PropTypes.string,
-        startTime: PropTypes.string,
-        duration: PropTypes.number,
-        detail: PropTypes.string,
-        reason: PropTypes.string,
-        documents: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            name: PropTypes.string,
-          })
-        ),
-        note: PropTypes.string,
-      }),
-    }).isRequired,
-  }).isRequired,
-};
+
 
 export default AppointmentDetailScreen;
