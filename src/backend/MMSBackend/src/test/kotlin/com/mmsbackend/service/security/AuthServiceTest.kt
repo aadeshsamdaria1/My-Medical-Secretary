@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 import kotlin.random.Random
 
@@ -59,10 +60,13 @@ class AuthServiceTest {
     @MockK
     private lateinit var user: UserEntity
 
+    @MockK
+    private lateinit var passwordEncoder: PasswordEncoder
+
     @BeforeEach
     fun setup() {
         authService = AuthService(userEntityRepository, tokenService, authManager, userDetailsService, jwtProperties,
-            refreshTokenEntityRepository)
+            refreshTokenEntityRepository, passwordEncoder)
 
         every { authManager.authenticate(UsernamePasswordAuthenticationToken(username, password)) } returns auth
         every { userDetailsService.loadUserByUsername(username) } returns userDetails
