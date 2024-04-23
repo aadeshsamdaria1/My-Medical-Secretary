@@ -18,8 +18,8 @@ class PatientEntity(
 
     val firstname: String,
     val middleName: String?,
-    val surname: String?,
-    val dob: Instant?,
+    val surname: String,
+    val dob: Instant,
     val address: String?,
     val suburb: String?,
     val state: String?,
