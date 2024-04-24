@@ -16,10 +16,18 @@ class FileController(
     @PostMapping("/upload/patients")
     fun uploadUserFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try{
-            val ids = fileService.readAndUploadUserFile(
+            val (fails, successes) = fileService.readAndUploadUserFile(
                 fileBytes = String(file.bytes)
             )
-            ResponseEntity.ok("Successfully created users with these ids: $ids.")
+
+            // TODO: Return these to actual file to frontend
+            if (fails.isNotEmpty()) {
+                ResponseEntity.ok("Successfully created users with these ids: $successes, but failed to upload" +
+                        " these ids: $fails.")
+            }
+            else {
+                ResponseEntity.ok("Successfully created users with these ids: $successes.")
+            }
         } catch (e: Exception){
             ResponseEntity.badRequest().body("Error while uploading patients: ${e.message}.")
         }
@@ -28,10 +36,18 @@ class FileController(
     @PostMapping("/upload/appointments")
     fun uploadAppointmentFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try {
-            val ids = fileService.readAndUploadAppointmentFile(
+            val (fails, successes) = fileService.readAndUploadAppointmentFile(
                 fileBytes = String(file.bytes)
             )
-            ResponseEntity.ok("Successfully uploaded appointments with these ids: $ids.")
+
+            // TODO: Return these to actual file to frontend
+            if (fails.isNotEmpty()) {
+                ResponseEntity.ok("Successfully uploaded appointments with these ids: $successes, " +
+                        "but failed to upload these ids: $fails.")
+            }
+            else {
+                ResponseEntity.ok("Successfully uploaded appointments with these ids: $successes.")
+            }
         } catch (e: Exception) {
             ResponseEntity.badRequest().body("Error while uploading appointments: ${e.message}.")
         }

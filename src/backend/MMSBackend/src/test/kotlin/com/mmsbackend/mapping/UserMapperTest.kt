@@ -2,6 +2,10 @@ package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
+import com.mmsbackend.enums.StatusType
+import com.mmsbackend.exception.ColumnError
+import com.mmsbackend.exception.IdException
+import com.mmsbackend.exception.ValueException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.service.security.PasswordService
@@ -171,11 +175,48 @@ class UserMapperTest {
                 "Id" to 9
             )
             val mappedPatient = userMapper.mapHtmlPatient(rowString, cols)
-            assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(expectedPatient)
+            assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(Pair(StatusType.SUCCESS, expectedPatient))
         }
 
         @Test
-        fun `Throw exception if data missing`() {
+        fun `Map a patient from HTML even if optional col is missing`() {
+
+            every { passwordService.generateSecurePassword() } returns temporaryPassword
+            every { encoder.encode(any() ) } returns password
+
+            val rowString = listOf(
+                "Correct email", "Correct first name", "Correct middle name",
+                "Correct surname", "1/08/1965", correctId.toString()
+            )
+            val cols = mapOf(
+                "EmailAddress" to 0,
+                "FirstName" to 1,
+                "MiddleName" to 2,
+                "Surname" to 3,
+                "DOB" to 4,
+                "Id" to 5
+            )
+             val expectedResult = PatientEntity(
+                firstname = "Correct first name",
+                middleName = "Correct middle name",
+                surname = "Correct surname",
+                dob = correctDOB,
+                address = null,
+                suburb = null,
+                state = null,
+                email = "Correct email",
+                patientId = correctId,
+                mmsId = correctMmsId,
+                password = password,
+                username = username,
+                temporaryPassword = temporaryPassword
+            )
+            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols)
+            assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(Pair(StatusType.SUCCESS, expectedResult))
+        }
+
+        @Test
+        fun `Throw exception if data array is mismatch`() {
             val rowString = listOf(
                 "Correct email", "Correct first name", "Correct middle name",
                 "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
@@ -194,6 +235,117 @@ class UserMapperTest {
                 "Id" to 9
             )
             assertThrows<Exception> { userMapper.mapHtmlPatient(rowString, cols) }
+        }
+
+        @Test
+        fun `Throw exception if data array has missing required col`() {
+            val rowString = listOf(
+                "Correct email", "Correct first name", "Correct middle name",
+                "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
+                "Correct state", correctId.toString()
+            )
+            val cols = mapOf(
+                "EmailAddress" to 0,
+                "" to 1,
+                "MiddleName" to 2,
+                "Surname" to 3,
+                "DOB" to 4,
+                "AddressLine1" to 5,
+                "AddressLine2" to 6,
+                "Suburb" to 7,
+                "State" to 8,
+                "Id" to 9
+            )
+            assertThrows<ColumnError> { userMapper.mapHtmlPatient(rowString, cols) }
+        }
+
+        @Test
+        fun `Throw exception if data array has missing required id col`() {
+            val rowString = listOf(
+                "Correct email", "Correct first name", "Correct middle name",
+                "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
+                "Correct state", correctId.toString()
+            )
+            val cols = mapOf(
+                "EmailAddress" to 0,
+                "FirstName" to 1,
+                "MiddleName" to 2,
+                "Surname" to 3,
+                "DOB" to 4,
+                "AddressLine1" to 5,
+                "AddressLine2" to 6,
+                "Suburb" to 7,
+                "State" to 8,
+                "" to 9
+            )
+            assertThrows<ColumnError> { userMapper.mapHtmlPatient(rowString, cols) }
+        }
+
+        @Test
+        fun `Return failure status if data array has missing required value`() {
+            val rowString = listOf(
+                "", "Correct first name", "Correct middle name",
+                "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
+                "Correct state", correctId.toString()
+            )
+            val cols = mapOf(
+                "EmailAddress" to 0,
+                "FirstName" to 1,
+                "MiddleName" to 2,
+                "Surname" to 3,
+                "DOB" to 4,
+                "AddressLine1" to 5,
+                "AddressLine2" to 6,
+                "Suburb" to 7,
+                "State" to 8,
+                "Id" to 9
+            )
+            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols)
+            val expectedResult = Pair(StatusType.FAILURE, correctId.toString())
+            assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(expectedResult)
+        }
+
+        @Test
+        fun `Throw exception if data array has missing required id`() {
+            val rowString = listOf(
+                "", "Correct first name", "Correct middle name",
+                "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
+                "Correct state", ""
+            )
+            val cols = mapOf(
+                "EmailAddress" to 0,
+                "FirstName" to 1,
+                "MiddleName" to 2,
+                "Surname" to 3,
+                "DOB" to 4,
+                "AddressLine1" to 5,
+                "AddressLine2" to 6,
+                "Suburb" to 7,
+                "State" to 8,
+                "Id" to 9
+            )
+            assertThrows<IdException> { userMapper.mapHtmlPatient(rowString, cols) }
+        }
+        @Test
+        fun `Throw exception if data array has non-integer id`() {
+            val rowString = listOf(
+                "abc", "Correct first name", "Correct middle name",
+                "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
+                "Correct state", "abc"
+            )
+            val cols = mapOf(
+                "EmailAddress" to 0,
+                "FirstName" to 1,
+                "MiddleName" to 2,
+                "Surname" to 3,
+                "DOB" to 4,
+                "AddressLine1" to 5,
+                "AddressLine2" to 6,
+                "Suburb" to 7,
+                "State" to 8,
+                "Id" to 9
+            )
+            assertThrows<IdException> { userMapper.mapHtmlPatient(rowString, cols) }
         }
     }
 

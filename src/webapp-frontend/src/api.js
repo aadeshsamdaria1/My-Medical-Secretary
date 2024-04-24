@@ -6,6 +6,12 @@ export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
 
 export const loginEndpoint = `${API_ENDPOINT}/login`;
 export const refreshTokenEndpoint = `${API_ENDPOINT}/refresh`;
+export const deleteFacilityEndpoint = `${API_ENDPOINT}/facilities/delete`;
+export const createFacilityEndpoint = `${API_ENDPOINT}/facilities/create`;
+export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
+export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
+export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
+
 
 // Login function
 export const login = async (username, password) => {
@@ -37,6 +43,24 @@ export const refreshToken = async () => {
     return jwtToken;
   } catch (error) {
     console.error('Token refresh failed:', error);
+    throw error;
+  }
+};
+
+
+// Function to handle API request errors
+export const handleRequestError = async (error, requestFunction, ...args) => {
+  // If token expired, try refreshing token and retry the request
+  if (error.response && error.response.status === 401) {
+    try {
+      await refreshToken();
+      return await requestFunction(...args);
+    } catch (refreshError) {
+      console.error('Failed to refresh token:', refreshError);
+      throw refreshError;
+    }
+  } else {
+    console.error('Request failed:', error);
     throw error;
   }
 };

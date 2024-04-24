@@ -28,13 +28,16 @@ class FileControllerTest {
     private val patientBytes = ""
     private val appointmentBytes = ""
     private val userIds = listOf(1,2,3)
+    private val failedIds = listOf(9,8,7)
+    private val emptyIds = listOf<Int>()
     private val appointmentIds = listOf(2,3,4)
+    private val failedIds2 = listOf(10,11,21,20)
 
     @BeforeEach
     fun setup(){
         fileController = FileController(fileService)
-        every { fileService.readAndUploadUserFile(patientBytes) } returns userIds
-        every { fileService.readAndUploadAppointmentFile(appointmentBytes) } returns appointmentIds
+        every { fileService.readAndUploadUserFile(patientBytes) } returns Pair(emptyIds, userIds)
+        every { fileService.readAndUploadAppointmentFile(appointmentBytes) } returns Pair(emptyIds, appointmentIds)
         every { userFile.bytes } returns patientBytes.toByteArray()
         every { appointmentFile.bytes } returns appointmentBytes.toByteArray()
     }
@@ -44,6 +47,15 @@ class FileControllerTest {
         val response = fileController.uploadUserFile(userFile)
         val expectedResponse = ResponseEntity.ok("Successfully created users with " +
                 "these ids: $userIds.")
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Successfully upload patients file but have failed users`() {
+        every { fileService.readAndUploadUserFile(patientBytes) } returns Pair(failedIds, userIds)
+        val response = fileController.uploadUserFile(userFile)
+        val expectedResponse = ResponseEntity.ok("Successfully created users with " +
+                "these ids: $userIds, but failed to upload these ids: $failedIds.")
         assertEquals(expectedResponse, response)
     }
 
@@ -62,6 +74,15 @@ class FileControllerTest {
         val response = fileController.uploadAppointmentFile(appointmentFile)
         val expectedResponse = ResponseEntity.ok("Successfully uploaded appointments with " +
                 "these ids: $appointmentIds.")
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Successfully upload appointments file but have failed appointments`() {
+        every { fileService.readAndUploadAppointmentFile(appointmentBytes) } returns Pair(failedIds2, appointmentIds)
+        val response = fileController.uploadAppointmentFile(appointmentFile)
+        val expectedResponse = ResponseEntity.ok("Successfully uploaded appointments with these " +
+                "ids: $appointmentIds, but failed to upload these ids: $failedIds2.")
         assertEquals(expectedResponse, response)
     }
 

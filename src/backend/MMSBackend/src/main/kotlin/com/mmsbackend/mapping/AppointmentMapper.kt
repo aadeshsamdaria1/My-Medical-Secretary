@@ -1,11 +1,16 @@
 package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.enums.StatusType
+import com.mmsbackend.exception.ColumnError
+import com.mmsbackend.exception.IdException
+import com.mmsbackend.exception.ValueException
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.mapping.UserMapper.Companion
 import org.springframework.stereotype.Service
 import java.sql.Time
 import java.text.SimpleDateFormat
@@ -60,23 +65,35 @@ class AppointmentMapper(
         )
     }
 
-    fun mapHtmlAppointment(rowString: List<String>, columns: Map<String, Int>): AppointmentEntity? {
-        return AppointmentEntity(
-            id = extractFromRow(columns, rowString, ID).toInt(),
+    fun mapHtmlAppointment(rowString: List<String>, columns: Map<String, Int>): Pair<StatusType, Any>? {
+        return try {
+            val appointmentId = extractID(columns, rowString)
+            try {
+                appointmentId.toInt()
+            } catch (e: NumberFormatException) {
+                throw IdException()
+            }
+            val appointmentEntity = AppointmentEntity(
+                id = appointmentId.toInt(),
 
-            detail = extractFromRow(columns, rowString, DETAIL),
-            reason = extractFromRow(columns, rowString, REASON),
-            note = extractFromRow(columns, rowString, NOTE),
-            lastUpdated = stringToInstant(extractFromRow(columns, rowString, LAST_UPDATED), LAST_UPDATED_PATTERN),
-            startTime = Time.valueOf(extractFromRow(columns, rowString, START_TIME)),
-            duration = extractFromRow(columns, rowString, DURATION).toInt(),
-            userNote = "",
-            startDate = SimpleDateFormat(DATE_CREATED_PATTERN).parse(extractFromRow(columns, rowString, START_DATE)),
-            dateCreate =  stringToInstant(extractFromRow(columns, rowString, DATE_CREATE), DATE_CREATED_PATTERN),
+                detail = extractFromRow(columns, rowString, DETAIL, appointmentId),
+                reason = extractFromRow(columns, rowString, REASON, appointmentId),
+                note = extractFromRow(columns, rowString, NOTE, appointmentId),
+                lastUpdated = stringToInstant(extractFromRow(columns, rowString, LAST_UPDATED,appointmentId), LAST_UPDATED_PATTERN),
+                startTime = Time.valueOf(extractFromRow(columns, rowString, START_TIME, appointmentId)),
+                duration = extractFromRow(columns, rowString, DURATION, appointmentId).toInt(),
+                userNote = "",
+                startDate = SimpleDateFormat(DATE_CREATED_PATTERN).parse(extractFromRow(columns, rowString, START_DATE, appointmentId)),
+                dateCreate =  stringToInstant(extractFromRow(columns, rowString, DATE_CREATE,appointmentId), DATE_CREATED_PATTERN),
 
-            patient = extractPatient(extractFromRow(columns, rowString, PATIENT)) ?: return null,
-            doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR)) ?: return null,
-        )
+                patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId)) ?: return null,
+                doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR, appointmentId)) ?: return null,
+            )
+
+            Pair(StatusType.SUCCESS, appointmentEntity)
+        } catch (e: ValueException) {
+            Pair(StatusType.FAILURE, e.id)
+        }
     }
 
     private fun extractDoctor(stringId: String): DoctorEntity? {
@@ -93,9 +110,16 @@ class AppointmentMapper(
             .toInstant()
     }
 
-    private fun extractFromRow(columns: Map<String, Int>, rowString: List<String>, col: String): String {
-        return columns[col]?.let { rowString.getOrNull(it) } ?: throw Exception("Column $col not found")
+    private fun extractID(columns: Map<String, Int>, rowString: List<String>): String {
+        val cell = columns[ID] ?: throw ColumnError(ID)
+        return rowString[cell].ifEmpty { throw IdException() }
     }
+
+    private fun extractFromRow(columns: Map<String, Int>, rowString: List<String>, col: String, id: String): String {
+        val cell = columns[col] ?: throw ColumnError(col)
+        return rowString[cell].ifEmpty { throw ValueException(id, col) }
+    }
+
     companion object {
         const val DATE_CREATED_PATTERN = "d/MM/yyyy"
         const val LAST_UPDATED_PATTERN = "yyyyMMddHHmmss"

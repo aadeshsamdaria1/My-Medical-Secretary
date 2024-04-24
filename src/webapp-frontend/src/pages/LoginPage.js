@@ -5,12 +5,12 @@ import '../styles/Login.css'; // Import CSS file
 
 const LoginPage = () => {
     const navigate = useNavigate();
-  
+
     // Callback function to navigate to the home page after successful login
     const handleLoginSuccess = () => {
       navigate('/doctors');
     };
-  
+
     return (
       <div className="login-container">
         <header className="header">
@@ -23,5 +23,5 @@ const LoginPage = () => {
       </div>
     );
   };
-  
+
   export default LoginPage;

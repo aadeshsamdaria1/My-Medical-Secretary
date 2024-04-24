@@ -8,7 +8,7 @@ const LoginForm = ({ onLoginSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
         const token = await login(username, password);
         console.log(token)

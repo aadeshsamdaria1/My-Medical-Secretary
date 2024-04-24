@@ -5,9 +5,14 @@ import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
+import com.mmsbackend.enums.StatusType
+import com.mmsbackend.exception.ColumnError
+import com.mmsbackend.exception.IdException
+import com.mmsbackend.exception.ValueException
 import com.mmsbackend.service.security.PasswordService
 import com.mmsbackend.util.mapAddress
 import org.springframework.security.crypto.password.PasswordEncoder
+import jdk.jshell.Snippet
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDate
@@ -93,44 +98,64 @@ class UserMapper(
         )
     }
 
-    fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): PatientEntity {
+    fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): Pair<StatusType, Any> {
 
-        // TODO: Decide which fields are actually necessary, and allow others to be missing
+        return try {
+            val patientId = extractID(columns, rowString)
+            try {
+                patientId.toInt()
+            } catch (e: NumberFormatException) {
+                throw IdException()
+            }
+            val firstname = extractFromRow(columns, rowString, FIRST_NAME, patientId)
+            val surname = extractFromRow(columns, rowString, SURNAME, patientId)
+            val name = Name(firstname = firstname, surname = surname)
 
-        val firstname = extractFromRow(columns, rowString, FIRST_NAME)
-        val surname = extractFromRow(columns, rowString, SURNAME)
-        val name = Name(firstname = firstname, surname = surname)
+            val plainTextPassword = passwordService.generateSecurePassword()
 
-        val plainTextPassword = passwordService.generateSecurePassword()
+            val patientEntity = PatientEntity(
+                firstname = firstname,
+                surname = surname,
+                email = extractFromRow(columns, rowString, EMAIL, patientId),
+                dob = stringToInstant(extractFromRow(columns, rowString, DOB, patientId)),
+                patientId = patientId.toInt(),
+                middleName = extractFromRowOptional(columns, rowString, MIDDLE_NAME),
+                suburb = extractFromRowOptional(columns, rowString, SUBURB),
+                state = extractFromRowOptional(columns, rowString, STATE),
+                address = mapAddress(
+                    extractFromRowOptional(columns, rowString, ADDRESS1),
+                    extractFromRowOptional(columns, rowString, ADDRESS2),
+                ),
+                // Randomly Generated
+                mmsId = 0,
+                username = passwordService.generateUsernameFromName(name),
+                password = encoder.encode(plainTextPassword),
+                temporaryPassword = plainTextPassword
+            )
 
-        return PatientEntity(
+            Pair(StatusType.SUCCESS, patientEntity)
 
-            // Compulsory columns
-            firstname = firstname,
-            surname = surname,
-            email = extractFromRow(columns, rowString, EMAIL),
-            dob = stringToInstant(extractFromRow(columns, rowString, DOB)),
-            patientId = extractFromRow(columns, rowString, ID).toInt(),
-
-            // Optional columns
-            middleName = extractFromRow(columns, rowString, MIDDLE_NAME),
-            suburb = extractFromRow(columns, rowString, SUBURB),
-            state = extractFromRow(columns, rowString, STATE),
-            address = mapAddress(
-                extractFromRow(columns, rowString, ADDRESS1),
-                extractFromRow(columns, rowString, ADDRESS2),
-            ),
-
-            // Randomly Generated
-            mmsId = 0,
-            username = passwordService.generateUsernameFromName(name),
-            password = encoder.encode(plainTextPassword),
-            temporaryPassword = plainTextPassword
-        )
+        // If one of required col's value is empty, return status fail and return the patient id
+        } catch (e: ValueException) {
+            Pair(StatusType.FAILURE, e.id)
+        }
     }
 
-    private fun extractFromRow(columns: Map<String, Int>, rowString: List<String>, col: String): String {
-        return columns[col]?.let { rowString.getOrNull(it) } ?: throw Exception("Data missing for column $col.")
+    // Extract id from the row, with the assumption Genie always generated some ids
+    private fun extractID(columns: Map<String, Int>, rowString: List<String>): String {
+        val cell = columns[ID] ?: throw ColumnError(ID)
+        return rowString[cell].ifEmpty { throw IdException() }
+    }
+
+    // Extract value for compulsory col, return exception if value is null
+    private fun extractFromRow(columns: Map<String, Int>, rowString: List<String>, col: String, id:String): String {
+        val cell = columns[col] ?: throw ColumnError(col)
+        return rowString[cell].ifEmpty { throw ValueException(id, col) }
+    }
+
+    // Extract value for optional col, return empty string if value is null
+    private fun extractFromRowOptional(columns: Map<String, Int>, rowString: List<String>, col: String): String? {
+        return columns[col]?.let { rowString.getOrNull(it) }
     }
 
     private fun stringToInstant(date: String): Instant {
