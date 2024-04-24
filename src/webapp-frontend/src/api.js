@@ -12,6 +12,11 @@ export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
 export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
 
+export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
+export const createPatientEndpoint = `${API_ENDPOINT}/users/create_patient`
+export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
+
+
 
 // Login function
 export const login = async (username, password) => {

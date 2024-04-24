@@ -10,7 +10,7 @@ const PatientList = ({ patients, onSelectPatient }) => {
             <th>ID</th>
             <th>Name</th>
             <th>Date of Birth</th>
-            <th>Account Status</th>
+            <th>Email</th>
           </tr>
         </thead>
         <tbody>
@@ -22,7 +22,7 @@ const PatientList = ({ patients, onSelectPatient }) => {
               <td>{patient.patientId}</td>
               <td>{`${patient.firstname} ${patient.surname}`}</td>
               <td>{new Date(patient.dob).toLocaleDateString()}</td>
-              <td>{patient.accountStatus}</td>
+              <td>{patient.email}</td>
             </tr>
           ))}
         </tbody>

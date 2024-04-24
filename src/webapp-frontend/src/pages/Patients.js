@@ -6,6 +6,11 @@ import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
 import "../styles/Patients.css";
 import CreatePatientModal from "../components/CreatePatientModal";
+import {
+  getAllPatients,
+  createPatient,
+  getAppointmentByPatientId,
+} from "../utils/patientsAPI";
 
 function Patients() {
   const [patients, setPatients] = useState([]);
@@ -42,68 +47,44 @@ function Patients() {
   };
 
   const handleNewPatientData = (newPatient) => {
-    // Here you would send the new patient data to the backend
-    // For now, we'll just console log it and pretend we're submitting it
-    console.log(newPatient);
-    // After submission, you might want to close the modal and refresh the patient list
+    console.log("New Patient Data:", newPatient);
+    createPatient(newPatient);
     handleCloseModal();
-    // fetch new list or add to current list
   };
 
   useEffect(() => {
-    // Fetch the patient data from an API endpoint here.
-    // The below is an example using a static patient object.
-    const patientData = [
-      {
-        patientId: 3,
-        firstname: "Zara",
-        middleName: "Doe",
-        surname: "Smith",
-        dob: "1990-01-01T00:00:00Z",
-        email: "john.doe@example.com",
-        street: "123 Main St",
-        suburb: "Cityville",
-        state: "California",
-      },
-      {
-        patientId: 4,
-        firstname: "Ethan",
-        middleName: "Kyle",
-        surname: "Johnson",
-        dob: "1984-05-15T00:00:00Z",
-        email: "ethan.johnson@example.com",
-        street: "456 Oak Lane",
-        suburb: "Springfield",
-        state: "Oregon",
-      },
-    ];
-
-    // Simulate an API call with a hardcoded delay
-    setTimeout(() => setPatients(patientData), 1000);
+    fetchPatients();
   }, []);
 
-  useEffect(() => {
-    if (selectedPatient) {
-      const appointmentData = [
-        {
-          id: 3,
-          detail: "Routine checkup",
-          reason: "General health.",
-          note: "No specific notes",
-          dateCreate: "2022-04-08T10:30:00Z",
-          lastUpdated: "2022-04-08T12:45:00Z",
-          startTime: "10:30:00",
-          startDate: "2022-04-15",
-          duration: 60,
-          patientId: 3,
-          providerId: 3,
-        },
-      ];
-      const patientAppointments = appointmentData.filter(
-        (a) => a.patientId === selectedPatient.patientId
-      );
-      setAppointments(patientAppointments);
+  const fetchPatients = async () => {
+    try {
+      const fetchedPatients = await getAllPatients();
+      setPatients(fetchedPatients);
+    } catch (error) {
+      console.error("Failed to fetch patients:", error);
     }
+  };
+
+  useEffect(() => {
+    const loadAppointments = async () => {
+      if (selectedPatient) {
+        try {
+          const appointmentData = await getAppointmentByPatientId(
+            selectedPatient.patientId
+          );
+          console.log(appointmentData);
+          const patientAppointments = appointmentData.filter(
+            (a) => a.patient.patientId === selectedPatient.patientId
+          );
+          console.log(patientAppointments);
+          setAppointments(patientAppointments);
+        } catch (error) {
+          console.error("Failed to load appointment data:", error);
+        }
+      }
+    };
+
+    loadAppointments();
   }, [selectedPatient]);
 
   const handleSearchChange = (query) => {
@@ -147,10 +128,12 @@ function Patients() {
               <SearchBar onSearchChange={handleSearchChange} />
             </div>
           </div>
-          <PatientList
-            patients={filteredPatients}
-            onSelectPatient={handleSelectPatient}
-          />
+          <div className="patients-list-scrollable">
+            <PatientList
+              patients={filteredPatients}
+              onSelectPatient={handleSelectPatient}
+            />
+          </div>
           <button onClick={handleCreatePatient} className="create-patient-btn">
             Create New Patient
           </button>

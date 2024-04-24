@@ -3,14 +3,15 @@ import React, { useState, useEffect } from 'react';
 const PatientDetail = ({ patient, onSave, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState({
-    firstname: '',
-    middleName: '',
-    surname: '',
-    dob: '',
-    email: '',
-    phone: '',
-    accountStatus: '',
-    password: '',
+    patientId: "",
+    firstname: "",
+    middleName: "",
+    surname: "",
+    dob: "",
+    email: "",
+    street: "",
+    suburb: "",
+    state: "",
   });
 
   useEffect(() => {
@@ -21,9 +22,10 @@ const PatientDetail = ({ patient, onSave, onDelete }) => {
         surname: patient.surname || '',
         dob: patient.dob || '',
         email: patient.email || '',
-        phone: patient.phone || '',
-        accountStatus: patient.accountStatus || '',
-        password: patient.password || '',
+        // phone: patient.phone || '',
+        street: patient.address || '',
+        suburb: patient.suburb || '',
+        state: patient.state || '',
       });
     }
   }, [patient]);
