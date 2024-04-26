@@ -26,7 +26,7 @@ const AppointmentsTable = ({ appointments }) => {
             {appointments.map((appointment) => (
               <tr key={appointment.id}>
                 <td>{appointment.id}</td>
-                <td>{appointment.providerId}</td>
+                <td>{appointment.doctor.name}</td>
                 <td>{appointment.detail}</td>
                 <td>{formatDate(appointment.startDate)}</td>
               </tr>

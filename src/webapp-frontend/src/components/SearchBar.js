@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import "../styles/Patients.css";
 
-const SearchBar = ({ onSearchChange, onFilterChange }) => {
+const SearchBar = ({ onSearchChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterByName, setFilterByName] = useState(true); // true for name, false for ID
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    onSearchChange(e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
+    onSearchChange(query, filterByName);
   };
 
   const handleFilterChange = (isByName) => {
     setFilterByName(isByName);
-    onFilterChange(isByName);
+    onSearchChange(searchQuery, isByName);
   };
 
   return (

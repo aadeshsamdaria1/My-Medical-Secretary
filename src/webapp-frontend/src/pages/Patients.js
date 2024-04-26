@@ -49,9 +49,9 @@ function Patients() {
     loadAppointments();
   }, [selectedPatient]);
 
-  const handleSearchChange = (query, filterByName) => {
+  const handleSearchChange = (query, isByName) => {
     setSearchQuery(query.toLowerCase());
-    setFilterByName(filterByName);
+    setFilterByName(isByName);
   };
 
   const handleSelectPatient = (patient) => {

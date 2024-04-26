@@ -3,6 +3,7 @@ import {
   getAllPatientsEndpoint,
   handleRequestError,
   getAllAppointmentByIdEndpoint,
+  // getDoctorsByIdEndpoint
 } from "../api";
 
 export const getAllPatients = async () => {
@@ -32,6 +33,20 @@ export const getAppointmentByPatientId = async (patientId) => {
     });
   }
 };
+
+// export const getDoctorsById = async (doctorId) => {
+//   try {
+//     const jwtToken = localStorage.getItem("jwtToken");
+//     const response = await axios.get(getDoctorsByIdEndpoint(doctorId), {
+//       headers: { Authorization: `Bearer ${jwtToken}` },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     return handleRequestError(error, axios.get, getDoctorsByIdEndpoint(doctorId), {
+//       headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
+//     });
+//   }
+// };
   // Implement the get appointment by patient ID API call here
 
 

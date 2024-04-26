@@ -17,6 +17,7 @@ export const getAllDoctorsEndpoint = `${API_ENDPOINT}/doctors/get_all`;
 
 export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
 export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
+export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/${userId}`;
 
 
 
