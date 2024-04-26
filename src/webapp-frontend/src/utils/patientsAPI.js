@@ -2,7 +2,6 @@ import axios from "axios";
 import {
   getAllPatientsEndpoint,
   handleRequestError,
-  createPatientEndpoint,
   getAllAppointmentByIdEndpoint,
 } from "../api";
 
@@ -20,32 +19,6 @@ export const getAllPatients = async () => {
   }
 };
 
-export const createPatient = async (patientData) => {
-  try {
-    const jwtToken = localStorage.getItem("jwtToken");
-    const response = await axios.post(createPatientEndpoint, patientData, {
-      headers: { Authorization: `Bearer ${jwtToken}` },
-    });
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    return handleRequestError(
-      error,
-      axios.post,
-      createPatientEndpoint,
-      patientData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      }
-    );
-  }
-};
-
-export const updatePatient = async (patientData) => {
-  // Implement the update patient API call here
-}
 
 export const getAppointmentByPatientId = async (patientId) => {
   try {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const PatientDetail = ({ patient, onSave, onDelete }) => {
-  const [isEditing, setIsEditing] = useState(false);
+const PatientDetail = ({ patient }) => {
   const [editFormData, setEditFormData] = useState({
     patientId: "",
     firstname: "",
@@ -22,31 +21,12 @@ const PatientDetail = ({ patient, onSave, onDelete }) => {
         surname: patient.surname || '',
         dob: patient.dob || '',
         email: patient.email || '',
-        // phone: patient.phone || '',
         street: patient.address || '',
         suburb: patient.suburb || '',
         state: patient.state || '',
       });
     }
   }, [patient]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData({ ...editFormData, [name]: value });
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelClick = () => {
-    setIsEditing(false);
-  };
-
-  const handleSaveClick = () => {
-    onSave(editFormData);
-    setIsEditing(false);
-  };
 
   return (
     <div className="patients-detail-card">
@@ -58,32 +38,10 @@ const PatientDetail = ({ patient, onSave, onDelete }) => {
             type={key === 'password' ? 'password' : 'text'}
             name={key}
             value={value}
-            onChange={handleInputChange}
-            readOnly={!isEditing}
+            readOnly
           />
         </div>
       ))}
-      <div className="patients-detail-actions">
-        {isEditing ? (
-          <>
-            <button onClick={handleSaveClick} className="patients-save-btn">
-              Save
-            </button>
-            <button onClick={handleCancelClick} className="patients-cancel-btn">
-              Cancel
-            </button>
-          </>
-        ) : (
-          <>
-            <button onClick={handleEditClick} className="patients-edit-btn">
-              Edit
-            </button>
-            <button onClick={() => onDelete(patient?.patientId)} className="patients-delete-btn">
-              Delete
-            </button>
-          </>
-        )}
-      </div>
     </div>
   );
 };

@@ -1,19 +1,18 @@
 /* General Page Styles */
 body {
   font-family: "Arial", sans-serif;
-  background-color: #f5f5f7;
-  color: #1c1c1e;
+  background-color: #fff;
+  color: #333;
 }
 
 :root {
   --primary-color: #06b4ff;
-  --text-color: #1c1c1e;
+  --text-color: #333;
   --button-text-color: #fff;
   --input-background: #fff;
-  --input-border-color: #d2d2d7;
+  --input-border-color: #d6d6d6;
   --button-hover-color: #0a84ff;
 }
-
 
 /* Main Patients Page Layout */
 .patients-container {
@@ -26,10 +25,10 @@ body {
 /* Patient Detail Component */
 .patients-detail {
   background-color: var(--input-background);
-  padding: 10px;
-  border-radius: 12px;
+  padding: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 45%;
+  width: 40%;
 }
 
 .patients-detail-card {
@@ -54,7 +53,6 @@ body {
 .patients-detail-row label {
   width: 40%;
   font-weight: 500;
-  padding-right: 5px;
   color: var(--text-color);
 }
 
@@ -63,7 +61,7 @@ body {
   flex-grow: 1;
   padding: 6px 10px;
   border: 1px solid var(--input-border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: var(--input-background);
   font-size: 14px;
 }
@@ -74,61 +72,18 @@ body {
   gap: 6px;
 }
 
-.patients-edit-btn,
-.patients-delete-btn,
-.patients-save-btn,
-.patients-cancel-btn {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-  color: var(--button-text-color);
-  background-color: var(--primary-color);
-  font-weight: 500;
-}
-
-.patients-edit-btn:hover,
-.patients-delete-btn:hover,
-.patients-save-btn:hover,
-.patients-cancel-btn:hover {
-  background-color: var(--button-hover-color);
-}
-
-.patients-edit-btn {
-  background-color: #ffc107;
-  color: #333;
-}
-
-.patients-delete-btn {
-  background-color: #ff3b30;
-  color: #fff;
-}
-
-.patients-save-btn {
-  background-color: #34c759;
-  color: #fff;
-}
-
-.patients-cancel-btn {
-  background-color: #6c757d;
-  color: #fff;
-}
-
 /* Patient List Component */
 .patients-list {
   background-color: var(--input-background);
-  border-radius: 12px;
-  padding: 10px;
-  width: 80%;
-  margin-bottom: 10px;
-  margin-left: 6px;
+  border-radius: 8px;
+  padding: 15px;
+  width: 60%;
+  margin-bottom: 20px;
 }
 
 .patients-list-scrollable {
-  max-height: 500px; /* Adjust to the height you want */
-  overflow-y: auto;  /* Enables vertical scrolling */
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .patients-list th {
@@ -152,7 +107,7 @@ body {
 
 .patients-table {
   border-collapse: collapse;
-  width: 100%;
+  width: auto;
 }
 
 .patients-table thead {
@@ -162,7 +117,7 @@ body {
 
 .patients-table th,
 .patients-table td {
-  padding: 4px;
+  padding: 6px;
   border: 1px solid #ddd;
   text-align: left;
   text-size-adjust: 80%;
@@ -176,7 +131,7 @@ body {
 
 .patients-table tbody tr {
   cursor: pointer;
-  background-color: #fff; 
+  background-color: #fff;
 }
 
 .patients-table tbody tr:nth-child(even) {
@@ -187,32 +142,12 @@ body {
   background-color: #eaeaea;
 }
 
-/* Search Bar Component */
-.patients-search-bar {
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  margin-right: 20px;
-}
-
-.patients-search-input {
-  flex-grow: 1;
-  padding: 8px 12px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 6px;
-  font-size: 14px;
-  position: relative;
-  width: calc(100% - 30px);
-  max-width: 200px;
-}
-
-
 /* Appointments Table Styles */
 .appointments-container {
   background-color: #fff;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 10px;
-  width: 98%;
+  width: 97%;
   border: none;
 }
 
@@ -226,9 +161,10 @@ body {
 .appointments-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
   text-align: left;
   box-shadow: none;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .appointments-table th,
@@ -245,129 +181,78 @@ body {
   font-weight: 600;
 }
 
-.create-appointment-btn,
-.create-patient-btn {
+.resource-viewer-btn {
   padding: 10px 16px;
-  background-color: var(--primary-color); 
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   margin-left: auto;
-  position: sticky;
   margin-top: 20px;
-  bottom: 20px;
 }
 
-.create-appointment-btn:hover,
-.create-patient-btn:hover {
+.resource-viewer-btn:hover {
   background-color: var(--button-hover-color);
 }
 
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+/* Search Bar Component */
+.patients-search-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  padding: 4px;
+  margin-right: 20px;
 }
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; 
-}
-
-/* Modal Box */
-.modal-box {
-  background: var(--input-background);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1001; /* Above the overlay */
-  width: 90%;
-  max-width: 500px; /* Adjust the max-width as needed */
-}
-
-/* Modal Header */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.modal-close-btn {
-  padding: 5px 10px;
-  border: none;
-  background-color: #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.modal-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 10px;
-  row-gap: 15px;
-}
-
-.modal-form input,
-.modal-form button {
-  padding: 10px;
-  border-radius: 6px;
+.patients-search-input {
+  flex-grow: 1;
+  padding: 8px 12px;
   border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  margin-right: 10px;
   font-size: 14px;
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  box-sizing: border-box;
 }
-
-.modal-form-button-container {
+.patients-search-bar .filter-buttons {
   display: flex;
-  justify-content: flex-end; 
-  gap: 10px;
+  margin-right: 10px;
 }
 
-/* Button styles */
-.modal-form-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.patients-search-bar .filter-button {
+  white-space: nowrap;
+  padding: 8px 12px;
   font-size: 14px;
+  background-color: #f0f0f0;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.patients-search-bar .filter-button.active {
   background-color: var(--primary-color);
-  color: var(--button-text-color);
+  color: #fff;
 }
 
-.modal-form-button.cancel {
-  background-color: #ccc;
-  color: #333; /* Change color as needed */
+.patients-search-bar h3{
+  font-size: 16px;
+  margin-right: 20px;
+  white-space: nowrap;
 }
 
-/* Hover effects for buttons */
-.modal-form-button:hover {
-  opacity: 0.8;
+.no-appointments-message {
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: flex-start;
+  color: var(--text-color);
 }
+
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
   .patients-container {
