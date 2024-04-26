@@ -1,42 +1,63 @@
-// utils/doctorsAPI.js
-export const fetchDoctors = () => {
-    // Implement the logic to fetch doctors data from an API or a mock data source
-    const fetchedDoctors = [
-      {
-        id: 1,
-        name: 'John Doe',
-        address: '123 Main St',
-        contact: '555-1234',
-        email: 'john.doe@example.com',
-        expertise: 'Cardiology',
-        website: 'johndoe.com',
-      },
-      {
-        id: 2,
-        name: 'Jane Smith',
-        address: '456 Oak Ave',
-        contact: '555-5678',
-        email: 'jane.smith@example.com',
-        expertise: 'Pediatrics',
-        website: 'janesmith.com',
-      },
-      // Add more doctor objects as needed
-    ];
-    return fetchedDoctors;
-  };
-  
-  export const addDoctor = (newDoctor) => {
-    // Implement the logic to add a new doctor
-    console.log('Adding a new doctor:', newDoctor);
-  };
-  
-  export const deleteDoctor = (doctorId) => {
-    // Implement the logic to delete a doctor
-    console.log('Deleting doctor with ID:', doctorId);
-  };
-  
-  export const updateDoctor = (updatedDoctor) => {
-    // Implement the logic to update a doctor
-    console.log('Updating doctor:', updatedDoctor);
-    
-  };
+import axios from "axios";
+import { deleteDoctorEndpoint, createDoctorEndpoint, getAllDoctorsEndpoint, handleRequestError } from "../api";
+
+// Function to fetch doctors data
+export const getAllDoctors = async () => {
+  try {
+    const jwtToken = localStorage.getItem('jwtToken');
+    const response = await axios.get(getAllDoctorsEndpoint, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    return handleRequestError(error, axios.get, getAllDoctorsEndpoint, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
+    });
+  }
+};
+
+// Function to add a new doctor
+export const addDoctor = async (newDoctor) => {
+  try {
+    const jwtToken = localStorage.getItem('jwtToken');
+    const response = await axios.post(createDoctorEndpoint, newDoctor, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+    console.log("Doctor added successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    return handleRequestError(error, axios.post, createDoctorEndpoint, newDoctor, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
+    });
+  }
+};
+
+// Function to delete a doctor by ID
+export const deleteDoctor = async (doctorId) => {
+  try {
+    const jwtToken = localStorage.getItem('jwtToken');
+    const response = await axios.delete(`${deleteDoctorEndpoint}/${doctorId}`, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+    console.log("Doctor deleted successfully");
+    return response.data;
+  } catch (error) {
+    return handleRequestError(error, axios.delete, `${deleteDoctorEndpoint}/${doctorId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
+    });
+  }
+};
+
+// Function to update a doctor
+export const updateDoctor = async (updatedDoctor) => {
+  try {
+    //await deleteDoctor(updatedDoctor.id);
+    const response = await addDoctor(updatedDoctor);
+
+    console.log("Doctor updated successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    console.log('Failed to update Doctor:', error);
+    throw error;
+  }
+};

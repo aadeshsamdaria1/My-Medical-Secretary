@@ -168,7 +168,7 @@ const Facilities = () => {
 
           <div className="table-container">
             <table className="facilities-table">
-              <thead>
+              <thead className='table-header'>
                 <tr>
                   <th>Name</th>
                   <th>Type</th>
@@ -182,7 +182,7 @@ const Facilities = () => {
                     onClick={() => handleFacilitySelect(facility)}
                     className={
                       selectedFacility && selectedFacility.name === facility.name
-                        ? 'selected'
+                        ? 'selected-row'
                         : ''
                     }
                   >

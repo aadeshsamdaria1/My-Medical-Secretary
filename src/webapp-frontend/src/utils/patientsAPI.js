@@ -19,7 +19,6 @@ export const getAllPatients = async () => {
   }
 };
 
-
 export const getAppointmentByPatientId = async (patientId) => {
   try {
     const jwtToken = localStorage.getItem("jwtToken");
