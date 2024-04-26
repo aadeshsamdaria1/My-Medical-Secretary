@@ -11,6 +11,11 @@ export const createFacilityEndpoint = `${API_ENDPOINT}/facilities/create`;
 export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
 export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
+export const deleteDoctorEndpoint = `${API_ENDPOINT}/doctors/delete`;
+export const createDoctorEndpoint = `${API_ENDPOINT}/doctors/create`;
+export const getAllDoctorsEndpoint = `${API_ENDPOINT}/doctors/get_all`;
+export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`;
+export const getAppointmentsbyUserIdEndpoint = `${API_ENDPOINT}/appointments/get_all`;
 
 
 // Login function

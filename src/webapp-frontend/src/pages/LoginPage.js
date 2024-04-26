@@ -8,7 +8,7 @@ const LoginPage = () => {
 
     // Callback function to navigate to the home page after successful login
     const handleLoginSuccess = () => {
-      navigate('/doctors');
+      navigate('/home');
     };
 
     return (
