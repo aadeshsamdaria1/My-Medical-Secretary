@@ -1,41 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PatientDetail = ({ patient }) => {
+  const [editFormData, setEditFormData] = useState({
+    patientId: "",
+    firstname: "",
+    middleName: "",
+    surname: "",
+    dob: "",
+    email: "",
+    street: "",
+    suburb: "",
+    state: "",
+  });
+
+  useEffect(() => {
+    if (patient) {
+      setEditFormData({
+        firstname: patient.firstname || '',
+        middleName: patient.middleName || '',
+        surname: patient.surname || '',
+        dob: patient.dob || '',
+        email: patient.email || '',
+        street: patient.address || '',
+        suburb: patient.suburb || '',
+        state: patient.state || '',
+      });
+    }
+  }, [patient]);
+
   return (
     <div className="patients-detail-card">
       <h2>Patient Details</h2>
-      {patient && (
-        <>
-          <div className="patients-detail-row">
-            <label>First Name</label>
-            <div>{patient.firstname}</div>
-          </div>
-          <div className="patients-detail-row">
-            <label>Middle Name</label>
-            <div>{patient.middleName}</div>
-          </div>
-          <div className="patients-detail-row">
-            <label>Surname</label>
-            <div>{patient.surname}</div>
-          </div>
-          <div className="patients-detail-row">
-            <label>Date of Birth</label>
-            <div>{patient.dob}</div>
-          </div>
-          <div className="patients-detail-row">
-            <label>Email</label>
-            <div>{patient.email}</div>
-          </div>
-          <div className="patients-detail-row">
-            <label>Phone</label>
-            <div>{patient.phone}</div>
-          </div>
-          <div className="patients-detail-row">
-            <label>Account Status</label>
-            <div>{patient.accountStatus}</div>
-          </div>
-        </>
-      )}
+      {Object.entries(editFormData).map(([key, value]) => (
+        <div className="patients-detail-row" key={key}>
+          <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+          <input
+            type={key === 'password' ? 'password' : 'text'}
+            name={key}
+            value={value}
+            readOnly
+          />
+        </div>
+      ))}
     </div>
   );
 };

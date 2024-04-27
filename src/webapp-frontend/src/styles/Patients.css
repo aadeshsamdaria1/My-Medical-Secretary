@@ -1,114 +1,123 @@
 /* General Page Styles */
 body {
   font-family: "Arial", sans-serif;
-  background-color: #f4f4f4;
+  background-color: #fff;
   color: #333;
+}
+
+:root {
+  --primary-color: #06b4ff;
+  --text-color: #333;
+  --button-text-color: #fff;
+  --input-background: #fff;
+  --input-border-color: #d6d6d6;
+  --button-hover-color: #0a84ff;
 }
 
 /* Main Patients Page Layout */
 .patients-container {
   display: flex;
   justify-content: space-between;
-  gap: 5px;
-  padding: 5px;
+  gap: 20px;
+  padding: 20px;
 }
 
 /* Patient Detail Component */
 .patients-detail {
-  background-color: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  width: 35%;
+  background-color: var(--input-background);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 40%;
 }
 
 .patients-detail-card {
-  border-radius: 4px;
+  border: none;
   padding: 8px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .patients-detail-card h2 {
-  border-bottom: 2px solid #06b4ff;
-  color: #06b4ff;
-  margin-bottom: 6px;
+  border-bottom: none;
+  color: var(--text-color);
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .patients-detail-row {
   display: flex;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   align-items: center;
 }
 
 .patients-detail-row label {
-  width: 30%;
-  font-weight: bold;
-  padding-right: 5px;
+  width: 40%;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .patients-detail-row input[type="text"],
 .patients-detail-row input[type="password"] {
   flex-grow: 1;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 8px;
+  background-color: var(--input-background);
+  font-size: 14px;
 }
 
 .patients-detail-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 6px;
 }
-
-
 
 /* Patient List Component */
 .patients-list {
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 5px;
+  background-color: var(--input-background);
+  border-radius: 8px;
+  padding: 15px;
+  width: 60%;
+  margin-bottom: 20px;
+}
 
+.patients-list-scrollable {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .patients-list th {
-  background-color: #06b4ff;
-  color: white;
+  background-color: #f5f5f7;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
 .patients-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 12px;
 }
 
 .patients-list-header h2 {
-  border-bottom: 2px solid #06b4ff;
-  color: #06b4ff;
-}
-
-.patients-list-container {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  flex-grow: 1;
+  border-bottom: none;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
 .patients-table {
   border-collapse: collapse;
-  width: 100%;
-  text-align: left;
-  box-shadow: none;
+  width: auto;
 }
 
 .patients-table thead {
-  background-color: #06b4ff; /* Color for the header */
-  color: white; /* Text color for the header */
+  background-color: #f5f5f7;
+  color: var(--text-color);
 }
 
 .patients-table th,
 .patients-table td {
-  padding: 4px;
+  padding: 6px;
   border: 1px solid #ddd;
   text-align: left;
   text-size-adjust: 80%;
@@ -121,73 +130,126 @@ body {
 }
 
 .patients-table tbody tr {
-  cursor: pointer; /* Indicates that rows are clickable */
-  background-color: #fff; /* Background color for the body rows */
+  cursor: pointer;
+  background-color: #fff;
 }
 
 .patients-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9; /* Zebra striping for rows */
+  background-color: #f9f9f9;
 }
 
 .patients-table tbody tr:hover {
-  background-color: #eaeaea; /* Hover state color */
+  background-color: #eaeaea;
 }
-
-/* Search Bar Component */
-.patients-search-bar {
-  display: flex;
-  align-items: flex-end;
-  padding: 4px;
-  margin-bottom: 10px;
-  margin-right: 20px
-}
-
-.patients-search-input {
-  flex-grow: 1;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  position: relative;
-  width: calc(100% - 30px);
-  max-width: 200px;
-}
-
 
 /* Appointments Table Styles */
 .appointments-container {
   background-color: #fff;
   border-radius: 8px;
   padding: 10px;
-  width: 100%;
+  width: 97%;
   border: none;
 }
 
 .appointment-title {
-  color: #06b4ff;
+  color: var(--text-color);
   font-size: 12px;
+  font-weight: 600;
   margin-bottom: 10px;
 }
 
 .appointments-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
   text-align: left;
   box-shadow: none;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .appointments-table th,
 .appointments-table td {
-  padding: 4px;
+  padding: 6px;
   border: 1px solid #ddd;
   text-align: left;
-  text-size-adjust: 80%;
+  font-size: 14px;
 }
 
 .appointments-table th {
-  background-color: #06b4ff; /* Color to match your theme */
+  background-color: #f5f5f7;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.resource-viewer-btn {
+  padding: 10px 16px;
+  background-color: var(--primary-color);
   color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: auto;
+  margin-top: 20px;
+}
+
+.resource-viewer-btn:hover {
+  background-color: var(--button-hover-color);
+}
+
+/* Search Bar Component */
+.patients-search-bar {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  margin-right: 20px;
+}
+
+.patients-search-input {
+  flex-grow: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  margin-right: 10px;
+  font-size: 14px;
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  box-sizing: border-box;
+}
+.patients-search-bar .filter-buttons {
+  display: flex;
+  margin-right: 10px;
+}
+
+.patients-search-bar .filter-button {
+  white-space: nowrap;
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.patients-search-bar .filter-button.active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.patients-search-bar h3{
+  font-size: 16px;
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+.no-appointments-message {
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: flex-start;
+  color: var(--text-color);
 }
 
 

@@ -4,82 +4,126 @@ import PatientList from "../components/PatientList";
 import PatientDetail from "../components/PatientDetail";
 import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
-import { getAllPatients, getPatientAppointments } from "../utils/patientsAPI";
 import "../styles/Patients.css";
+import {
+  getAllPatients,
+  getAppointmentByPatientId,
+} from "../utils/patientsAPI";
 
 function Patients() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterByName, setFilterByName] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchedPatients = await getAllPatients();
-        setPatients(fetchedPatients);
-      } catch (error) {
-        console.error('Failed to fetch patients:', error);
-      }
-    };
-    fetchData();
+    fetchPatients();
   }, []);
 
+  const fetchPatients = async () => {
+    try {
+      const fetchedPatients = await getAllPatients();
+      setPatients(fetchedPatients);
+    } catch (error) {
+      console.error("Failed to fetch patients:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchAppointments = async () => {
+    const loadAppointments = async () => {
       if (selectedPatient) {
         try {
-          const fetchedAppointments = await getPatientAppointments(selectedPatient.patientId);
-          setAppointments(fetchedAppointments);
+          const appointmentData = await getAppointmentByPatientId(
+            selectedPatient.patientId
+          );
+          const patientAppointments = appointmentData.filter(
+            (a) => a.patient.patientId === selectedPatient.patientId
+          );
+          setAppointments(patientAppointments);
         } catch (error) {
-          console.error('Failed to fetch appointments:', error);
+          console.error("Failed to load appointment data:", error);
         }
       }
     };
-    fetchAppointments();
+    loadAppointments();
   }, [selectedPatient]);
 
-  const handleSearchChange = (query) => {
+  const handleSearchChange = (query, isByName) => {
     setSearchQuery(query.toLowerCase());
+    setFilterByName(isByName);
   };
 
   const handleSelectPatient = (patient) => {
-    setSelectedPatient(patient);
-    // Reset appointments when changing selection
-    setAppointments([]);
+    if (!selectedPatient || patient.patientId !== selectedPatient.patientId) {
+      setSelectedPatient(patient);
+      setAppointments([]);
+    }
   };
 
-  const filteredPatients = searchQuery
-    ? patients.filter(
-        (p) =>
-          p.firstname.toLowerCase().includes(searchQuery) ||
-          p.surname.toLowerCase().includes(searchQuery) ||
-          String(p.patientId).includes(searchQuery)
-      )
-    : patients;
+  const handleFilterChange = (isByName) => {
+    setFilterByName(isByName);
+  };
 
-    return (
-      <div>
-        <NavBar />
-        <div className="patients-container">
-          <div className="patients-detail">
-            <PatientDetail patient={selectedPatient} />
-            {selectedPatient && <AppointmentsTable appointments={appointments} />}
+  const handleResourceViewerClick = () => {
+    console.log("Resource Viewer clicked");
+    // Add your logic to open the resource viewer here
+  };
+
+  const filteredPatients = patients
+    .filter((patient) =>
+      filterByName
+        ? (patient.firstname + " " + patient.surname)
+            .toLowerCase()
+            .includes(searchQuery)
+        : String(patient.patientId).includes(searchQuery)
+    )
+    .sort((a, b) =>
+      filterByName
+        ? (a.firstname + " " + a.surname).localeCompare(
+            b.firstname + " " + b.surname
+          )
+        : a.patientId - b.patientId
+    );
+
+  return (
+    <div>
+      <NavBar />
+      <div className="patients-container">
+      <div className="patients-detail">
+          <PatientDetail patient={selectedPatient} />
+          {selectedPatient && (
+            <>
+              <AppointmentsTable appointments={appointments} />
+              <button
+                onClick={handleResourceViewerClick}
+                className="resource-viewer-btn"
+              >
+                Resource Viewer
+              </button>
+            </>
+          )}
+        </div>
+        <div className="patients-list">
+          <div className="patients-list-header">
+            <h2>Patients</h2>
+            <div className="patients-search-bar">
+              <SearchBar
+                onSearchChange={handleSearchChange}
+                onFilterChange={handleFilterChange}
+              />
+            </div>
           </div>
-          <div className="patients-list-container">
-            <div className="patients-list-header">
-              <h2>Patients</h2>
-              <div className="patients-search-bar">
-                <SearchBar onSearchChange={handleSearchChange} />
-              </div>
-            </div>
-            <div className="patients-list-scrollable">
-              <PatientList patients={filteredPatients} onSelectPatient={handleSelectPatient} />
-            </div>
+          <div className="patients-list-scrollable">
+            <PatientList
+              patients={filteredPatients}
+              onSelectPatient={handleSelectPatient}
+            />
           </div>
         </div>
       </div>
-    );
-  }
-  
-  export default Patients;
+    </div>
+  );
+}
+
+export default Patients;
