@@ -24,7 +24,7 @@ class SecurityConfiguration(
         return http.csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    // Open to anyone
+                    // Open to anyone on the internet
                     .requestMatchers(
                         "/api/login",
                         "/api/refresh",

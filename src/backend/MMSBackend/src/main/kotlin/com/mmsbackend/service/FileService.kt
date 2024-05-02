@@ -32,10 +32,10 @@ class FileService(
             .associate { (index, columnName) -> columnName to index }
 
         val patientResults = tableRows.drop(1).map { row ->
-                userMapper.mapHtmlPatient(
-                    rowString = row,
-                    columns = columns
-                )
+            userMapper.mapHtmlPatient(
+                rowString = row,
+                columns = columns
+            )
         }
 
         // These are PatientIDs
@@ -75,7 +75,7 @@ class FileService(
             )
         }
 
-        // TODO: Should also include appointment that isn't properly link to patient and doctor
+        // TODO: Should also include appointment that isn't properly linked to patient and doctor
         // These are AppointmentIds
         val failedAppointmentID = appointmentResults
             .filter { it.first == StatusType.FAILURE }

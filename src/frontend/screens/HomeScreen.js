@@ -6,7 +6,6 @@ import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
 const HomeScreen = ({ route }) => {
   const userId = route.params?.userId;
-  // console.log (upcomingAppointments);
   const recentMessages = [
     { id: '1', sender: 'Nurse Mary', message: 'Please remember to take your medication. This is a longer message to demonstrate the functionality.' },
     { id: '2', sender: 'Dr. John Doe', message: 'Your test results are ready.' },

@@ -1,5 +1,10 @@
 import axios from "axios";
-import { deleteDoctorEndpoint, createDoctorEndpoint, getAllDoctorsEndpoint, handleRequestError } from "../api";
+import {
+  deleteDoctorEndpoint,
+  createDoctorEndpoint,
+  getAllDoctorsEndpoint,
+  handleRequestError
+} from "../api";
 
 // Function to fetch doctors data
 export const getAllDoctors = async () => {
@@ -51,7 +56,6 @@ export const deleteDoctor = async (doctorId) => {
 // Function to update a doctor
 export const updateDoctor = async (updatedDoctor) => {
   try {
-    //await deleteDoctor(updatedDoctor.id);
     const response = await addDoctor(updatedDoctor);
 
     console.log("Doctor updated successfully:", response.data);

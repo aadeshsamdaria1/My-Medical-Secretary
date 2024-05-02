@@ -29,7 +29,6 @@ class UserController(
     @GetMapping("/get_patient/{id}")
     fun getPatient(@PathVariable id: Int): PatientEntity? {
         val userDetails = securityContextHolderRetriever.getSecurityContext()
-
         val patient = userEntityRepository.findByPatientId(id) ?: return null
         return if (generalValidation.isAdminOrSpecificPatientUsername(userDetails, patient.username)) {
             patient

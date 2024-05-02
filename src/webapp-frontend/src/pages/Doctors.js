@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import '../styles/Doctors.css';
-import deleteIcon from '../assets/delete-icon.png'; // Import the delete icon
-import doctorsIcon from '../assets/doctors-logo.jpg'; // Import the doctors icon
+import deleteIcon from '../assets/delete-icon.png';
+import doctorsIcon from '../assets/doctors-logo.jpg';
 import { getAllDoctors, addDoctor, deleteDoctor, updateDoctor } from '../utils/doctorsAPI';
 import AddDoctorForm from '../components/AddDoctorForm';
 
@@ -92,12 +92,10 @@ const DoctorsPage = () => {
     try {
       await addDoctor(newDoctor);
       setShowAddDoctorForm(false);
-      // setSelectedDoctor(null)
       fetchDoctors();
     } catch (error) {
       console.error("Failed to save new doctor:", error);
     }
-
   };
 
   const filteredDoctors = filterCount

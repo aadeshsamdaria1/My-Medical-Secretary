@@ -11,9 +11,6 @@ const FileUpload = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [progressMessage, setProgressMessage] = useState('');
-  
-
-
   const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
@@ -24,7 +21,6 @@ const FileUpload = () => {
         setError('');
         setSuccessMessage('');
     }
-
   };
 
   const handleDragOver = (event) => {
@@ -40,7 +36,6 @@ const FileUpload = () => {
         setError('');
         setSuccessMessage('');
     }
-
   };
 
   const handleButtonClick = () => {
@@ -106,7 +101,7 @@ const FileUpload = () => {
       <input
         type="file"
         onChange={handleFileChange}
-        style={{ position: 'absolute', left: '-9999px' }} // Hide the input off-screen but keep it accessible
+        style={{ position: 'absolute', left: '-9999px' }}
         ref={fileInputRef}
       />
       {fileName ? (

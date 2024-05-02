@@ -11,18 +11,17 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({ route, navigation }) {
     const userId = route.params?.userId;
-    // console.log('userId in TabNavigator:', userId)
     return (
             <Tab.Navigator 
                 screenOptions={{
                     tabBarStyle: {
-                        backgroundColor: 'white', // Set tab bar background color
+                        backgroundColor: 'white',
                     },
                     headerStyle: {
-                        backgroundColor: 'white', // Set header background color
+                        backgroundColor: 'white',
                     },
-                    headerTintColor: 'black', // Set header text color
-                    headerRight: () => <ProfileIcon />, // Add the HeaderRight component to the header
+                    headerTintColor: 'black',
+                    headerRight: () => <ProfileIcon />,
                     headerLeft: () => (
                       <Ionicons
                         name="log-out-outline"
