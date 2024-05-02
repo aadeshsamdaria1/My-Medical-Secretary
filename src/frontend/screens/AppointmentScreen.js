@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import AppointmentCalendar from "../components/Calendar";
 import AppointmentCard from "../components/AppointmentCard";
-import { useUserDetails } from "../utils/useUserDetails";
 import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
 const AppointmentScreen = ({route}) => {
