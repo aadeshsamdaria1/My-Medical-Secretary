@@ -10,7 +10,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="change files path">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ai-pr-review.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ai-pr-review.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Agile Doc Intro.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-1/Sprint 1 Plan.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-1/Sprint 1 Retrospective.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-2/Sprint 2 Plan.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-2/Sprint 2 Retrospective.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-2/Sprint 2 Review.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint 3 Plan.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Technical Details.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Authentication Architecture Diagram.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Cyber Security.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Risk Analysis.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/API-Documentation/API Documentations Short Description.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/API-Documentation/Frontend-Backend Endpoints.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Code Review.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Development Details Short Description.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/System Architecture.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Backend Test Cases.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Backend Test Details.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Frontend Test Cases.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Frontend Testing Details.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Ethical Consideration.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Home-Page.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/DO-BE-FEEL.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/Goal Model.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Mark.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Olivia.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Personas Description.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Ron.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Sarah.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/Project Details.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Application Prototypes.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Cilinic Web App Prototypes.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/User Stories.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Team-Page.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,23 +78,23 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="front-end-testing-ai" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "anxiousalsa"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;anxiousalsa&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/COMP90082-2024-SM1/ME-Wombat.git",
-    "accountId": "16c11105-6b2e-45d4-866f-6fc7a53fe084"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/COMP90082-2024-SM1/ME-Wombat.git&quot;,
+    &quot;accountId&quot;: &quot;16c11105-6b2e-45d4-866f-6fc7a53fe084&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -88,7 +122,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "android.gradle.sync.needed": "true",
-    "git-widget-placeholder": "chatgpt-code-review-2",
+    "git-widget-placeholder": "uploading-sprint-2-docs",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/jonat/IdeaProjects/ME-Wombat/src/backend/MyMedicalSecretaryBackend/src/main",
@@ -104,6 +138,15 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Agile Ceremonies\Sprint-3" />
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Agile Ceremonies\Sprint-2" />
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Requirements" />
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Development-Details" />
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
