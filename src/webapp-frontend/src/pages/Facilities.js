@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 import AddFacilityForm from '../components/AddFacilityForm';
 import deleteIcon from '../assets/delete-icon.png';
 import '../styles/Facilities.css';
-import doctorsLogo from '../assets/doctors-logo.jpg';
+import facilitiesLogo from '../assets/facilities-logo.png';
 
 import {
   updateFacility,
@@ -290,8 +290,7 @@ const Facilities = () => {
             </>
           ) : (
             <div className="facility-logo">
-              {/* Display a random logo or placeholder */}
-              <img src={doctorsLogo} alt="Facility Logo" />
+              <img src={facilitiesLogo} alt="Facility Logo" />
             </div>
           )}
 

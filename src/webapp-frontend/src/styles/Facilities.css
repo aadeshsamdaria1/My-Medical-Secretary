@@ -159,9 +159,18 @@
   }
   
   .selected-row {
-    background-color: #06b4ff5d; /* Choose your preferred color */
+    background-color: #06b4ff5d;
   }
 
   .table-header {
     background-color: #ccc;
+  }
+
+  .facility-logo {
+    text-align: center;
+  }
+
+  .facility-logo img {
+    width: 40%;
+    filter: brightness(0) saturate(100%) invert(68%) sepia(58%) saturate(4855%) hue-rotate(165deg) brightness(99%) contrast(103%);
   }
