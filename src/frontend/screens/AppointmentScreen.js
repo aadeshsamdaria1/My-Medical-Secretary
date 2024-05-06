@@ -18,11 +18,10 @@ const AppointmentScreen = ({ route }) => {
 
   const CalendarTab = () => {
     const appointmentsFromApi = useUpcomingAppointments(userId);
-
     const selectedAppointments = appointmentsFromApi.filter(
       (appointment) => appointment.startDate.split("T")[0] === selectedDate
     );
-
+  
     return (
       <View style={styles.container}>
         <AppointmentCalendar
@@ -30,7 +29,7 @@ const AppointmentScreen = ({ route }) => {
           onDaySelect={onDaySelect}
           testID="calendar"
         />
-        {selectedDate && (
+        {selectedDate ? (
           <>
             <Text style={styles.title}>On this date...</Text>
             {selectedAppointments.map((appointment, index) => (
@@ -41,9 +40,14 @@ const AppointmentScreen = ({ route }) => {
               />
             ))}
           </>
+        ) : (
+          <Text style={styles.defaultText}>
+            Tap a date to view its appointments ☺️!
+          </Text>
         )}
       </View>
     );
+  
   };
 
   return (
@@ -74,6 +78,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 8,
     marginLeft: 16,
+  },
+  defaultText: {
+    fontSize: 18,
+    marginTop: 24,
+    marginHorizontal: 16,
+    textAlign: "center",
   },
 });
 

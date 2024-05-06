@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 4,
   },
   sectionTitle: {
     fontSize: 20,
@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 16,
     color: "#333",
-    marginBottom: 4,
     marginLeft: 32,
+    marginVertical: 4,
   },
   linkText: {
     fontSize: 16,
@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginLeft: 32,
     alignSelf: "flex-start",
+    marginTop: 8,
   },
   actionButtonText: {
     color: "#007AFF",

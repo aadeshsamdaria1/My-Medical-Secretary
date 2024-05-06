@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Ionicons from "react-native-vector-icons/Ionicons";
 
 const AppointmentCard = ({ appointment, testID }) => {
   const navigation = useNavigation();
@@ -58,6 +57,9 @@ const styles = StyleSheet.create({
   },
   emojiContainer: {
     marginRight: 8,
+  },
+  emoji: {
+    fontSize: 16,
   },
   details: {
     justifyContent: "center",

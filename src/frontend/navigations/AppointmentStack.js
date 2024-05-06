@@ -14,7 +14,7 @@ const AppointmentStack = ({ route }) => {
         name="AppointmentTabs"
         component={AppointmentScreen}
         initialParams={{ userId }}
-        options={{ title: "Appointments", headerTitleAlign: "center" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AppointmentDetail"
