@@ -320,7 +320,6 @@ const DoctorsPage = () => {
                 </>
             ) : (
                 <div className="doctor-logo">
-                {/* Display a random logo or placeholder */}
                 <img src={doctorsIcon} alt="Doctor Logo" />
                 </div>
             )}

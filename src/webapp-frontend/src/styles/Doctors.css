@@ -52,7 +52,7 @@
   }
 
   .table-container {
-    max-height: 400px; /* Adjust the height as needed */
+    max-height: 400px; 
     overflow-y: auto;
   }
   
@@ -124,6 +124,11 @@
   .doctor-logo {
     text-align: center;
   }
+
+  .doctor-logo img {
+    width: 40%;
+    filter: brightness(0) saturate(100%) invert(68%) sepia(58%) saturate(4855%) hue-rotate(165deg) brightness(99%) contrast(103%);
+  }
   
   .doctor-actions {
     margin-top: 20px;
@@ -163,7 +168,7 @@
   }
 
   .selected-row {
-    background-color: #06b4ff5d; /* Choose your preferred color */
+    background-color: #06b4ff5d;
   }
 
   .table-header {

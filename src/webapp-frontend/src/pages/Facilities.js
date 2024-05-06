@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 import AddFacilityForm from '../components/AddFacilityForm';
 import deleteIcon from '../assets/delete-icon.png';
 import '../styles/Facilities.css';
-import doctorsLogo from '../assets/doctors-logo.jpg';
+import facilitiesLogo from '../assets/facilities-logo.png';
 
 import {
   updateFacility,
@@ -23,8 +23,8 @@ const Facilities = () => {
   const [showAddFacilityForm, setShowAddFacilityForm] = useState(false);
 
   useEffect(() => {
-    fetchFacilities(); // Initial fetch on component mount
-  }, []); // Empty dependency array, so it only runs once on component mount
+    fetchFacilities();
+  }, []);
 
   const fetchFacilities = async () => {
     try {
@@ -100,7 +100,7 @@ const Facilities = () => {
     try {
       await createFacility(newFacility);
       setShowAddFacilityForm(false);
-      fetchFacilities(); // Refetch facilities after creating
+      fetchFacilities();
     } catch (error) {
       console.error('Failed to save new facility:', error);
     }
@@ -265,14 +265,17 @@ const Facilities = () => {
                 </div>
                 <div className="facility-info-row">
                   <label>Type:</label>
-                  <input
-                    type="text"
+                  <select
                     value={selectedFacility.facilityType}
                     onChange={(e) =>
                       setSelectedFacility({ ...selectedFacility, facilityType: e.target.value })
                     }
                     className="facility-input"
-                  />
+                  >
+                    <option value="RADIOLOGY">Radiology</option>
+                    <option value="PATHOLOGY">Pathology</option>
+                    <option value="HOSPITAL">Hospital</option>
+                  </select>
                 </div>
               </div>
               <div className="facility-actions">
@@ -290,8 +293,7 @@ const Facilities = () => {
             </>
           ) : (
             <div className="facility-logo">
-              {/* Display a random logo or placeholder */}
-              <img src={doctorsLogo} alt="Facility Logo" />
+              <img src={facilitiesLogo} alt="Facility Logo" />
             </div>
           )}
 
