@@ -239,9 +239,10 @@ const DoctorsPage = () => {
                     />
                     </div>
                     <div className="doctor-info-row">
-                    <label>Name:</label>
+                    <label htmlFor="name">Name:</label>
                     <input
                         type="text"
+                        id="name"
                         value={selectedDoctor.name}
                         onChange={(e) =>
                         setSelectedDoctor({ ...selectedDoctor, name: e.target.value })
@@ -250,9 +251,10 @@ const DoctorsPage = () => {
                     />
                     </div>
                     <div className="doctor-info-row">
-                    <label>Expertise:</label>
+                    <label htmlFor="expertise">Expertise:</label>
                     <input
                         type="text"
+                        id="expertise"
                         value={selectedDoctor.expertise}
                         onChange={(e) =>
                         setSelectedDoctor({ ...selectedDoctor, expertise: e.target.value })
@@ -261,9 +263,10 @@ const DoctorsPage = () => {
                     />
                     </div>
                     <div className="doctor-info-row">
-                    <label>Address:</label>
+                    <label htmlFor="address">Address:</label>
                     <input
                         type="text"
+                        id="address"  
                         value={selectedDoctor.address}
                         onChange={(e) =>
                         setSelectedDoctor({ ...selectedDoctor, address: e.target.value })
@@ -272,9 +275,10 @@ const DoctorsPage = () => {
                     />
                     </div>
                     <div className="doctor-info-row">
-                    <label>Contact:</label>
+                    <label htmlFor="contact">Contact:</label>
                     <input
                         type="text"
+                        id="contact"
                         value={selectedDoctor.contact}
                         onChange={(e) =>
                         setSelectedDoctor({ ...selectedDoctor, contact: e.target.value })
@@ -283,9 +287,10 @@ const DoctorsPage = () => {
                     />
                     </div>
                     <div className="doctor-info-row">
-                    <label>Email:</label>
+                    <label htmlFor="email">Email:</label>
                     <input
                         type="email"
+                        id="email"
                         value={selectedDoctor.email}
                         onChange={(e) =>
                         setSelectedDoctor({ ...selectedDoctor, email: e.target.value })
@@ -294,9 +299,10 @@ const DoctorsPage = () => {
                     />
                     </div>
                     <div className="doctor-info-row">
-                    <label>Website:</label>
+                    <label htmlFor="website">Website:</label>
                     <input
                         type="text"
+                        id="website"
                         value={selectedDoctor.website}
                         onChange={(e) =>
                         setSelectedDoctor({ ...selectedDoctor, website: e.target.value })
@@ -320,7 +326,6 @@ const DoctorsPage = () => {
                 </>
             ) : (
                 <div className="doctor-logo">
-                {/* Display a random logo or placeholder */}
                 <img src={doctorsIcon} alt="Doctor Logo" />
                 </div>
             )}
