@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const AppointmentCard = ({ appointment, testID }) => {
   const navigation = useNavigation();
@@ -14,15 +15,16 @@ const AppointmentCard = ({ appointment, testID }) => {
   return (
     <TouchableOpacity onPress={handlePress} testID={testID}>
       <View style={styles.card}>
+        <View style={styles.emojiContainer}>
+          <Text style={styles.emoji}>😷</Text>
+        </View>
         <View style={styles.details}>
-          <Text style={styles.title}>
-            Meet with Dr.{appointment.doctor.name}
-          </Text>
+          <Text style={styles.title}>Dr.{appointment.doctor.name}</Text>
           <View style={styles.datetimeWrapper}>
             <Text style={styles.date}>
               {new Date(appointment.startDate).toLocaleDateString("en-US", {
                 weekday: "short",
-                month: "long",
+                month: "short",
                 day: "numeric",
                 year: "numeric",
               })}
@@ -34,7 +36,6 @@ const AppointmentCard = ({ appointment, testID }) => {
     </TouchableOpacity>
   );
 };
-
 
 const styles = StyleSheet.create({
   card: {
@@ -52,6 +53,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    borderLeftWidth: 4,
+    borderLeftColor: "#007aff",
+  },
+  emojiContainer: {
+    marginRight: 8,
   },
   details: {
     justifyContent: "center",

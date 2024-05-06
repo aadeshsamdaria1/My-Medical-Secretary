@@ -1,128 +1,79 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AppointmentCalendar from "../components/Calendar";
 import AppointmentCard from "../components/AppointmentCard";
-import { useUserDetails } from "../utils/useUserDetails";
+import AppointmentListScreen from "./AppointmentListScreen";
 import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
-const AppointmentScreen = ({route}) => {
-  const today = new Date().toISOString().split("T")[0];
-  const [selectedDate, setSelectedDate] = useState("");
+const Tab = createMaterialTopTabNavigator();
 
-  
+const AppointmentScreen = ({ route }) => {
+  const [selectedDate, setSelectedDate] = useState("");
   const userId = route.params.userId;
-  // const userDetails = useUserDetails(userId);
-  const appointmentsFromApi = useUpcomingAppointments(userId);
 
   const onDaySelect = (day) => {
     setSelectedDate(day.dateString);
   };
 
-  const displayAppointments = () => {
-    const formattedAppointments = appointmentsFromApi.map((appointment) => ({
-      date: appointment.startDate.split("T")[0], 
-      ...appointment,
-    }));
+  const CalendarTab = () => {
+    const appointmentsFromApi = useUpcomingAppointments(userId);
 
-    if (selectedDate) {
-      const appointmentDetails = formattedAppointments.filter(
-        (appointment) => appointment.date === selectedDate
-      );
-      return {
-        appointmentDetails,
-        displayOnlyDetails: appointmentDetails.length > 0,
-      };
-    } else {
-      const upcomingAppointments = formattedAppointments.filter(
-        ({ date }) => date >= today
-      );
-      const pastAppointments = formattedAppointments.filter(
-        ({ date }) => date < today
-      );
-      return {
-        upcomingAppointments,
-        pastAppointments,
-        displayOnlyDetails: false,
-      };
-    }
-  };
+    const selectedAppointments = appointmentsFromApi.filter(
+      (appointment) => appointment.startDate.split("T")[0] === selectedDate
+    );
 
-  const {
-    appointmentDetails,
-    upcomingAppointments,
-    pastAppointments,
-    displayOnlyDetails,
-  } = displayAppointments();
-
-  return (
-    <ScrollView style={styles.scrollView}>
+    return (
       <View style={styles.container}>
         <AppointmentCalendar
           appointmentsFromApi={appointmentsFromApi}
           onDaySelect={onDaySelect}
           testID="calendar"
         />
-
-        {displayOnlyDetails ? (
+        {selectedDate && (
           <>
-            <Text style={styles.title}>Appointment Details</Text>
-            {appointmentDetails.map((appointment, index) => (
-              <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
+            <Text style={styles.title}>On this date...</Text>
+            {selectedAppointments.map((appointment, index) => (
+              <AppointmentCard
+                testID={`appointment-card-${appointment.id}`}
+                key={index}
+                appointment={appointment}
+              />
             ))}
-          </>
-        ) : (
-          <>
-            <Text style={styles.title}>Upcoming Appointments</Text>
-            {upcomingAppointments.length > 0 ? (
-              upcomingAppointments.map((appointment, index) => (
-                <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
-              ))
-            ) : (
-              <Text style={styles.noAppointments}>
-                You have no upcoming appointments.
-              </Text>
-            )}
-
-            <Text style={styles.title}>Past Appointments</Text>
-            {pastAppointments.length > 0 ? (
-              pastAppointments.map((appointment, index) => (
-                <AppointmentCard testID={`appointment-card-${appointment.id}`} key={index} appointment={appointment} />
-              ))
-            ) : (
-              <Text style={styles.noAppointments}>
-                You have no past appointments.
-              </Text>
-            )}
           </>
         )}
       </View>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarTab}
+        options={{ title: "Calendar" }}
+      />
+      <Tab.Screen
+        name="List"
+        component={AppointmentListScreen}
+        initialParams={{ userId }}
+        options={{ title: "List" }}
+      />
+    </Tab.Navigator>
   );
 };
 
-
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   container: {
     flex: 1,
     paddingTop: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginTop: 16,
-    alignSelf: "flex-start",
-    marginLeft: 20,
-  },
-  noAppointments: {
-    fontSize: 16, 
-    color: "#6e6e72", 
-    marginVertical: 10, 
-    alignSelf: "flex-start",
-    marginLeft: 20, 
+    marginBottom: 8,
+    marginLeft: 16,
   },
 });
 
