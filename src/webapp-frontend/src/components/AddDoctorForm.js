@@ -39,6 +39,7 @@ const AddDoctorForm = ({ onCancel, onSave }) => {
           <input
             type="text"
             name="name"
+            placeholder='Name'
             value={newDoctor.name}
             onChange={handleInputChange}
             className="doctor-input"
@@ -49,6 +50,7 @@ const AddDoctorForm = ({ onCancel, onSave }) => {
           <input
             type="text"
             name="expertise"
+            placeholder='Expertise'
             value={newDoctor.expertise}
             onChange={handleInputChange}
             className="doctor-input"
@@ -59,6 +61,7 @@ const AddDoctorForm = ({ onCancel, onSave }) => {
           <input
             type="text"
             name="address"
+            placeholder='Address'
             value={newDoctor.address}
             onChange={handleInputChange}
             className="doctor-input"
@@ -69,6 +72,7 @@ const AddDoctorForm = ({ onCancel, onSave }) => {
           <input
             type="text"
             name="contact"
+            placeholder='Contact'
             value={newDoctor.contact}
             onChange={handleInputChange}
             className="doctor-input"
@@ -79,6 +83,7 @@ const AddDoctorForm = ({ onCancel, onSave }) => {
           <input
             type="text"
             name="email"
+            placeholder='Email'
             value={newDoctor.email}
             onChange={handleInputChange}
             className="doctor-input"
@@ -89,6 +94,7 @@ const AddDoctorForm = ({ onCancel, onSave }) => {
           <input
             type="text"
             name="website"
+            placeholder='Website'
             value={newDoctor.website}
             onChange={handleInputChange}
             className="doctor-input"
