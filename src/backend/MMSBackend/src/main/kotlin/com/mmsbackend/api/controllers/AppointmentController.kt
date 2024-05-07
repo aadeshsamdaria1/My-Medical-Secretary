@@ -50,11 +50,8 @@ class AppointmentController (
     }
 
     private fun getAppointmentsById(userId: Int): List<AppointmentEntity> {
-        return appointmentEntityRepository.findAll().filter { appointment ->
-            appointment.patient.patientId == userId
-        }.sortedBy {
-            it.dateCreate
-        }
+        return appointmentEntityRepository.findByPatientId(userId)
+            .sortedBy { it.dateCreate }
     }
 
     @PostMapping("/create")

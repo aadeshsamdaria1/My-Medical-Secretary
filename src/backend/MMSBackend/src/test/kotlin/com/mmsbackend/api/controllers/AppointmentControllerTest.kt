@@ -112,7 +112,7 @@ class AppointmentControllerTest {
         every { appointmentEntityRepository.findById(appointmentId1) } returns Optional.of(appointment1)
         every { appointmentEntityRepository.findById(missingAppointmentId) } returns Optional.empty()
         every { appointment1.id } returns appointmentId1
-        every { appointmentEntityRepository.findAll() } returns listOf(appointment1, appointment2, appointment3)
+        every { appointmentEntityRepository.findByPatientId(patientId) } returns listOf(appointment1, appointment2)
 
         // Only appointments 1 and 2 relate to our test patient
         every { appointment1.patient.patientId } returns patientId

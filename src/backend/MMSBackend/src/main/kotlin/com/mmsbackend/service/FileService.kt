@@ -9,7 +9,6 @@ import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
 import org.jsoup.Jsoup
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
@@ -38,23 +37,21 @@ class FileService(
             )
         }
 
-        // These are PatientIDs
-        val failedPatientID = patientResults
+        val failedPatientIds = patientResults
             .filter { it.first == StatusType.FAILURE }
             .map { it.second.toString().toInt()}
 
-        // These are PatientEntities
-        val successPatients = patientResults
+        val successfulPatients = patientResults
             .filter { it.first == StatusType.SUCCESS }
             .map { it.second as PatientEntity }
 
-        successPatients.forEach { patientEntity ->
+        successfulPatients.forEach { patientEntity ->
             (patientEntity).persist(userEntityRepository, userMapper).patientId
         }
 
-        val successPatientId = (successPatients).map {it.patientId}
+        val successfulPatientIds = (successfulPatients).map {it.patientId}
 
-        return Pair(failedPatientID, successPatientId)
+        return Pair(failedPatientIds, successfulPatientIds)
     }
 
     fun readAndUploadAppointmentFile(fileBytes: String): Pair<List<Int>, List<Int>> {
@@ -76,23 +73,21 @@ class FileService(
         }
 
         // TODO: Should also include appointment that isn't properly linked to patient and doctor
-        // These are AppointmentIds
-        val failedAppointmentID = appointmentResults
+        val failedAppointmentIds = appointmentResults
             .filter { it.first == StatusType.FAILURE }
             .map { it.second.toString().toInt()}
 
-        // These are AppointmentEntities
-        val successAppointments = appointmentResults
+        val successfulAppointments = appointmentResults
             .filter { it.first == StatusType.SUCCESS }
             .map { it.second as AppointmentEntity }
 
-        successAppointments.forEach { appointmentEntity ->
+        successfulAppointments.forEach { appointmentEntity ->
             (appointmentEntity).persist(appointmentEntityRepository, appointmentMapper).id
         }
 
-        val successAppointmentId = (successAppointments).map {it.id}
+        val successAppointmentIds = successfulAppointments.map {it.id}
 
-        return Pair(failedAppointmentID, successAppointmentId)
+        return Pair(failedAppointmentIds, successAppointmentIds)
     }
 
     companion object {
