@@ -11,23 +11,15 @@ const AppointmentStack = ({ route }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="AppointmentList"
+        name="AppointmentTabs"
         component={AppointmentScreen}
         initialParams={{ userId }}
-        options={{
-          title: "Calendar",
-          headerTitleAlign: "center",
-          headerTitleStyle: { fontWeight: "bold" },
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AppointmentDetail"
         component={AppointmentDetailScreen}
-        options={{
-          title: "Appointment Detail",
-          headerTitleAlign: "center",
-          headerTitleStyle: { fontWeight: "bold" },
-        }}
+        options={{ title: "Appointment Detail", headerTitleAlign: "center" }}
       />
     </Stack.Navigator>
   );

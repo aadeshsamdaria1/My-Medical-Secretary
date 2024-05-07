@@ -13,7 +13,7 @@ export const onViewDoctorLocation = async (appointmentDetails) => {
       return;
     }
 
-    const doctorAddress = `${appointmentDetails.clinicAddress}, ${appointmentDetails.clinicSuburb}, ${appointmentDetails.clinicState}`;
+    const doctorAddress = `${appointmentDetails.doctor.address}`;
 
     // Open the location in the device's default maps app
     const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -39,12 +39,12 @@ export const shareAppointmentDetails = async (appointmentDetails) => {
   try {
     const message = `
         Appointment Details:
-        Doctor: ${appointmentDetails.doctorName}
-        Specialty: ${appointmentDetails.doctorSpecialty}
-        Date: ${appointmentDetails.date}
-        Time: ${appointmentDetails.time}
-        Clinic: ${appointmentDetails.clinicName}
-        Address: ${appointmentDetails.clinicAddress}
+        Doctor: ${appointmentDetails.doctor.name}
+        Date: ${appointmentDetails.startDate}
+        Time: ${appointmentDetails.startTime}
+        Duration: ${appointmentDetails.duration}
+        Clinic: ${appointmentDetails.detail}
+        Note: ${appointmentDetails.note}
       `;
 
     const result = await Share.share({
@@ -80,26 +80,29 @@ export const addAppointmentToCalendar = async (appointmentDetails) => {
       ? await getDefaultCalendarSource()
       : { isLocalAccount: true, name: "Expo Calendar" };
 
-  const calendars = await Calendar.getCalendarsAsync(
-    Calendar.EntityTypes.EVENT
-  );
+  const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
   const defaultCalendar =
     calendars.find((calendar) => calendar.allowsModifications) || calendars[0];
 
   try {
+    const startDate = new Date(appointmentDetails.startDate);
+    const startTime = appointmentDetails.startTime;
+
+    const [startHour, startMinute] = startTime.split(":");
+
+    startDate.setHours(startHour);
+    startDate.setMinutes(startMinute);
+
+    const endDate = new Date(startDate);
+    endDate.setMinutes(startDate.getMinutes() + appointmentDetails.duration);
+
     const eventDetails = {
-      title: appointmentDetails.doctorName,
-      startDate: new Date(appointmentDetails.date).toISOString(),
-      endDate: new Date(
-        new Date(appointmentDetails.date).getTime() + 60 * 60 * 1000
-      ).toISOString(), // Assuming the appointment is 1 hour long
+      title: `Appointment with Dr. ${appointmentDetails.doctor.name}`,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
       timeZone: "UTC",
-      location: appointmentDetails.clinicAddress,
-      notes:
-        "Appointment with " +
-        appointmentDetails.doctorName +
-        " at " +
-        appointmentDetails.clinicName,
+      location: appointmentDetails.doctor.address,
+      notes: appointmentDetails.note,
     };
 
     await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
@@ -124,14 +127,14 @@ export const getDefaultCalendarSource = async () => {
 };
 
 export const getFormattedTime = (startDate, startTime, duration) => {
-  const startDateTime = new Date(`${startDate.split('T')[0]}T${startTime}`);
+  const startDateTime = new Date(`${startDate.split("T")[0]}T${startTime}`);
 
   const endTime = new Date(startDateTime.getTime() + duration * 60000);
 
-  const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+  const options = { hour: "2-digit", minute: "2-digit", hour12: true };
 
-  const formattedStartTime = startDateTime.toLocaleTimeString('en-US', options);
-  const formattedEndTime = endTime.toLocaleTimeString('en-US', options);
+  const formattedStartTime = startDateTime.toLocaleTimeString("en-US", options);
+  const formattedEndTime = endTime.toLocaleTimeString("en-US", options);
 
   return `${formattedStartTime} to ${formattedEndTime}`;
 };

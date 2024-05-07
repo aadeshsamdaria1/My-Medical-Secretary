@@ -39,17 +39,13 @@ const AppointmentDetailScreen = ({ route }) => {
           )}
         </View>
         <View>
-          <Text style={styles.sectionContent}>
-            {appointmentDetails.doctor.expertise}
-          </Text>
           <TouchableOpacity
+            style={styles.actionButton}
             onPress={() => {
               onViewDoctorLocation(appointmentDetails);
             }}
           >
-            <Text style={styles.linkText}>
-              {appointmentDetails.doctor.address}
-            </Text>
+            <Text style={styles.actionButtonText}>View Doctor's Location</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -61,12 +57,12 @@ const AppointmentDetailScreen = ({ route }) => {
             size={24}
             style={styles.iconStyle}
           />
-          <Text style={styles.sectionTitle}>Appointment Time</Text>
+          <Text style={styles.sectionTitle}>Date</Text>
         </View>
         <Text style={styles.sectionContent}>
           {new Date(appointmentDetails.startDate).toLocaleDateString("en-US", {
             weekday: "long",
-            month: "long",
+            month: "short",
             day: "numeric",
             year: "numeric",
           })}
@@ -80,9 +76,10 @@ const AppointmentDetailScreen = ({ route }) => {
         </Text>
 
         <TouchableOpacity
+          style={styles.actionButton}
           onPress={() => addAppointmentToCalendar(appointmentDetails)}
         >
-          <Text style={styles.linkText}>Add to calendar</Text>
+          <Text style={styles.actionButtonText}>Add to Calendar</Text>
         </TouchableOpacity>
       </View>
 
@@ -93,7 +90,7 @@ const AppointmentDetailScreen = ({ route }) => {
             size={24}
             style={styles.iconStyle}
           />
-          <Text style={styles.sectionTitle}>Additional Information</Text>
+          <Text style={styles.sectionTitle}>Details</Text>
         </View>
         <Text style={styles.sectionContent}>{appointmentDetails.detail}</Text>
         <Text style={styles.sectionContent}>{appointmentDetails.reason}</Text>
@@ -106,7 +103,7 @@ const AppointmentDetailScreen = ({ route }) => {
             size={24}
             style={styles.iconStyle}
           />
-          <Text style={styles.sectionTitle}>Related Documents</Text>
+          <Text style={styles.sectionTitle}>Documents</Text>
         </View>
         {appointmentDetails.documents &&
         appointmentDetails.documents.length > 0 ? (
@@ -114,10 +111,9 @@ const AppointmentDetailScreen = ({ route }) => {
             <TouchableOpacity
               key={index}
               onPress={() => onDocumentPress(document.url)}
+              style={styles.documentItem}
             >
-              <View style={styles.documentItem}>
-                <Text style={styles.linkText}>{document.name}</Text>
-              </View>
+              <Text style={styles.documentText}>{document.name}</Text>
             </TouchableOpacity>
           ))
         ) : (
@@ -160,10 +156,10 @@ const styles = StyleSheet.create({
   section: {
     padding: 16,
     marginHorizontal: 8,
-    backgroundColor: "#fff", 
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#eaeaea",
-    borderRadius: 10, 
+    borderRadius: 10,
     marginVertical: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -177,27 +173,27 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8, 
+    marginBottom: 4,
   },
   sectionTitle: {
-    fontSize: 20, 
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
     marginLeft: 8,
   },
   sectionContent: {
-    fontWeight: "400", 
-    fontSize: 16, 
-    color: "#000",
-    marginBottom: 4, 
+    fontWeight: "400",
+    fontSize: 16,
+    color: "#333",
     marginLeft: 32,
+    marginVertical: 4,
   },
   linkText: {
     fontSize: 16,
     color: "#007BFF",
     textDecorationLine: "underline",
     marginLeft: 32,
-    fontWeight: "500", 
+    fontWeight: "500",
   },
   documentItem: {
     flexDirection: "row",
@@ -220,14 +216,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#e6f7ff",
     borderRadius: 10,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
   },
   reminderItem: {
     flexDirection: "row",
     alignItems: "center",
   },
   reminderText: {
-    fontSize: 16, 
+    fontSize: 16,
     marginLeft: 8,
     fontWeight: "600",
   },
@@ -248,22 +244,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   statusBadge: {
-    alignSelf: "flex-start", 
-    backgroundColor: "orange", 
+    alignSelf: "flex-start",
+    backgroundColor: "orange",
     borderRadius: 4,
     paddingVertical: 2,
     paddingHorizontal: 4,
     marginTop: 4,
-    marginLeft: 8, 
+    marginLeft: 8,
   },
   statusBadgeText: {
-    color: "white", 
+    color: "white",
     fontSize: 12,
     fontWeight: "bold",
   },
   confirmBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "green", 
+    backgroundColor: "green",
     borderRadius: 4,
     paddingVertical: 2,
     paddingHorizontal: 4,
@@ -271,12 +267,25 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 
+  actionButton: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginLeft: 32,
+    alignSelf: "flex-start",
+    marginTop: 8,
+  },
+  actionButtonText: {
+    color: "#007AFF",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
   iconStyle: {
-    color: "#007aff", 
+    color: "#007aff",
     alignSelf: "center",
   },
 });
-
-
 
 export default AppointmentDetailScreen;

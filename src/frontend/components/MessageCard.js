@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const MessageCard = ({ sender, message, time }) => {
+const MessageCard = ({ sender, message, time, onPress }) => {
   return (
-    <View style={styles.messageCard}>
+    <TouchableOpacity style={styles.messageCard} onPress={onPress}>
       <View style={styles.cardHeader}>
         <View style={styles.senderContainer}>
           <Text style={styles.senderText}>{sender}</Text>
@@ -13,7 +13,7 @@ const MessageCard = ({ sender, message, time }) => {
         </View>
       </View>
       <Text style={styles.messageText}>{message}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -58,6 +58,5 @@ const styles = StyleSheet.create({
     color: "#000",
   },
 });
-
 
 export default MessageCard;
