@@ -79,6 +79,9 @@ class SecurityConfiguration(
             }
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .requiresChannel {
+                it.anyRequest().requiresSecure()
+            }
             .build()
     }
 }

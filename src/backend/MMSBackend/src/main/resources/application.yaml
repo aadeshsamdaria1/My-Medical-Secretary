@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/my_medical_secretary
     username: root
-    password: password
+    password: 123456
 #    username: mmsadmin
 #    password: Password123!
 
@@ -33,3 +33,12 @@ admin:
   defaultEmail: "https://mymedicalsecretary.com.au/"
   default-username: "admin"
   default-password: "password"
+
+server:
+  ssl:
+    key-store: classpath:springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password
+  port: 8443
