@@ -8,23 +8,25 @@ const AppointmentListScreen = ({ route }) => {
   const appointmentsFromApi = useUpcomingAppointments(userId);
 
   const today = new Date().toISOString().split("T")[0];
-  const upcomingAppointments = appointmentsFromApi.filter(
-    (appointment) => appointment.startDate.split("T")[0] >= today
-  );
-  const pastAppointments = appointmentsFromApi.filter(
-    (appointment) => appointment.startDate.split("T")[0] < today
-  );
+
+  const upcomingAppointments = appointmentsFromApi
+    .filter((appointment) => appointment.startDate.split("T")[0] >= today)
+    .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+  const pastAppointments = appointmentsFromApi
+    .filter((appointment) => appointment.startDate.split("T")[0] < today)
+    .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
   const renderAppointmentCard = ({ item, index }) => (
-    <AppointmentCard
-      testID={`appointment-card-${item.id}`}
-      key={index}
-      appointment={item}
-    />
+    <AppointmentCard testID={`appointment-card-${item.id}`} key={index} appointment={item} />
   );
 
   const renderEmptyUpcomingAppointments = () => (
     <Text style={styles.emptyText}>You have no upcoming appointments.</Text>
+  );
+
+  const renderEmptyPastAppointments = () => (
+    <Text style={styles.emptyText}>You have no past appointments.</Text>
   );
 
   return (
@@ -41,14 +43,19 @@ const AppointmentListScreen = ({ route }) => {
       )}
 
       <Text style={styles.title}>Past Appointments</Text>
-      <FlatList
-        data={pastAppointments}
-        renderItem={renderAppointmentCard}
-        keyExtractor={(item) => item.id.toString()}
-      />
+      {pastAppointments.length > 0 ? (
+        <FlatList
+          data={pastAppointments}
+          renderItem={renderAppointmentCard}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      ) : (
+        renderEmptyPastAppointments()
+      )}
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

@@ -32,18 +32,20 @@ const AppointmentScreen = ({ route }) => {
         {selectedDate ? (
           <>
             <Text style={styles.title}>On this date...</Text>
-            {selectedAppointments.map((appointment, index) => (
-              <AppointmentCard
-                testID={`appointment-card-${appointment.id}`}
-                key={index}
-                appointment={appointment}
-              />
-            ))}
+            {selectedAppointments.length > 0 ? (
+              selectedAppointments.map((appointment, index) => (
+                <AppointmentCard
+                  testID={`appointment-card-${appointment.id}`}
+                  key={index}
+                  appointment={appointment}
+                />
+              ))
+            ) : (
+              <Text style={styles.defaultText}>You have no appointments 🥰.</Text>
+            )}
           </>
         ) : (
-          <Text style={styles.defaultText}>
-            Tap a date to view its appointments ☺️!
-          </Text>
+          <Text style={styles.defaultText}>Tap a date to view its appointments ☺️!</Text>
         )}
       </View>
     );
