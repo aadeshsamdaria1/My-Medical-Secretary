@@ -27,6 +27,7 @@ class SecurityConfiguration(
                     // Open to anyone on the internet
                     .requestMatchers(
                         "/api/login",
+                        "/api/activate",
                         "/api/refresh",
                         "/error"
                     ).permitAll()

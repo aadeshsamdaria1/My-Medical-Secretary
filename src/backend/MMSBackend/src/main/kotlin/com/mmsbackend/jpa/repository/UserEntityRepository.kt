@@ -12,6 +12,9 @@ interface UserEntityRepository: JpaRepository<UserEntity, Int> {
     @Query("SELECT u FROM PatientEntity u WHERE u.patientId = :patientId")
     fun findByPatientId(patientId: Int): PatientEntity?
 
+    @Query("SELECT u FROM PatientEntity u WHERE u.email = :email")
+    fun findByEmail(email: String): PatientEntity?
+
     @Query("SELECT u FROM UserEntity u WHERE u.username = :username")
     fun findByUsername(username: String): UserEntity?
 

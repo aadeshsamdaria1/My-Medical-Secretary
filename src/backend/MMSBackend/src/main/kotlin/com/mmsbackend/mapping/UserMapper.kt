@@ -47,7 +47,8 @@ class UserMapper(
             mmsId = 0,
             username = passwordService.generateUsernameFromName(name),
             password = encoder.encode(plaintextPassword),
-            temporaryPassword = plaintextPassword
+            accountActive = false,
+            oneTimePasscode = null
         )
     }
 
@@ -73,7 +74,6 @@ class UserMapper(
             address = updatedPatient.address,
             suburb = updatedPatient.suburb,
             state = updatedPatient.state,
-            temporaryPassword = updatedPatient.temporaryPassword,
 
             // Unchanged fields
             email = existingPatient.email,
@@ -81,6 +81,8 @@ class UserMapper(
             mmsId = existingPatient.mmsId,
             username = existingPatient.username,
             password = existingPatient.password,
+            accountActive = existingPatient.accountActive,
+            oneTimePasscode = null
         )
     }
 
@@ -129,7 +131,8 @@ class UserMapper(
                 mmsId = 0,
                 username = passwordService.generateUsernameFromName(name),
                 password = encoder.encode(plainTextPassword),
-                temporaryPassword = plainTextPassword
+                accountActive = false,
+                oneTimePasscode = null
             )
 
             Pair(StatusType.SUCCESS, patientEntity)
