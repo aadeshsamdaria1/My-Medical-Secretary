@@ -12,3 +12,5 @@ COPY --from=build /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 EXPOSE 3001
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+#test
