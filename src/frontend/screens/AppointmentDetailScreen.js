@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,9 +14,27 @@ import {
   onViewDoctorLocation,
   getFormattedTime,
 } from "../utils/appointmentFunctions";
+import NotesModal from "../components/NotesModal";
+import { updateUserNote } from "../utils/updateUserNote";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [notes, setNotes] = useState(appointmentDetails.notes || "");
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const handleSaveNotes = async (newNotes) => {
+    try {
+      await updateUserNote(appointmentDetails.id, newNotes);
+      setNotes(newNotes);
+      toggleModal();
+    } catch (error) {
+      console.error('Failed to save notes:', error.message);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -94,6 +112,9 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
         <Text style={styles.sectionContent}>{appointmentDetails.detail}</Text>
         <Text style={styles.sectionContent}>{appointmentDetails.reason}</Text>
+        <TouchableOpacity style={styles.actionButton} onPress={toggleModal}>
+          <Text style={styles.actionButtonText}>Add Notes</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
@@ -130,6 +151,7 @@ const AppointmentDetailScreen = ({ route }) => {
               style={styles.iconStyle}
             />
             <Text style={styles.reminderText}>{appointmentDetails.note}</Text>
+            <Text style={styles.reminderText}>{appointmentDetails.userNote}</Text>
           </View>
         ) : (
           <Text style={styles.reminderText}>You have no reminders.</Text>
@@ -142,6 +164,13 @@ const AppointmentDetailScreen = ({ route }) => {
       >
         <Text style={styles.confirmButtonText}>Share Appointment Details</Text>
       </TouchableOpacity>
+
+      <NotesModal
+        isVisible={isModalVisible}
+        onClose={toggleModal}
+        onSave={handleSaveNotes}
+        initialNotes={notes}
+      />
     </ScrollView>
   );
 };
@@ -186,7 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     marginLeft: 32,
-    marginVertical: 4,
   },
   linkText: {
     fontSize: 16,
@@ -230,7 +258,7 @@ const styles = StyleSheet.create({
 
   confirmButton: {
     backgroundColor: "#007aff",
-    borderRadius: 20,
+    borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginHorizontal: 16,

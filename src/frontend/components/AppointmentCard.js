@@ -14,9 +14,6 @@ const AppointmentCard = ({ appointment, testID }) => {
   return (
     <TouchableOpacity onPress={handlePress} testID={testID}>
       <View style={styles.card}>
-        <View style={styles.emojiContainer}>
-          <Text style={styles.emoji}>😷</Text>
-        </View>
         <View style={styles.details}>
           <Text style={styles.title}>Dr.{appointment.doctor.name}</Text>
           <View style={styles.datetimeWrapper}>
@@ -55,14 +52,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: "#007aff",
   },
-  emojiContainer: {
-    marginRight: 8,
-  },
-  emoji: {
-    fontSize: 16,
-  },
   details: {
     justifyContent: "center",
+    marginLeft: 8,
     flex: 1,
   },
   title: {

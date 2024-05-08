@@ -8,6 +8,7 @@ export const getUserEndpoint = (userId) => `${API_ENDPOINT}/users/get_patient/${
 export const getAppointmentsByUserEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
 export const getFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 export const getDoctorsByUserEndpoint = (userId) => `${API_ENDPOINT}/doctors/get_by_patient_id/${userId}`;
+export const updateUserNoteEndpoint = `${API_ENDPOINT}/appointments/user_note/update`;
 
 // Login function
 export const login = async (username, password) => {
