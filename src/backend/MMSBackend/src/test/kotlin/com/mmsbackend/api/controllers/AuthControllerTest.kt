@@ -1,9 +1,12 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.data.ActivateRequest
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.data.LoginResponse
 import com.mmsbackend.data.UpdatePasswordRequest
+import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
+import com.mmsbackend.service.security.OneTimePasscodeAuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -19,7 +22,7 @@ import kotlin.random.Random
 @ExtendWith(MockKExtension::class)
 class AuthControllerTest {
 
-    private lateinit var loginController: AuthController
+    private lateinit var authController: AuthController
 
     private val username = UUID.randomUUID().toString()
     private val password = UUID.randomUUID().toString()
@@ -34,10 +37,14 @@ class AuthControllerTest {
     @MockK
     private lateinit var authService: AuthService
 
+    @MockK
+    private lateinit var oneTimePasscodeAuthService: OneTimePasscodeAuthService
+
     @BeforeEach
     fun setup() {
-        loginController = AuthController(
-            authService
+        authController = AuthController(
+            authService,
+            oneTimePasscodeAuthService
         )
         every { authService.authenticate(LoginRequest(username, password)) } returns Triple(validToken, refreshToken, userId)
         every { authService.updatePassword(username, oldPassword, newPassword) } returns true
@@ -46,7 +53,7 @@ class AuthControllerTest {
 
     @Test
     fun `Successfully log in and retrieve jwt token`() {
-        val token = loginController.login(loginRequest).body
+        val token = authController.login(loginRequest).body
         val expectedResponse = LoginResponse(validToken, refreshToken, userId)
         assertEquals(expectedResponse, token)
     }
@@ -55,14 +62,14 @@ class AuthControllerTest {
     fun `Fail if patient authentication is unsuccessful`() {
         every { authService.authenticate(LoginRequest(username, password)) } returns null
 
-        val response = loginController.login(loginRequest)
+        val response = authController.login(loginRequest)
         val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password.")
         assertEquals(expectedResponse, response)
     }
 
     @Test
     fun `Successfully update password`() {
-        val response = loginController.updatePassword(updatePasswordRequest)
+        val response = authController.updatePassword(updatePasswordRequest)
         val expectedResponse = ResponseEntity.ok().body("Password updated successfully.")
         assertEquals(expectedResponse, response)
     }
@@ -70,8 +77,36 @@ class AuthControllerTest {
     @Test
     fun `Fail to update password with incorrect old password`() {
         val wrongRequest = updatePasswordRequest.copy(oldPassword = "wrongPassword")
-        val response = loginController.updatePassword(wrongRequest)
+        val response = authController.updatePassword(wrongRequest)
         val expectedResponse = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed. Check your credentials and try again.")
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Successfully activate account`() {
+        every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns true
+
+        val request = ActivateRequest(
+            patientId = userId,
+            oneTimeCode = "One Time Code",
+            password = "New Password"
+        )
+        val expectedResponse = ResponseEntity.ok().body("Account activated successfully.")
+        val response = authController.activate(request)
+        assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Fail to activate account when auth fails`() {
+        every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns false
+
+        val request = ActivateRequest(
+            patientId = userId,
+            oneTimeCode = "One Time Code",
+            password = "New Password"
+        )
+        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid one-time code.")
+        val response = authController.activate(request)
         assertEquals(expectedResponse, response)
     }
 }

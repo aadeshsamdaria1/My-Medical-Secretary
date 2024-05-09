@@ -1,7 +1,9 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.*
+import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
+import com.mmsbackend.service.security.OneTimePasscodeAuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,7 +11,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api")
 class AuthController(
-    val authService: AuthService
+    val authService: AuthService,
+    val oneTimePasscodeAuthService: OneTimePasscodeAuthService
 ) {
 
     @PostMapping("/login")
@@ -46,6 +49,16 @@ class AuthController(
             ResponseEntity.ok().body("Password updated successfully.")
         } else {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed. Check your credentials and try again.")
+        }
+    }
+
+    @PostMapping("/activate")
+    fun activate(@RequestBody request: ActivateRequest): ResponseEntity<Any> {
+
+        return if (oneTimePasscodeAuthService.authenticateOneTimePasscode(request)) {
+            ResponseEntity.ok().body("Account activated successfully.")
+        } else{
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid one-time code.")
         }
     }
 }
