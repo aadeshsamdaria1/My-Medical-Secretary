@@ -133,7 +133,7 @@ class AuthControllerTest {
         every { emailService.sendSignUpEmail(email) } throws PatientAlreadyCreatedException("Error")
 
         val response = authController.enterEmail(email)
-        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        val expectedResponse = ResponseEntity.status(HttpStatus.CONFLICT)
             .body("Account already activated. Use forgot password instead.")
         assertThat(response).isEqualTo(expectedResponse)
     }
@@ -143,7 +143,7 @@ class AuthControllerTest {
         every { emailService.sendSignUpEmail(email) } throws PatientNotFoundException("Error")
 
         val response = authController.enterEmail(email)
-        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        val expectedResponse = ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body("Patient with this email does not exist.")
         assertThat(response).isEqualTo(expectedResponse)
     }
@@ -154,7 +154,7 @@ class AuthControllerTest {
         every { emailService.sendSignUpEmail(email) } throws Exception(message)
 
         val response = authController.enterEmail(email)
-        val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        val expectedResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body("Issue sending email: $message")
         assertThat(response).isEqualTo(expectedResponse)
     }
