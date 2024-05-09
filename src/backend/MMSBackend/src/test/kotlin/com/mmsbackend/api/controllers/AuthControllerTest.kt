@@ -4,12 +4,16 @@ import com.mmsbackend.data.ActivateRequest
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.data.LoginResponse
 import com.mmsbackend.data.UpdatePasswordRequest
+import com.mmsbackend.exception.PatientAlreadyCreatedException
+import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
 import com.mmsbackend.service.security.OneTimePasscodeAuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.justRun
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -33,6 +37,7 @@ class AuthControllerTest {
     private val oldPassword = UUID.randomUUID().toString()
     private val newPassword = UUID.randomUUID().toString()
     private val updatePasswordRequest = UpdatePasswordRequest(username, oldPassword, newPassword)
+    private val email = UUID.randomUUID().toString()
 
     @MockK
     private lateinit var authService: AuthService
@@ -40,15 +45,21 @@ class AuthControllerTest {
     @MockK
     private lateinit var oneTimePasscodeAuthService: OneTimePasscodeAuthService
 
+    @MockK
+    private lateinit var emailService: EmailService
+
     @BeforeEach
     fun setup() {
         authController = AuthController(
             authService,
-            oneTimePasscodeAuthService
+            oneTimePasscodeAuthService,
+            emailService
         )
         every { authService.authenticate(LoginRequest(username, password)) } returns Triple(validToken, refreshToken, userId)
         every { authService.updatePassword(username, oldPassword, newPassword) } returns true
         every { authService.updatePassword(username, "wrongPassword", newPassword) } returns false
+
+        justRun { emailService.sendSignUpEmail(email) }
     }
 
     @Test
@@ -108,5 +119,43 @@ class AuthControllerTest {
         val expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid one-time code.")
         val response = authController.activate(request)
         assertEquals(expectedResponse, response)
+    }
+
+    @Test
+    fun `Successfully send email for sign up`() {
+        val response = authController.enterEmail(email)
+        val expectedResponse = ResponseEntity.ok().body("Email successfully sent.")
+        assertThat(response).isEqualTo(expectedResponse)
+    }
+
+    @Test
+    fun `Fail to send email for sign up when account already activated`() {
+        every { emailService.sendSignUpEmail(email) } throws PatientAlreadyCreatedException("Error")
+
+        val response = authController.enterEmail(email)
+        val expectedResponse = ResponseEntity.status(HttpStatus.CONFLICT)
+            .body("Account already activated. Use forgot password instead.")
+        assertThat(response).isEqualTo(expectedResponse)
+    }
+
+    @Test
+    fun `Fail to send email for sign up when patient not found`() {
+        every { emailService.sendSignUpEmail(email) } throws PatientNotFoundException("Error")
+
+        val response = authController.enterEmail(email)
+        val expectedResponse = ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Patient with this email does not exist.")
+        assertThat(response).isEqualTo(expectedResponse)
+    }
+
+    @Test
+    fun `Fail to send email for sign up when unknown error occurs`() {
+        val message = "An error occurred"
+        every { emailService.sendSignUpEmail(email) } throws Exception(message)
+
+        val response = authController.enterEmail(email)
+        val expectedResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("Issue sending email: $message")
+        assertThat(response).isEqualTo(expectedResponse)
     }
 }

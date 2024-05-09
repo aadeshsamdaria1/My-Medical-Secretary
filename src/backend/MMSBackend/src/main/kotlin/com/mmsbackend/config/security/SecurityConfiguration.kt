@@ -29,6 +29,7 @@ class SecurityConfiguration(
                         "/api/login",
                         "/api/activate",
                         "/api/refresh",
+                        "/api/enter_email/**",
                         "/error"
                     ).permitAll()
 

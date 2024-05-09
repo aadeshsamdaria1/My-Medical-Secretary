@@ -1,6 +1,7 @@
 package com.mmsbackend.service
 
 import com.mmsbackend.exception.PatientAlreadyCreatedException
+import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.jpa.entity.OneTimePasscodeEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.OneTimePasscodeEntityRepository
@@ -61,7 +62,7 @@ class EmailService(
 
     private fun getPatient(email: String): PatientEntity {
         return userEntityRepository.findByEmail(email)
-            ?: throw Exception("User not found!")
+            ?: throw PatientNotFoundException("Patient not found!")
     }
 
     private fun sendEmail(to: String, subject: String, text: String) {

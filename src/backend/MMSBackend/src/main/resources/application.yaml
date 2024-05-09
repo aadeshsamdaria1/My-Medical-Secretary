@@ -4,10 +4,10 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/my_medical_secretary
-#    username: root
-#    password: password
-    username: mmsadmin
-    password: Password123!
+    username: root
+    password: password
+#    username: mmsadmin
+#    password: Password123!
 
   jpa:
     hibernate:
