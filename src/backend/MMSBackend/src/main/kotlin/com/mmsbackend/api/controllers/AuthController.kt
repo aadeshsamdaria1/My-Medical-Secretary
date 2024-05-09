@@ -69,11 +69,11 @@ class AuthController(
             emailService.sendSignUpEmail(email)
             ResponseEntity.ok().body("Email successfully sent.")
         } catch (pace: PatientAlreadyCreatedException) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account already activated. Use forgot password instead.")
+            ResponseEntity.status(HttpStatus.CONFLICT).body("Account already activated. Use forgot password instead.")
         } catch (pne: PatientNotFoundException) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Patient with this email does not exist.")
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with this email does not exist.")
         } catch (e: Exception) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Issue sending email: ${e.message}")
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Issue sending email: ${e.message}")
         }
     }
 }
