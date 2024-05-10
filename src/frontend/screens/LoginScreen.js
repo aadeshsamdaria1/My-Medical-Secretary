@@ -84,14 +84,14 @@ const LoginScreen = ({ navigation }) => {
           onPress={() => setForgotPasswordModal(true)}
           style={styles.forgotPasswordLink}
         >
-          <Text style={styles.forgotPasswordLinkText}>Forgot Password?</Text>
+          <Text style={styles.forgotPasswordLinkText}>Forgot Password? / Register</Text>
         </TouchableOpacity>
       </View>
 
       <Modal visible={forgotPasswordModal} animationType="slide" transparent>
         <View style={styles.forgotPasswordModal}>
           <View style={styles.forgotPasswordContent}>
-            <Text style={styles.forgotPasswordTitle}>Enter your Username</Text>
+            <Text style={styles.forgotPasswordTitle}>Enter your Email</Text>
             <TextInput
               style={styles.forgotPasswordInput}
               placeholder="Username"
