@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "http-proxy-middleware": "^3.0.0",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "@babel/plugin-proposal-private-property-in-object": "^7.18.6"
   }
 }
