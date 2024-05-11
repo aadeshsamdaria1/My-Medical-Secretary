@@ -3,11 +3,9 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import { useRoute, useNavigation } from '@react-navigation/native';
 
 const DoctorsScreen = () => {
-  console.log("doctor")
   const route = useRoute();
   const navigation = useNavigation();
   const doctors = route.params.doctors;
-  console.log(doctors)
 
   const handleDoctorPress = (doctor) => {
     navigation.navigate('DoctorDetailScreen', { doctor });
@@ -29,6 +27,7 @@ const DoctorsScreen = () => {
         data={doctors}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderDoctorItem}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
@@ -37,6 +36,9 @@ const DoctorsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  listContainer: {
     padding: 20,
   },
   doctorItem: {
