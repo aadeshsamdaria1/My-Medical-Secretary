@@ -2,9 +2,11 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
+import com.mmsbackend.data.AccountStatus
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.exception.AdminPatientUsernameMatchException
+import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
@@ -80,6 +82,16 @@ class UserController(
             ResponseEntity.ok("Admin with ID $id deleted successfully.")
         } catch (e: Exception) {
             ResponseEntity.badRequest().body("Admin with ID $id could not be deleted: ${e.message}")
+        }
+    }
+
+    @GetMapping("/get_account_status/{id}")
+    fun getAccountStatus(@PathVariable id: Int): AccountStatus {
+        val patient = userEntityRepository.findByPatientId(patientId = id)
+            ?: throw PatientNotFoundException("Patient does not exist")
+        return when (patient.accountActive) {
+            true -> AccountStatus.ACTIVE
+            false -> AccountStatus.UNACTIVATED
         }
     }
 }
