@@ -28,7 +28,9 @@ class PatientEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passcodeId")
-    var oneTimePasscode: OneTimePasscodeEntity?
+    var oneTimePasscode: OneTimePasscodeEntity?,
+
+    val deviceToken: String?
 
 ): UserEntity(
     mmsId = mmsId,

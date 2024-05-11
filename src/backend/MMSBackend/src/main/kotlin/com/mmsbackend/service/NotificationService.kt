@@ -1,30 +1,78 @@
 package com.mmsbackend.service
 
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingException
+import com.google.firebase.messaging.*
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
-import com.google.firebase.messaging.Message
-import com.google.firebase.messaging.Notification
+import com.google.gson.GsonBuilder
+import com.mmsbackend.data.NotificationRequest
+import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutionException
+import java.util.logging.Logger
+import kotlin.time.Duration
 
-// TODO: NOT FINISHED YET
 @Service
 class NotificationService (val userEntityRepository: UserEntityRepository) {
+    //private val logger: Logger = LoggerFactory.getLogger(NotificationService::class)
 
-    fun sendNotificationToPatient(patientId: Int, title:String, body: String) {
+    @Throws(InterruptedException::class, ExecutionException::class)
+    fun sendMessageToToken(request: NotificationRequest) {
+        val message = preconfigureMessageToToken(request)
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val jsonOutput = gson.toJson(message)
+        val response = sendAndGetResponse(message)
+        println("Sent message to token. Device token: ${request.deviceToken}, $response msg $jsonOutput")
+        //logger.info("Sent message to token. Device token: ${request.token}, $response msg $jsonOutput")
+    }
+
+    @Throws(InterruptedException::class, ExecutionException::class)
+    private fun sendAndGetResponse(message: Message): String {
+        return FirebaseMessaging.getInstance().sendAsync(message).get()
+    }
+
+    private fun getAndroidConfig(topic: String): AndroidConfig {
+        return AndroidConfig.builder()
+            .setTtl(java.time.Duration.ofMinutes(2).toMillis())
+            .setCollapseKey(topic)
+            .setPriority(AndroidConfig.Priority.HIGH)
+            .setNotification(AndroidNotification.builder()
+                .setTag(topic).build()).build()
+    }
+
+    private fun getApnsConfig(topic: String): ApnsConfig {
+        return ApnsConfig.builder()
+            .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build()
+    }
+
+    private fun preconfigureMessageToToken(request: NotificationRequest): Message {
+        return preconfigureMessageBuilder(request).setToken(request.deviceToken).build()
+    }
+
+    private fun preconfigureMessageBuilder(request: NotificationRequest): Message.Builder {
+        val androidConfig = getAndroidConfig(request.topic)
+        val apnsConfig = getApnsConfig(request.topic)
+        val notification = Notification.builder()
+            .setTitle(request.title)
+            .setBody(request.body)
+            .build()
+        return Message.builder()
+            .setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(notification)
+    }
+
+    //////////////////////////////////////////////////////////////////////////// OLD FUNCTION
+    fun sendFCMNotificationUser(patientId: Int, title:String, body: String) {
         val user = userEntityRepository.findByPatientId(patientId)
-        // val deviceId
+        val deviceToken = user?.deviceToken
 
-//        val message = Message.builder()
-//            .setNotification(Notification(title, body))
-//            .setToken(deviceToken)
-//            .build()
+        val message = Message.builder()
+            .setNotification(Notification.builder().setTitle(title).setBody(body).build())
+            .setToken(deviceToken)
+            .build()
 
-//        try {
-//            FirebaseMessaging.getInstance().send(message)
-//        } catch (e: FirebaseMessagingException) {
-//            e.printStackTrace()
-//        }
+        try {
+            FirebaseMessaging.getInstance().send(message)
+        } catch (e: FirebaseMessagingException) {
+            e.printStackTrace()
+        }
     }
 
 }
