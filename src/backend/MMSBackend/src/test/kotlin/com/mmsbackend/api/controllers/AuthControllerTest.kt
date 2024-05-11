@@ -4,7 +4,6 @@ import com.mmsbackend.data.ActivateRequest
 import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.data.LoginResponse
 import com.mmsbackend.data.UpdatePasswordRequest
-import com.mmsbackend.exception.PatientAlreadyCreatedException
 import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
@@ -59,7 +58,7 @@ class AuthControllerTest {
         every { authService.updatePassword(username, oldPassword, newPassword) } returns true
         every { authService.updatePassword(username, "wrongPassword", newPassword) } returns false
 
-        justRun { emailService.sendSignUpEmail(email) }
+        justRun { emailService.sendActivateRecoverEmail(email) }
     }
 
     @Test
@@ -98,7 +97,7 @@ class AuthControllerTest {
         every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns true
 
         val request = ActivateRequest(
-            patientId = userId,
+            email = email,
             oneTimeCode = "One Time Code",
             password = "New Password"
         )
@@ -112,7 +111,7 @@ class AuthControllerTest {
         every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns false
 
         val request = ActivateRequest(
-            patientId = userId,
+            email = email,
             oneTimeCode = "One Time Code",
             password = "New Password"
         )
@@ -129,18 +128,8 @@ class AuthControllerTest {
     }
 
     @Test
-    fun `Fail to send email for sign up when account already activated`() {
-        every { emailService.sendSignUpEmail(email) } throws PatientAlreadyCreatedException("Error")
-
-        val response = authController.enterEmail(email)
-        val expectedResponse = ResponseEntity.status(HttpStatus.CONFLICT)
-            .body("Account already activated. Use forgot password instead.")
-        assertThat(response).isEqualTo(expectedResponse)
-    }
-
-    @Test
     fun `Fail to send email for sign up when patient not found`() {
-        every { emailService.sendSignUpEmail(email) } throws PatientNotFoundException("Error")
+        every { emailService.sendActivateRecoverEmail(email) } throws PatientNotFoundException("Error")
 
         val response = authController.enterEmail(email)
         val expectedResponse = ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -151,7 +140,7 @@ class AuthControllerTest {
     @Test
     fun `Fail to send email for sign up when unknown error occurs`() {
         val message = "An error occurred"
-        every { emailService.sendSignUpEmail(email) } throws Exception(message)
+        every { emailService.sendActivateRecoverEmail(email) } throws Exception(message)
 
         val response = authController.enterEmail(email)
         val expectedResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

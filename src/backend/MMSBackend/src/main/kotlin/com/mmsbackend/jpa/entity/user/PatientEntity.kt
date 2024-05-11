@@ -1,6 +1,9 @@
 package com.mmsbackend.jpa.entity.user
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.OneTimePasscodeEntity
+import com.mmsbackend.jpa.entity.PatientResourceEntity
 import jakarta.persistence.*
 import java.time.Instant
 
@@ -26,9 +29,10 @@ class PatientEntity(
 
     var accountActive: Boolean,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     @JoinColumn(name = "passcodeId")
-    var oneTimePasscode: OneTimePasscodeEntity?
+    var oneTimePasscode: OneTimePasscodeEntity?,
 
 ): UserEntity(
     mmsId = mmsId,

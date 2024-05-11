@@ -1,9 +1,7 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.*
-import com.mmsbackend.exception.PatientAlreadyCreatedException
 import com.mmsbackend.exception.PatientNotFoundException
-import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
 import com.mmsbackend.service.security.OneTimePasscodeAuthService
@@ -66,10 +64,8 @@ class AuthController(
     @PostMapping("/enter_email/{email}")
     fun enterEmail(@PathVariable email: String): ResponseEntity<Any> {
         return try {
-            emailService.sendSignUpEmail(email)
+            emailService.sendActivateRecoverEmail(email)
             ResponseEntity.ok().body("Email successfully sent.")
-        } catch (pace: PatientAlreadyCreatedException) {
-            ResponseEntity.status(HttpStatus.CONFLICT).body("Account already activated. Use forgot password instead.")
         } catch (pne: PatientNotFoundException) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with this email does not exist.")
         } catch (e: Exception) {

@@ -23,7 +23,7 @@ spring:
       max-request-size: 250MB
 
   mail:
-    host: # Depends on Clinic email
+    host: smtp.office365.com # Depends on Clinic email
     port: 587
     username: # Get from env var!
     password: # Get from env var!

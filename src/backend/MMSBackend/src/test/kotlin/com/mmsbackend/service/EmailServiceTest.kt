@@ -74,19 +74,20 @@ class EmailServiceTest {
             passwordEncoder = passwordEncoder
         )
         emailService.mailProperties = mailProperties
-        every { userEntityRepository.findByEmail(email) } returns patient
+        every { userEntityRepository.findByEmail(email) } returns listOf(patient)
         every { patient.accountActive } returns false
         every { patient.patientId } returns patientId
         every { patient.email } returns email
         every { patient.firstname } returns firstname
         every { patient.username } returns username
-        every { passcodeService.generateRandomCode(passcodeLength) } returns passcode
+        every { passcodeService.generateRandomIntCode() } returns passcode
         every { passcodeProperties.passcodeExpiry } returns expiry
         every { passcodeProperties.passcodeLength } returns passcodeLength
         every { passwordEncoder.encode(passcode) } returns encodedPasscode
         every { oneTimePasscodeEntityRepository.save( any() ) } returns oneTimePasscodeEntity
         every { userEntityRepository.save( any() ) } returns patient
         every { mailProperties.username } returns username
+        every { patient.oneTimePasscode } returns oneTimePasscodeEntity
 
         justRun { emailSender.send( any<SimpleMailMessage>() ) }
         justRun { patient.oneTimePasscode = any() }
@@ -94,25 +95,13 @@ class EmailServiceTest {
 
     @Test
     fun `Successfully send sign up email`() {
-        emailService.sendSignUpEmail(email)
+        emailService.sendActivateRecoverEmail(email)
         verify(exactly = 1) { emailSender.send( any<SimpleMailMessage>() ) }
-    }
-
-    @Test
-    fun `Throw exception on sign up if patient already activated`() {
-        every { patient.accountActive } returns true
-        assertThrows<PatientAlreadyCreatedException> { emailService.sendSignUpEmail(email) }
     }
 
     @Test
     fun `Throw exception on sign up if patient doesnt exist`() {
-        every { userEntityRepository.findByEmail(email) } returns null
-        assertThrows<Exception> { emailService.sendSignUpEmail(email) }
-    }
-
-    @Test
-    fun `Successfully send password forgotten email`() {
-        emailService.sendForgotPasswordEmail(email)
-        verify(exactly = 1) { emailSender.send( any<SimpleMailMessage>() ) }
+        every { userEntityRepository.findByEmail(email) } returns emptyList()
+        assertThrows<Exception> { emailService.sendActivateRecoverEmail(email) }
     }
 }

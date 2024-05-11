@@ -47,7 +47,9 @@ class SecurityConfiguration(
                         "/api/doctors/delete/**",
                         "/api/doctors/get_all",
                         "/api/appointments/create",
-                        "/api/users/get_all_patients"
+                        "/api/users/get_all_patients",
+                        "/api/users/delete_patient/**",
+                        "/api/users/delete_admin/**",
                     ).hasRole(Role.ADMIN.toString())
 
                     // Open to patients only

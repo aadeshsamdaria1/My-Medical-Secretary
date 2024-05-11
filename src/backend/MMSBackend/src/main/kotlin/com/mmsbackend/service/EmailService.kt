@@ -1,6 +1,6 @@
 package com.mmsbackend.service
 
-import com.mmsbackend.exception.PatientAlreadyCreatedException
+import com.mmsbackend.exception.PasscodeNotSetException
 import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.jpa.entity.OneTimePasscodeEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -29,40 +29,35 @@ class EmailService(
     @Autowired
     lateinit var mailProperties: MailProperties
 
-    fun sendSignUpEmail(email: String) {
+    fun sendActivateRecoverEmail(email: String) {
 
-        val patient = getPatient(email)
+        val patients = getPatients(email)
+        val patientsWithCodes = patients
+            .zip(
+                patients.map { persistCode(passcodeService.generateRandomIntCode(), it)  }
+            ) { patient, code ->
+                Pair(patient, code)
+            }
 
-        if (patient.accountActive) {
-            throw PatientAlreadyCreatedException("Patient account ${patient.patientId} already activated.")
+        patients.forEach { patient ->
+            if (patient.oneTimePasscode == null) {
+                throw PasscodeNotSetException("Passcode for patient ${patient.patientId} not set.")
+            }
         }
 
-        val passcode = passcodeService.generateRandomCode(passcodeProperties.passcodeLength)
-        persistCode(passcode, patient)
-
         sendEmail(
-            to = patient.email,
+            to = email,
             subject = signUpSubject,
-            text = buildSignUpText(patient, passcode)
+            text = buildSignUpText(patientsWithCodes)
         )
     }
 
-    fun sendForgotPasswordEmail(email: String) {
-
-        val patient = getPatient(email)
-
-        // TODO: Validate this patient
-
-        sendEmail(
-            to = patient.email,
-            subject = forgotPasswordSubject,
-            text = buildForgotPasswordText(patient)
-        )
-    }
-
-    private fun getPatient(email: String): PatientEntity {
-        return userEntityRepository.findByEmail(email)
-            ?: throw PatientNotFoundException("Patient not found!")
+    private fun getPatients(email: String): List<PatientEntity> {
+        val patients = userEntityRepository.findByEmail(email)
+        if (patients.isEmpty()){
+            throw PatientNotFoundException("Patient not found!")
+        }
+        return patients
     }
 
     private fun sendEmail(to: String, subject: String, text: String) {
@@ -74,50 +69,61 @@ class EmailService(
         emailSender.send(message)
     }
 
-    private fun persistCode(passcode: String, patient: PatientEntity) {
+    private fun persistCode(passcode: String, patient: PatientEntity): String {
         val oneTimePasscodeEntity = OneTimePasscodeEntity(
             id = 0, // Automatically generated
             passcode = passwordEncoder.encode(passcode),
             expiry = getExpiry()
         )
-
         oneTimePasscodeEntityRepository.save(oneTimePasscodeEntity)
         patient.oneTimePasscode = oneTimePasscodeEntity
         userEntityRepository.save(patient)
+        return passcode
     }
 
     private fun getExpiry(): Date {
         return Date(Date().time + passcodeProperties.passcodeExpiry)
     }
 
-    private fun buildSignUpText(patient: PatientEntity, passcode: String): String {
-        return """
-        Dear ${patient.firstname.capitalise()},
-        
-        Welcome to My Medical Secretary!
-        
-        To complete your registration and log into your account, please follow the link below:
-        
-        <Link> Passcode: $passcode Patient ID: ${patient.patientId}
-        
-        You username is: ${patient.username}
-        
-        All the best,
-        My Medical Secretary Team
-    """.trimIndent()
+    private fun buildSignUpText(patients: List<Pair<PatientEntity, String>>): String {
+        return getIntroduction(patients) + "\n\n" +
+                "Welcome to My Medical Secretary!\n\n" +
+                getLinkText(patients) + "\n\n" +
+                "All the best,\n" +
+                "My Medical Secretary Team"
     }
 
-    private fun buildForgotPasswordText(patient: PatientEntity): String {
-        return """
-        Dear ${patient.firstname.capitalise()},
-        
-        To recover your account and change your password, follow the link below:
-        
-        <Link>
-        
-        All the best,
-        My Medical Secretary Team
-    """.trimIndent()
+    private fun getIntroduction(patients: List<Pair<PatientEntity, String>>): String {
+        val firstNames = when {
+            patients.size == 1 -> patients[0].first.firstname.capitalise()
+            patients.size == 2 -> "${patients[0].first.firstname.capitalise()} & ${patients[1].first.firstname.capitalise()}"
+            else -> {
+                val allButLast = patients.dropLast(1).joinToString(", ") { it.first.firstname.capitalise() }
+                val last = patients.last().first.firstname.capitalise()
+                "$allButLast, & $last"
+            }
+        }
+        return "Dear $firstNames,"
+    }
+
+    private fun getLinkText(patients: List<Pair<PatientEntity, String>>): String {
+        return if (patients.size == 1) {
+            "To update your password and access your account, please follow these steps:\n\n" +
+                    "1. Open the 'My Medical Secretary' app.\n" +
+                    "2. Copy in the 6-digit code provided below:\n\n" +
+                    "Code: ${patients[0].second}\n\n" +
+                    "Your username is '${patients[0].first.username}'"
+        } else {
+            "We notice that there are multiple accounts using this email address\n\n" +
+                    "To update your password and access your account, please follow these steps:\n\n" +
+                    "1. Open the 'My Medical Secretary' app.\n" +
+                    "2. Copy the 6-digit code below related to the account you want to access:\n\n" +
+                    multiPersonCode(patients)
+        }
+    }
+
+    private fun multiPersonCode(patients: List<Pair<PatientEntity, String>>): String {
+        return patients.joinToString("\n") { "Code: ${it.second} (${it.first.firstname} ${it.first.surname})" }
     }
 
     private fun String.capitalise(): String {
@@ -125,5 +131,4 @@ class EmailService(
     }
 
     private val signUpSubject = "My Medical Secretary Sign Up"
-    private val forgotPasswordSubject = "My Medical Secretary - Forgotten Password"
 }

@@ -7,10 +7,14 @@ import java.util.Base64
 @Service
 class PasscodeService {
 
-    fun generateRandomCode(length: Int): String {
-        val randomBytes = ByteArray(length)
-        SecureRandom().nextBytes(randomBytes)
-        val base64String = Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes)
-        return base64String.substring(0, length)
+    private val random = java.util.Random()
+    fun generateRandomIntCode(): String {
+        val randomInt = (random.nextInt(BOUND) + OFFSET).toString()
+        return randomInt
+    }
+
+    companion object {
+        const val BOUND = 900000
+        const val OFFSET = 100000
     }
 }

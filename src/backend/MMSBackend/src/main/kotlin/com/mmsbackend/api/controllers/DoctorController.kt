@@ -77,8 +77,7 @@ class DoctorController(
         } catch (dive: DataIntegrityViolationException) {
             ResponseEntity.badRequest().body("Doctor with ID $id cannot be deleted " +
                     "because they still have Appointments")
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             ResponseEntity.badRequest().body("Doctor with ID $id could not be deleted: ${e.message}")
         }
     }

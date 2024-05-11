@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class PasscodeServiceTest {
 
     private lateinit var passcodeService: PasscodeService
-    private val length = 10
+    private val length = 6
 
     @BeforeEach
     fun setup() {
@@ -19,7 +19,7 @@ class PasscodeServiceTest {
 
     @Test
     fun `Generate a passcode`() {
-        val response = passcodeService.generateRandomCode(length)
+        val response = passcodeService.generateRandomIntCode()
         assertThat(response.length).isEqualTo(length)
     }
 }
