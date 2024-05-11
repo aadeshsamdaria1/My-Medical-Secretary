@@ -3,7 +3,7 @@ RUN apt-get update && apt-get install -y mysql-client
 RUN { \
         echo "CREATE DATABASE IF NOT EXISTS my_medical_secretary;"; \
         echo "CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY 'password';"; \
-        echo "GRANT ALL PRIVILEGES ON your_database_name.* TO 'root'@'localhost';"; \
+        echo "GRANT ALL PRIVILEGES ON my_medical_secretary.* TO 'root'@'localhost';"; \
         echo "FLUSH PRIVILEGES;"; \
     } | mysql -u root -ppassword
 
