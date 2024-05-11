@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+export const API_ENDPOINT = 'http://http://wombat-mms.ap-southeast-2.elasticbeanstalk.com8080/api';
 
 // API endpoints
 export const getUserEndpoint = (userId) => `${API_ENDPOINT}/users/get_patient/${userId}`;
@@ -41,4 +41,3 @@ export const refreshToken = async () => {
     throw error;
   }
 };
-
