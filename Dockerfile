@@ -1,5 +1,5 @@
 # Step 1: Create backend MySQL
-FROM adoptopenjdk:11-jre-hotspot as backend-build
+FROM openjdk:17-oracle as backend-build
 RUN apt-get update && apt-get install -y mysql-client
 RUN { \
         echo "CREATE DATABASE IF NOT EXISTS my_medical_secretary;"; \
@@ -10,15 +10,15 @@ RUN { \
 
 # Step 2: Build Springboot Backend
 WORKDIR /app
-COPY ./src/backend/MMSBackend/out/artifacts/MMSBackend_jar/ .
+COPY ./src/backend/MMSBackend/out/artifacts/MMSBackend_jar/ /app/
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "nohup java -jar /MMSBackend.jar > /var/log/backend.log 2>&1 &"]
+ENTRYPOINT ["java","-jar","/app/MMSBackend.jar"]
 
 # Step 3: Build React App
 FROM node:alpine3.18 as build 
 WORKDIR /app 
 COPY ./src/webapp-frontend . 
-RUN npm install  
+RUN npm install
 RUN npm run build 
 
 # Step 4: Sever with Nginx
