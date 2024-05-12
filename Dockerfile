@@ -11,7 +11,8 @@ RUN { \
 # Step 2: Build Springboot Backend
 WORKDIR /app
 COPY ./src/backend/MMSBackend/out/artifacts/MMSBackend_jar/ .
-ENTRYPOINT ["java","-jar","/MMSBackend.jar"]
+EXPOSE 8080
+ENTRYPOINT ["sh", "-c", "nohup java -jar /MMSBackend.jar > /var/log/backend.log 2>&1 &"]
 
 # Step 3: Build React App
 FROM node:alpine3.18 as build 
