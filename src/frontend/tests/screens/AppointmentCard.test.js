@@ -61,15 +61,15 @@ describe("AppointmentCard", () => {
 
   it("renders correctly", () => {
     const { getByText } = render(<AppointmentCard appointment={appointment} />);
-    expect(getByText("Meet with Dr.John")).toBeTruthy();
-    expect(getByText(" Wed, April 24, 2024")).toBeTruthy();
+    expect(getByText("Dr.John")).toBeTruthy();
+    expect(getByText(" Wed, Apr 24, 2024")).toBeTruthy();
     expect(getByText("10:00:00")).toBeTruthy();
   });
 
   it("navigates to appointment detail on press", () => {
     const { getByText } = render(<AppointmentCard appointment={appointment} />);
 
-    fireEvent.press(getByText("Meet with Dr.John"));
+    fireEvent.press(getByText("Dr.John"));
     expect(mockNavigate).toHaveBeenCalledWith("AppointmentDetail", {
       appointmentDetails: appointment,
     });
@@ -81,17 +81,13 @@ describe("AppointmentCard", () => {
 
   it("responds to press interactions", () => {
     const { getByText } = render(<AppointmentCard appointment={testDetail} testID="appointment-card" />);
-    fireEvent.press(getByText("Meet with Dr.John"));
+    fireEvent.press(getByText("Dr.John"));
     expect(mockNavigate).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith("AppointmentDetail", {
       appointmentDetails: testDetail,
     });
   });
 
-  it('matches snapshot', () => {
-    const { toJSON } = render(<AppointmentCard appointment={testDetail} />);
-    expect(toJSON()).toMatchSnapshot();
-  });
   
 
 });

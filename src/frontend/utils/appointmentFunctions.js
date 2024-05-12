@@ -36,10 +36,11 @@ export const onDocumentPress = (url) => {
 
 export const shareAppointmentDetails = async (appointmentDetails) => {
   try {
+    const startDateTime = appointmentDetails.startDate.split("T")[0]
     const message = `
         Appointment Details:
         Doctor: ${appointmentDetails.doctor.name}
-        Date: ${appointmentDetails.startDate}
+        Date: ${startDateTime}
         Time: ${appointmentDetails.startTime}
         Duration: ${appointmentDetails.duration}
         Clinic: ${appointmentDetails.detail}
@@ -79,21 +80,20 @@ export const addAppointmentToCalendar = async (appointmentDetails) => {
       ? await getDefaultCalendarSource()
       : { isLocalAccount: true, name: "Expo Calendar" };
 
-  const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+  const calendars = await Calendar.getCalendarsAsync(
+    Calendar.EntityTypes.EVENT
+  );
   const defaultCalendar =
     calendars.find((calendar) => calendar.allowsModifications) || calendars[0];
 
   try {
     const startDate = new Date(appointmentDetails.startDate);
-    const startTime = appointmentDetails.startTime;
-
-    const [startHour, startMinute] = startTime.split(":");
-
-    startDate.setHours(startHour);
-    startDate.setMinutes(startMinute);
-
-    const endDate = new Date(startDate);
-    endDate.setMinutes(startDate.getMinutes() + appointmentDetails.duration);
+    const utcStartDate = new Date(startDate.toISOString());
+    const endDate = new Date(
+      utcStartDate.setMinutes(
+        utcStartDate.getMinutes() + appointmentDetails.duration
+      )
+    );
 
     const eventDetails = {
       title: `Appointment with Dr. ${appointmentDetails.doctor.name}`,
@@ -103,6 +103,8 @@ export const addAppointmentToCalendar = async (appointmentDetails) => {
       location: appointmentDetails.doctor.address,
       notes: appointmentDetails.note,
     };
+
+    console.log("Adding event to calendar:", eventDetails);
 
     await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
     Alert.alert("Success", "Appointment added to your calendar");

@@ -12,11 +12,16 @@ import Patients from './pages/Patients';
 import Facilities from './pages/Facilities';
 import FileUpload from './pages/FileUpload';
 import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App/>,
+  },
+  {
+    path: "login",
+    element: <LoginPage/>
   },
   {
     path: "home",
