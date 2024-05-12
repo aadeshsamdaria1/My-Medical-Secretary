@@ -1,12 +1,32 @@
-version: "1"
 services:
+  docker-mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: my_medical_secretary
+    ports:
+      - "3306:3306"
+  
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      target: backend-build
+    depends_on:
+      - docker-mysql
+    ports:
+      - "8080:8080"
+
   nginx-react:
     image: reactapp:latest
     container_name: mms-website
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.frontend
     ports:
-      - 80:80
+      - "80:80"
     environment:
       NODE_ENV: production
+    depends_on:
+      - backend
+    restart: unless-stopped

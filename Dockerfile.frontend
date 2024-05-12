@@ -17,7 +17,7 @@ ENTRYPOINT ["java","-jar","/MMSBackend.jar"]
 FROM node:alpine3.18 as build 
 WORKDIR /app 
 COPY ./src/webapp-frontend . 
-RUN npm install  
+RUN npm install
 RUN npm run build 
 
 # Step 4: Sever with Nginx

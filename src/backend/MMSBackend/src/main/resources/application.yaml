@@ -3,11 +3,15 @@ spring:
     name: MMSBackend
 
   datasource:
-    url: jdbc:mysql://localhost:3306/my_medical_secretary
-    username: root
-    password: password
-#    username: mmsadmin
-#    password: Password123!
+      url: jdbc:mysql://docker-mysql:3306/my_medical_secretary?createDatabaseIfNotExist=true
+#      url: jdbc:mysql://localhost:3306/my_medical_secretary?createDatabaseIfNotExist=true
+      username: root
+      password: root
+#      password: password
+
+#      username: mmsadmin
+#      password: Password123!
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -39,7 +43,7 @@ spring:
 
 jwt:
 #  key: ${JWT_KEY}
-# Create a key as an environment variable!
+# Create a key as an environment variable
   key: "Secret key - a_very_very_very_very_very_very_very_very_very_secret_key"
   access-token-expiration: 3_600_000
   refresh-token-expiration: 86_400_000
@@ -53,3 +57,7 @@ admin:
 passcode:
   passcode_length: 10
   passcode_expiry: 3_600_000
+
+logging:
+  level:
+    com.example: DEBUG
