@@ -1,5 +1,35 @@
 version: "1"
 services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-setup
+    environment:
+      MYSQL_DATABASE: my_medical_secretary
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend-build
+    image: backend:latest
+    container_name: backend
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
   nginx-react:
     image: reactapp:latest
     container_name: mms-website
@@ -7,6 +37,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 80:80
+      - "80:80"
     environment:
       NODE_ENV: production
+    depends_on:
+      - backend
+    restart: unless-stopped
