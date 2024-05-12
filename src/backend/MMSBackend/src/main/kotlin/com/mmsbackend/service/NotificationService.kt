@@ -31,7 +31,7 @@ class NotificationService (val userEntityRepository: UserEntityRepository) {
 
     private fun getAndroidConfig(topic: String): AndroidConfig {
         return AndroidConfig.builder()
-            .setTtl(java.time.Duration.ofMinutes(2).toMillis())
+            .setTtl(java.time.Duration.ofMinutes(2).toMillis()) // Maybe make this longer
             .setCollapseKey(topic)
             .setPriority(AndroidConfig.Priority.HIGH)
             .setNotification(AndroidNotification.builder()
@@ -57,22 +57,4 @@ class NotificationService (val userEntityRepository: UserEntityRepository) {
         return Message.builder()
             .setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(notification)
     }
-
-    //////////////////////////////////////////////////////////////////////////// OLD FUNCTION
-    fun sendFCMNotificationUser(patientId: Int, title:String, body: String) {
-        val user = userEntityRepository.findByPatientId(patientId)
-        val deviceToken = user?.deviceToken
-
-        val message = Message.builder()
-            .setNotification(Notification.builder().setTitle(title).setBody(body).build())
-            .setToken(deviceToken)
-            .build()
-
-        try {
-            FirebaseMessaging.getInstance().send(message)
-        } catch (e: FirebaseMessagingException) {
-            e.printStackTrace()
-        }
-    }
-
 }

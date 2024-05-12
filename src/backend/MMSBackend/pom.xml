@@ -29,6 +29,12 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>Google Maven Repository</id>-->
+<!--            <url>https://maven.google.com</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -109,6 +115,12 @@
             <artifactId>firebase-admin</artifactId>
             <version>7.3.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-messaging -->
+<!--        <dependency>-->
+<!--            <groupId>com.google.firebase</groupId>-->
+<!--            <artifactId>firebase-messaging</artifactId>-->
+<!--            <version>24.0.0</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>

@@ -14,7 +14,9 @@ class FirebaseConfig {
 
     @PostConstruct
     fun initializeFirebase() {
-        val serviceAccount = FileInputStream("/src/main/resources/me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json")
+
+        // CHANGE THIS TO YOUR CREDENTIAL FILE
+        val serviceAccount = FileInputStream("C:\\Users\\andre\\OneDrive\\Documents\\GitHub\\ME-Wombat\\src\\backend\\MMSBackend\\src\\main\\resources\\me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json")
 
          try {
              val options = FirebaseOptions.builder()
