@@ -1,27 +1,31 @@
-# Step 1: Create backend MySQL
-FROM openjdk:17-oracle as backend-build
-RUN apt-get update && apt-get install -y mysql-client
-RUN { \
-        echo "CREATE DATABASE IF NOT EXISTS my_medical_secretary;"; \
-        echo "CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY 'password';"; \
-        echo "GRANT ALL PRIVILEGES ON my_medical_secretary.* TO 'root'@'localhost';"; \
-        echo "FLUSH PRIVILEGES;"; \
-    } | mysql -u root -ppassword
+# Step 1: Set up MySQL
+FROM mysql:latest as mysql-setup
+ENV MYSQL_DATABASE=my_medical_secretary \
+    MYSQL_USER=root \
+    MYSQL_PASSWORD=password \
+    MYSQL_ROOT_PASSWORD=password
+EXPOSE 3306
+
+CMD ["mysqld", "--default-authentication-plugin=mysql_native_password"]
+RUN mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;"
+RUN mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+RUN mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
 
 # Step 2: Build Springboot Backend
+FROM openjdk:17-oracle as backend-build
 WORKDIR /app
 COPY ./src/backend/MMSBackend/out/artifacts/MMSBackend_jar/ /app/
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/MMSBackend.jar"]
 
-# Step 3: Build React App
+# # Step 3: Build React App
 FROM node:alpine3.18 as build 
 WORKDIR /app 
 COPY ./src/webapp-frontend . 
 RUN npm install
 RUN npm run build 
 
-# Step 4: Sever with Nginx
+# # Step 4: Sever with Nginx
 FROM nginx:1.23-alpine 
 COPY --from=build /app/build /usr/share/nginx/html/ 
 COPY --from=build /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf

@@ -53,3 +53,8 @@ admin:
 passcode:
   passcode_length: 10
   passcode_expiry: 3_600_000
+
+logging:
+  level:
+    com.example: DEBUG
+    
