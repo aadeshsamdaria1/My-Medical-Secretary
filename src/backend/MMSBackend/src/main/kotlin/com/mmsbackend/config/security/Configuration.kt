@@ -2,6 +2,7 @@ package com.mmsbackend.config.security
 
 import com.mmsbackend.config.admin.RootAdminProperties
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.properties.NotificationProperties
 import com.mmsbackend.properties.PasscodeProperties
 import com.mmsbackend.service.security.CustomUserDetailsService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -19,7 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @EnableConfigurationProperties(
     JwtProperties::class,
     RootAdminProperties::class,
-    PasscodeProperties::class
+    PasscodeProperties::class,
+    NotificationProperties::class
 )
 class Configuration {
 

@@ -5,14 +5,14 @@ import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
 import com.google.gson.GsonBuilder
 import com.mmsbackend.data.NotificationRequest
-import org.slf4j.LoggerFactory
 import java.util.concurrent.ExecutionException
-import java.util.logging.Logger
-import kotlin.time.Duration
 
 @Service
 class NotificationService (val userEntityRepository: UserEntityRepository) {
-    //private val logger: Logger = LoggerFactory.getLogger(NotificationService::class)
+
+    companion object {
+        const val TIME: Long = 2
+    }
 
     @Throws(InterruptedException::class, ExecutionException::class)
     fun sendMessageToToken(request: NotificationRequest) {
@@ -21,7 +21,6 @@ class NotificationService (val userEntityRepository: UserEntityRepository) {
         val jsonOutput = gson.toJson(message)
         val response = sendAndGetResponse(message)
         println("Sent message to token. Device token: ${request.deviceToken}, $response msg $jsonOutput")
-        //logger.info("Sent message to token. Device token: ${request.token}, $response msg $jsonOutput")
     }
 
     @Throws(InterruptedException::class, ExecutionException::class)
@@ -31,7 +30,7 @@ class NotificationService (val userEntityRepository: UserEntityRepository) {
 
     private fun getAndroidConfig(topic: String): AndroidConfig {
         return AndroidConfig.builder()
-            .setTtl(java.time.Duration.ofMinutes(2).toMillis()) // Maybe make this longer
+            .setTtl(java.time.Duration.ofMinutes(TIME).toMillis())
             .setCollapseKey(topic)
             .setPriority(AndroidConfig.Priority.HIGH)
             .setNotification(AndroidNotification.builder()
