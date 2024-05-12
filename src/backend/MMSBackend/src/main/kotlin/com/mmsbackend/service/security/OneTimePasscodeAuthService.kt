@@ -16,13 +16,14 @@ class OneTimePasscodeAuthService(
 
     fun authenticateOneTimePasscode(request: ActivateRequest): Boolean {
 
-        val patient = userEntityRepository.findByPatientId(request.patientId) ?: return false
+        val patients = userEntityRepository.findByEmail(request.email)
+            .filter { isValidPasscode(it.oneTimePasscode, request.oneTimeCode) }
 
-        val oneTimePasscode = patient.oneTimePasscode
+        if (patients.size != 1) { return false }
 
-        return isValidPasscode(oneTimePasscode, request.oneTimeCode).also {isValid ->
-            if (isValid) { activate(patient, request.password) }
-        }
+        // Only one patient found
+        activate(patients[0], request.password)
+        return true
     }
 
     private fun activate(patient: PatientEntity, password: String) {
@@ -30,6 +31,7 @@ class OneTimePasscodeAuthService(
         patient.oneTimePasscode = null
         patient.password = passwordEncoder.encode(password)
         patient.accountActive = true
+        userEntityRepository.save(patient)
     }
 
     private fun isValidPasscode(oneTimePasscode: OneTimePasscodeEntity?, passcodeAttempt: String): Boolean {

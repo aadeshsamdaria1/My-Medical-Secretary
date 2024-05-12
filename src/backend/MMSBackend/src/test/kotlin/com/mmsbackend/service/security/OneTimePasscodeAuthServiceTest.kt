@@ -26,6 +26,7 @@ class OneTimePasscodeAuthServiceTest {
     private val encodedPasscode = UUID.randomUUID().toString()
     private val passcode = UUID.randomUUID().toString()
     private val password = UUID.randomUUID().toString()
+    private val email = UUID.randomUUID().toString()
 
     @MockK
     private lateinit var userEntityRepository: UserEntityRepository
@@ -42,7 +43,8 @@ class OneTimePasscodeAuthServiceTest {
             userEntityRepository = userEntityRepository,
             passwordEncoder = passwordEncoder
         )
-        every { userEntityRepository.findByPatientId(patientId) } returns patient
+        every { userEntityRepository.save(any()) } returns patient
+        every { userEntityRepository.findByEmail(email) } returns listOf(patient)
         every { passwordEncoder.encode(password) } returns encodedPassword
         every { passwordEncoder.matches(password, encodedPassword) } returns true
         every { passwordEncoder.matches(passcode, encodedPasscode) } returns true
@@ -61,7 +63,7 @@ class OneTimePasscodeAuthServiceTest {
     fun `Successfully authenticate one time password`() {
         val response = oneTimePasscodeAuthService.authenticateOneTimePasscode(
             request = ActivateRequest(
-                patientId = patientId,
+                email = email,
                 oneTimeCode = passcode,
                 password = password
             )
@@ -75,7 +77,7 @@ class OneTimePasscodeAuthServiceTest {
         every { passwordEncoder.matches(badPasscode, encodedPasscode) } returns false
         val response = oneTimePasscodeAuthService.authenticateOneTimePasscode(
             request = ActivateRequest(
-                patientId = patientId,
+                email = email,
                 oneTimeCode = badPasscode,
                 password = password
             )
@@ -86,11 +88,11 @@ class OneTimePasscodeAuthServiceTest {
     @Test
     fun `Fail to authenticate one time password when patient cannot be found`() {
 
-        every { userEntityRepository.findByPatientId(patientId) } returns null
+        every { userEntityRepository.findByEmail(email) } returns emptyList()
 
         val response = oneTimePasscodeAuthService.authenticateOneTimePasscode(
             request = ActivateRequest(
-                patientId = patientId,
+                email = email,
                 oneTimeCode = passcode,
                 password = password
             )

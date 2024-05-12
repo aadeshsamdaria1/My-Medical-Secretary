@@ -2,8 +2,10 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
+import com.mmsbackend.data.AccountStatus
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
+import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
@@ -12,12 +14,15 @@ import com.mmsbackend.mapping.UserMapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.justRun
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
@@ -135,6 +140,26 @@ class UserControllerTest {
                 "Could not create patient. Missing ID.")
             assertEquals(response, expectedResponse)
         }
+
+        @Test
+        fun `Successfully check patient account status as true`() {
+            every { patientEntity.accountActive } returns true
+            val result = userController.getAccountStatus(patientId)
+            assertEquals(result, AccountStatus.ACTIVE)
+        }
+
+        @Test
+        fun `Successfully check patient account status as false`() {
+            every { patientEntity.accountActive } returns false
+            val result = userController.getAccountStatus(patientId)
+            assertEquals(result, AccountStatus.UNACTIVATED)
+        }
+
+        @Test
+        fun `Fail to check account status when patient not found`() {
+            every { userEntityRepository.findByPatientId(patientId) } returns null
+            assertThrows<PatientNotFoundException> { userController.getAccountStatus(patientId) }
+        }
     }
 
     @Nested
@@ -157,6 +182,7 @@ class UserControllerTest {
             every { adminEntity.username } returns username
             every { userEntityRepository.findByUsername(username) } returns adminEntity
             every { userMapper.updateExistingAdmin(adminEntity, adminEntity) } returns adminEntity
+            justRun { userEntityRepository.deleteByMmsId(mmsId) }
         }
 
         @Test
@@ -177,6 +203,22 @@ class UserControllerTest {
             val expectedResponse = ResponseEntity.ok("" +
                     "Successfully added / updated admin with mms ID: $mmsId.")
             assertEquals(response, expectedResponse)
+        }
+
+        @Test
+        fun `Successfully delete an admin`() {
+            val response = userController.deleteAdmin(mmsId)
+            val expectedResponse = ResponseEntity.ok("Admin with ID $mmsId deleted successfully.")
+            assertEquals(expectedResponse, response)
+        }
+
+        @Test
+        fun `Fail to delete admin if other exception occurs`() {
+            every { userEntityRepository.deleteByMmsId(mmsId) } throws RuntimeException("Mocked exception")
+            val response = userController.deleteAdmin(mmsId)
+            val expectedResponse = ResponseEntity.badRequest().body(
+                "Admin with ID $mmsId could not be deleted: Mocked exception")
+            assertEquals(expectedResponse, response)
         }
     }
 }

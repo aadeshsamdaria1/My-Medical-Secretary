@@ -2,15 +2,18 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
+import com.mmsbackend.data.AccountStatus
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
 import com.mmsbackend.exception.AdminPatientUsernameMatchException
+import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.jpa.util.persist
 import com.mmsbackend.mapping.UserMapper
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -69,6 +72,26 @@ class UserController(
             ResponseEntity.ok("Successfully added / updated admin with mms ID: ${savedAdmin.mmsId}.")
         } catch (ape: AdminPatientUsernameMatchException) {
             ResponseEntity.badRequest().body(ape.message)
+        }
+    }
+
+    @DeleteMapping("/delete_admin/{id}")
+    fun deleteAdmin(@PathVariable id: Int): ResponseEntity<String> {
+        return try {
+            userEntityRepository.deleteByMmsId(id)
+            ResponseEntity.ok("Admin with ID $id deleted successfully.")
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body("Admin with ID $id could not be deleted: ${e.message}")
+        }
+    }
+
+    @GetMapping("/get_account_status/{id}")
+    fun getAccountStatus(@PathVariable id: Int): AccountStatus {
+        val patient = userEntityRepository.findByPatientId(patientId = id)
+            ?: throw PatientNotFoundException("Patient does not exist")
+        return when (patient.accountActive) {
+            true -> AccountStatus.ACTIVE
+            false -> AccountStatus.UNACTIVATED
         }
     }
 }

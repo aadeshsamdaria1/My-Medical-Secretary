@@ -1,6 +1,8 @@
 package com.mmsbackend.jpa.entity.user
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.mmsbackend.jpa.entity.AppointmentEntity
+import com.mmsbackend.jpa.entity.RefreshTokenEntity
 import jakarta.persistence.*
 import java.util.UUID
 
@@ -17,9 +19,7 @@ open class UserEntity(
     @Column(nullable = false)
     open val email: String,
 
-    // Do not return password in REST requests
     @JsonIgnore
     @Column(nullable = false)
-    open var password: String
-    // TODO: Build update password endpoint
+    open var password: String,
 )
