@@ -1,4 +1,5 @@
 # Step 1: Create backend MySQL
+FROM adoptopenjdk:11-jre-hotspot as backend-build
 RUN apt-get update && apt-get install -y mysql-client
 RUN { \
         echo "CREATE DATABASE IF NOT EXISTS my_medical_secretary;"; \
@@ -8,7 +9,6 @@ RUN { \
     } | mysql -u root -ppassword
 
 # Step 2: Build Springboot Backend
-FROM adoptopenjdk:11-jre-hotspot as backend-build
 WORKDIR /app
 COPY ./src/backend/MMSBackend/out/artifacts/MMSBackend_jar/ .
 ENTRYPOINT ["java","-jar","/MMSBackend.jar"]
