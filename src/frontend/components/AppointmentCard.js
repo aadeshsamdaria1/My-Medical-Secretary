@@ -49,8 +49,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    borderLeftWidth: 4,
-    borderLeftColor: "#007aff",
   },
   details: {
     justifyContent: "center",

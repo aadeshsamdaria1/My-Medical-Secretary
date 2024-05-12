@@ -60,7 +60,7 @@ const AppointmentDetailScreen = ({ route }) => {
           <TouchableOpacity
             style={styles.actionButton}
             onPress={() => {
-              onViewDoctorLocation(appointmentDetails);
+              onViewDoctorLocation(appointmentDetails.doctor.address);
             }}
           >
             <Text style={styles.actionButtonText}>View Doctor's Location</Text>
@@ -79,8 +79,8 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
         <Text style={styles.sectionContent}>
           {new Date(appointmentDetails.startDate).toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "short",
+            weekday: "short",
+            month: "long",
             day: "numeric",
             year: "numeric",
           })}
@@ -159,10 +159,10 @@ const AppointmentDetailScreen = ({ route }) => {
       </View>
 
       <TouchableOpacity
-        style={styles.confirmButton}
+        style={styles.shareButton}
         onPress={() => shareAppointmentDetails(appointmentDetails)}
       >
-        <Text style={styles.confirmButtonText}>Share Appointment Details</Text>
+        <Text style={styles.shareButtonText}>Share Appointment Details</Text>
       </TouchableOpacity>
 
       <NotesModal
@@ -188,33 +188,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#eaeaea",
-    borderRadius: 10,
+    borderRadius: 12,
     marginVertical: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 4,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginLeft: 8,
+    marginBottom: 4,
   },
   sectionContent: {
     fontWeight: "400",
     fontSize: 16,
     color: "#333",
     marginLeft: 32,
+    marginBottom: 4,
   },
   linkText: {
     fontSize: 16,
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
     marginLeft: 32,
+    marginTop: 4,
   },
 
   reminderSection: {
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  confirmButton: {
+  shareButton: {
     backgroundColor: "#007aff",
     borderRadius: 10,
     paddingVertical: 12,
@@ -265,7 +267,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     alignItems: "center",
   },
-  confirmButtonText: {
+  shareButtonText: {
     textTransform: "none",
     color: "#fff",
     fontSize: 16,
@@ -296,18 +298,14 @@ const styles = StyleSheet.create({
   },
 
   actionButton: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
     marginLeft: 32,
     alignSelf: "flex-start",
-    marginTop: 8,
   },
   actionButtonText: {
-    color: "#007AFF",
+    color: "#007aff",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "500",
+    textDecorationLine: "underline", 
   },
 
   iconStyle: {
