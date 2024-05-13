@@ -4,6 +4,7 @@ import PatientList from "../components/PatientList";
 import PatientDetail from "../components/PatientDetail";
 import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
+import ResourceViewerPopup from "../components/ResourceViewerPopup";
 import "../styles/Patients.css";
 import {
   getAllPatients,
@@ -16,6 +17,7 @@ function Patients() {
   const [appointments, setAppointments] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterByName, setFilterByName] = useState(true);
+  const [showResourceViewer, setShowResourceViewer] = useState(false);
 
   useEffect(() => {
     fetchPatients();
@@ -67,8 +69,12 @@ function Patients() {
 
   const handleResourceViewerClick = () => {
     console.log("Resource Viewer clicked");
-    // Add your logic to open the resource viewer here
+    setShowResourceViewer(true);
   };
+
+  const handleCloseResourceViewer = () => {
+    setShowResourceViewer(false);
+  }
 
   const filteredPatients = patients
     .filter((patient) =>
@@ -85,6 +91,24 @@ function Patients() {
           )
         : a.patientId - b.patientId
     );
+
+    const dummyResources = [
+      {
+        id: 1,
+        text: "Resource 1",
+        link: "https://example.com/resource1"
+      },
+      {
+        id: 2,
+        text: "Resource 2",
+        link: "https://example.com/resource2"
+      },
+      {
+        id: 3,
+        text: "Resource 3",
+        link: "https://example.com/resource3"
+      }
+    ];
 
   return (
     <div>
@@ -122,6 +146,12 @@ function Patients() {
           </div>
         </div>
       </div>
+      {showResourceViewer && (
+        <ResourceViewerPopup
+          resources={dummyResources} // TODO fetch resources
+          onClose={handleCloseResourceViewer}
+        />
+      )}
     </div>
   );
 }
