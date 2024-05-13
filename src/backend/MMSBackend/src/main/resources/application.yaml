@@ -54,6 +54,15 @@ admin:
   default-username: "admin"
   default-password: "password"
 
+server:
+  ssl:
+    key-store: classpath:springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password
+  port: 8080
+
 passcode:
   passcode_length: 10
   passcode_expiry: 3_600_000
