@@ -15,6 +15,7 @@ class FirebaseConfig(val notificationProperties: NotificationProperties) {
     @PostConstruct
     fun initializeFirebase() {
 
+        println(notificationProperties.filePath)
         val serviceAccount = FileInputStream(notificationProperties.filePath)
 
          try {

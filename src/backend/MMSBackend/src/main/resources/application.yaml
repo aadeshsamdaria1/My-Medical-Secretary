@@ -67,10 +67,8 @@ passcode:
   passcode_length: 10
   passcode_expiry: 3_600_000
 
-
-# Change this to your firebase config file
 firebase:
-  file_path: "${user.dir}/src/backend/MMSBackend/src/main/resources/me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json"
+  file_path: classpath:me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json
 
 logging:
   level:

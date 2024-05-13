@@ -5,7 +5,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.mmsbackend.config.FirebaseConfig
 import com.mmsbackend.data.NotificationRequest
-import com.mmsbackend.exception.ColumnError
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.properties.NotificationProperties
 import io.mockk.every
