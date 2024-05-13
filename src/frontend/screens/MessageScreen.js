@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Linking
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Linking } from "react-native";
 import MessageCard from "../components/MessageCard";
 import * as Notifications from "expo-notifications";
 import { useResource } from "../utils/useResourceByUser";
 
-const MessageScreen = ( { route }) => {
+const MessageScreen = ({ route }) => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   const userId = route.params.userId;
   const resource = useResource(userId);
@@ -30,6 +22,15 @@ const MessageScreen = ( { route }) => {
     },
   ];
 
+  useEffect(() => {
+    const checkNotificationPermission = async () => {
+      const { status } = await Notifications.getPermissionsAsync();
+      setIsPermissionGranted(status === "granted");
+    };
+
+    checkNotificationPermission();
+  }, []);
+
   const enableNotifications = async () => {
     const { status } = await Notifications.requestPermissionsAsync();
     if (status !== "granted") {
@@ -39,22 +40,11 @@ const MessageScreen = ( { route }) => {
       );
       return;
     }
-
     setIsPermissionGranted(true);
   };
 
   const handleMessagePress = (message) => {
-    Alert.alert(
-      message.sender,
-      message.message,
-      [
-        {
-          text: "Close",
-          style: "cancel",
-        },
-      ],
-      { cancelable: true }
-    );
+    // Handle message press event
   };
 
   const handleLinkPress = (link) => {
@@ -70,7 +60,6 @@ const MessageScreen = ( { route }) => {
             sender={message.sender}
             message={message.message}
             time={message.time}
-            onPress={() => handleMessagePress(message)}
           />
         ))}
         {resource.map((item, index) => (
@@ -83,9 +72,14 @@ const MessageScreen = ( { route }) => {
           />
         ))}
       </ScrollView>
-      <TouchableOpacity style={styles.notificationButton} onPress={enableNotifications}>
-        <Text style={styles.notificationButtonText}>Enable Notifications</Text>
-      </TouchableOpacity>
+      {!isPermissionGranted && (
+        <TouchableOpacity
+          style={styles.notificationButton}
+          onPress={enableNotifications}
+        >
+          <Text style={styles.notificationButtonText}>Enable Notifications</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -94,9 +88,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 16,
+    paddingTop: 16,
   },
-
   notificationButton: {
     backgroundColor: "#007AFF",
     borderRadius: 20,

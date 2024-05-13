@@ -64,7 +64,7 @@ const MessageCard = ({ sender, message, time, link, onPress }) => {
 const styles = StyleSheet.create({
   messageCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 5,
   },
   cardHeader: {
     flexDirection: "row",

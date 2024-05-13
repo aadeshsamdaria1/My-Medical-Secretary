@@ -215,7 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     marginLeft: 32,
-    marginBottom: 4,
   },
   linkText: {
     fontSize: 16,
@@ -239,7 +238,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
     marginLeft: 32,
-    marginTop: 4,
   },
 
   reminderSection: {
