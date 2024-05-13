@@ -1,0 +1,5 @@
+FROM openjdk:17-oracle as backend-build
+WORKDIR /backend
+COPY ./src/backend/MMSBackend/out/artifacts/MMSBackend_jar/ /backend/
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/backend/MMSBackend.jar"]

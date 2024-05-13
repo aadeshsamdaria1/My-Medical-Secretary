@@ -3,11 +3,15 @@ spring:
     name: MMSBackend
 
   datasource:
-    url: jdbc:mysql://localhost:3306/my_medical_secretary
-    username: root
-    password: password
-#    username: mmsadmin
-#    password: Password123!
+      url: jdbc:mysql://docker-mysql:3306/my_medical_secretary?createDatabaseIfNotExist=true
+#      url: jdbc:mysql://localhost:3306/my_medical_secretary?createDatabaseIfNotExist=true
+      username: root
+      password: root
+#      password: password
+
+#      username: mmsadmin
+#      password: Password123!
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -50,10 +54,24 @@ admin:
   default-username: "admin"
   default-password: "password"
 
+server:
+  ssl:
+    key-store: classpath:springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password
+  port: 8080
+
 passcode:
   passcode_length: 10
   passcode_expiry: 3_600_000
 
+
 # Change this to your firebase config file
 firebase:
   file_path: "${user.dir}/src/backend/MMSBackend/src/main/resources/me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json"
+
+logging:
+  level:
+    com.example: DEBUG
