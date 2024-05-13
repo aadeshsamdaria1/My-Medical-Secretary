@@ -30,6 +30,7 @@ class PasswordService(
         return if ( !userEntityRepository.existsByUsername(base)) {
             base
         } else {
+            // TODO: Fix this (it doesn't work since they all get added in-memory first
             generateSequence(1) { it + 1 }
                 .map { base + it.toString() }
                 .first { !userEntityRepository.existsByUsername(it) }
