@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+export const API_ENDPOINT = 'https://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
 // API endpoints
 export const loginEndpoint = `${API_ENDPOINT}/login`;
