@@ -1,7 +1,10 @@
 import React from "react";
+import { useState } from "react";
 import "../styles/ResourceViewer.css";
 
 function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
+  const [editedResources, setEditedResources] = useState({});
+
   const handleMakeResourceAvailable = (resourceId) => {
     // TODO add userD to resource
     console.log("Resource made available:", resourceId);
@@ -12,16 +15,34 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
     console.log("Resource made unavailable:", resourceId);
   };
 
+  const handleEditResource = (resourceId) => {
+    // TODO save edited resource
+    console.log("Resource edited:", editedResources[resourceId]);
+  };
+
+  const handleDeleteResource = (resourceId) => {
+    // TODO delete resource
+    console.log("Resource deleted:", resourceId);
+  };
+
+  const handleInputChange = (resourceId, field, value) => {
+    setEditedResources({
+      ...editedResources,
+      [resourceId]: {
+        ...editedResources[resourceId],
+        [field]: value
+      }
+    });
+  };
+
   const handleAddNewResource = () => {
     // TODO create new resource
     console.log("Adding new resource");
   };
 
-  // Sort resources by availability to the selected patient
   resources.sort((a, b) => {
     const aAvailable = a.patientIds.includes(selectedPatient.patientId);
     const bAvailable = b.patientIds.includes(selectedPatient.patientId);
-    // Resources available to the patient should come before those unavailable
     if (aAvailable && !bAvailable) return -1;
     if (!aAvailable && bAvailable) return 1;
     return 0;
@@ -38,25 +59,51 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
                 <th>ID</th>
                 <th>Name</th>
                 <th>Link</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {resources.map((resource) => (
                 <tr key={resource.id} className={resource.patientIds.includes(selectedPatient.patientId) ? "available" : "not-available"}>
                   <td>{resource.id}</td>
-                  <td>{resource.text}</td>
-                  <td>{resource.link}</td>
                   <td>
+                    {editedResources[resource.id] ? (
+                      <input
+                        type="text"
+                        value={editedResources[resource.id].text}
+                        onChange={(e) => handleInputChange(resource.id, "text", e.target.value)}
+                      />
+                    ) : (
+                      resource.text
+                    )}
+                  </td>
+                  <td>
+                    {editedResources[resource.id] ? (
+                      <input
+                        type="text"
+                        value={editedResources[resource.id].link}
+                        onChange={(e) => handleInputChange(resource.id, "link", e.target.value)}
+                      />
+                    ) : (
+                      resource.link
+                    )}
+                  </td>
+                  <td className="action-buttons">
                     {resource.patientIds.includes(selectedPatient.patientId) ? (
-                      <button className="green-button" onClick={() => handleMakeResourceUnavailable(resource.id)}>
+                      <button className="make-unavailable-button" onClick={() => handleMakeResourceUnavailable(resource.id)}>
                         Remove from Patient
                       </button>
                     ) : (
-                      <button className="red-button" onClick={() => handleMakeResourceAvailable(resource.id)}>
+                      <button className="make-available-button" onClick={() => handleMakeResourceAvailable(resource.id)}>
                         Make Available to Patient
                       </button>
                     )}
+                    <button className="edit-button" onClick={() => handleEditResource(resource.id)}>
+                      Edit
+                    </button>
+                    <button className="delete-button" onClick={() => handleDeleteResource(resource.id)}>
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
