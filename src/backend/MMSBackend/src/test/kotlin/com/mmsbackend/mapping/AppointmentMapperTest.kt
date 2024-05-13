@@ -50,19 +50,20 @@ class AppointmentMapperTest {
         appointmentMapper = AppointmentMapper(userEntityRepository, doctorEntityRepository)
 
         patient = PatientEntity(
-                mmsId = 0,
-                email = "correct.email@example.com",
-                password = "securePassword",
-                username = "patientUsername",
-                patientId = patientId,
-                firstname = "John",
-                middleName = "A.",
-                surname = "Doe",
-                dob = Instant.now(),
-                address = "123 Correct Street",
-                suburb = "Correct Suburb",
-                state = "Correct State",
-                temporaryPassword = "Correct temp"
+            mmsId = 0,
+            email = "correct.email@example.com",
+            password = "securePassword",
+            username = "patientUsername",
+            patientId = patientId,
+            firstname = "John",
+            middleName = "A.",
+            surname = "Doe",
+            dob = Instant.now(),
+            address = "123 Correct Street",
+            suburb = "Correct Suburb",
+            state = "Correct State",
+            accountActive = true,
+            oneTimePasscode = null
         )
 
         doctor = DoctorEntity(
@@ -130,19 +131,20 @@ class AppointmentMapperTest {
                 lastUpdated = Instant.parse("2022-04-15T00:00:00Z"),
                 startDate = SimpleDateFormat("dd/MM/yyyy").parse("7/02/2022"),
                 patient = PatientEntity(
-                        mmsId = 1,
-                        email = "incorrect.email@example.com",
-                        password = "Incorrect Password",
-                        username = "incorrect Patient Username",
-                        patientId = patientId + 1,
-                        firstname = "Incorrect John",
-                        middleName = "Incorrect middleName",
-                        surname = "Incorrect surname",
-                        dob = Instant.ofEpochMilli(Random.nextLong()),
-                        address = "Incorrect address",
-                        suburb = "Incorrect Suburb",
-                        state = "Incorrect State",
-                        temporaryPassword = "Incorrect temp"
+                    mmsId = 1,
+                    email = "incorrect.email@example.com",
+                    password = "Incorrect Password",
+                    username = "incorrect Patient Username",
+                    patientId = patientId + 1,
+                    firstname = "Incorrect John",
+                    middleName = "Incorrect middleName",
+                    surname = "Incorrect surname",
+                    dob = Instant.ofEpochMilli(Random.nextLong()),
+                    address = "Incorrect address",
+                    suburb = "Incorrect Suburb",
+                    state = "Incorrect State",
+                    accountActive = true,
+                    oneTimePasscode = null
                 ),
                 doctor = DoctorEntity(
                         id = doctorId + 1,

@@ -1,7 +1,10 @@
 package com.mmsbackend.jpa.entity.user
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.mmsbackend.jpa.entity.AppointmentEntity
+import com.mmsbackend.jpa.entity.OneTimePasscodeEntity
+import com.mmsbackend.jpa.entity.PatientResourceEntity
+import jakarta.persistence.*
 import java.time.Instant
 
 @Entity
@@ -24,7 +27,12 @@ class PatientEntity(
     val suburb: String?,
     val state: String?,
 
-    val temporaryPassword: String?
+    var accountActive: Boolean,
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "passcodeId")
+    var oneTimePasscode: OneTimePasscodeEntity?,
 
 ): UserEntity(
     mmsId = mmsId,

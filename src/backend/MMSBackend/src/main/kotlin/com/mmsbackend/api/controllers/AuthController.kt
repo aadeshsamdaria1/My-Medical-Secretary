@@ -1,7 +1,10 @@
 package com.mmsbackend.api.controllers
 
 import com.mmsbackend.data.*
+import com.mmsbackend.exception.PatientNotFoundException
+import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
+import com.mmsbackend.service.security.OneTimePasscodeAuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,14 +12,14 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api")
 class AuthController(
-    val authService: AuthService
+    val authService: AuthService,
+    val oneTimePasscodeAuthService: OneTimePasscodeAuthService,
+    val emailService: EmailService
 ) {
 
     @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): ResponseEntity<Any> {
-
         val response = authService.authenticate(request)
-
         return if (response != null){
             ResponseEntity.ok().body(
                 LoginResponse(
@@ -46,6 +49,27 @@ class AuthController(
             ResponseEntity.ok().body("Password updated successfully.")
         } else {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed. Check your credentials and try again.")
+        }
+    }
+
+    @PostMapping("/activate")
+    fun activate(@RequestBody request: ActivateRequest): ResponseEntity<Any> {
+        return if (oneTimePasscodeAuthService.authenticateOneTimePasscode(request)) {
+            ResponseEntity.ok().body("Account activated successfully.")
+        } else{
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid one-time code.")
+        }
+    }
+
+    @PostMapping("/enter_email/{email}")
+    fun enterEmail(@PathVariable email: String): ResponseEntity<Any> {
+        return try {
+            emailService.sendActivateRecoverEmail(email)
+            ResponseEntity.ok().body("Email successfully sent.")
+        } catch (pne: PatientNotFoundException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with this email does not exist.")
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Issue sending email: ${e.message}")
         }
     }
 }

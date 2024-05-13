@@ -1,32 +1,56 @@
-/* Login.css */
+/* LoginPage.css */
 
-/* Center the login container */
-.login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
+.login-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f8ff; /* Light blue background */
+}
 
-  /* Header styles */
-  .header {
-    padding: 20px 0;
-    text-align: center;
-  }
+.header {
+  margin-bottom: 2rem;
+}
 
-  .header-title {
-    color: #06B4FF;
-    font-weight: bold;
-  }
+.header-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #3fb1de; /* Light blue header title */
+}
 
-  /* Login content styles */
-  .login-content {
-    margin-top: 20px;
-    text-align: center;
-  }
+.login-content {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .login-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
+.login-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #3fb1de; /* Light blue login title */
+  margin-bottom: 1.5rem;
+}
+
+.login-form-container {
+  width: 100%;
+}
+
+.footer {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #3fb1de; /* Light blue footer text */
+}
+
+.footer-text {
+  text-align: center;
+}

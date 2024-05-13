@@ -11,7 +11,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+
     properties:
       hibernate:
         show_sql: true
@@ -21,12 +22,27 @@ spring:
       max-file-size: 250MB
       max-request-size: 250MB
 
+  mail:
+    host: smtp.office365.com # Depends on Clinic email
+    port: 587
+    username: # Get from env var!
+    password: # Get from env var!
+    properties:
+      mail:
+        protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
 jwt:
 #  key: ${JWT_KEY}
-# Create a key as an environment variable!
+# Create a key as an environment variable
   key: "Secret key - a_very_very_very_very_very_very_very_very_very_secret_key"
-  access-token-expiration: 3600000
-  refresh-token-expiration: 86400000
+  access-token-expiration: 3_600_000
+  refresh-token-expiration: 86_400_000
 
 admin:
 # Store these on the server!
@@ -42,3 +58,7 @@ server:
     key-alias: springboot
     key-password: password
   port: 8080
+
+passcode:
+  passcode_length: 10
+  passcode_expiry: 3_600_000
