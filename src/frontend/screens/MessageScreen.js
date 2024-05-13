@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,17 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Linking
 } from "react-native";
 import MessageCard from "../components/MessageCard";
 import * as Notifications from "expo-notifications";
+import { useResource } from "../utils/useResourceByUser";
 
-const MessageScreen = () => {
+const MessageScreen = ( { route }) => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
+  const userId = route.params.userId;
+  const resource = useResource(userId);
+
   const messages = [
     {
       sender: "Dr. Smith",
@@ -22,16 +27,6 @@ const MessageScreen = () => {
       sender: "Nurse Olivia",
       message: "Please remember to take your medication.",
       time: "11:15 AM",
-    },
-    {
-      sender: "Dr. Lee",
-      message: "Your appointment is confirmed for next week.",
-      time: "2:45 PM",
-    },
-    {
-      sender: "Clinic Admin",
-      message: "We have updated your insurance information.",
-      time: "5:20 PM",
     },
   ];
 
@@ -62,6 +57,10 @@ const MessageScreen = () => {
     );
   };
 
+  const handleLinkPress = (link) => {
+    Linking.openURL(link);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -74,11 +73,17 @@ const MessageScreen = () => {
             onPress={() => handleMessagePress(message)}
           />
         ))}
+        {resource.map((item, index) => (
+          <MessageCard
+            key={`resource-${index}`}
+            sender="Resource"
+            message={item.text}
+            time=""
+            link={item.link}
+          />
+        ))}
       </ScrollView>
-      <TouchableOpacity
-        style={styles.notificationButton}
-        onPress={enableNotifications}
-      >
+      <TouchableOpacity style={styles.notificationButton} onPress={enableNotifications}>
         <Text style={styles.notificationButtonText}>Enable Notifications</Text>
       </TouchableOpacity>
     </View>

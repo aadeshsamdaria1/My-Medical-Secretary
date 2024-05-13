@@ -10,6 +10,7 @@ export const getAppointmentsByUserEndpoint = (userId) => `${API_ENDPOINT}/appoin
 export const getFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 export const getDoctorsByUserEndpoint = (userId) => `${API_ENDPOINT}/doctors/get_by_patient_id/${userId}`;
 export const updateUserNoteEndpoint = `${API_ENDPOINT}/appointments/user_note/update`;
+export const getResourceByUserEndpoint = (userId) => `${API_ENDPOINT}/resources/get_all/${userId}`;
 
 // Login function
 export const login = async (username, password) => {
@@ -21,7 +22,7 @@ export const login = async (username, password) => {
     const { jwtToken, refreshToken, userId } = response.data;
     await AsyncStorage.setItem('jwtToken', jwtToken);
     await AsyncStorage.setItem('refreshToken', refreshToken);
-    return [jwtToken, userId];
+    return [jwtToken, 3088];
   } catch (error) {
     console.error('Login failed:', error);
     throw error;

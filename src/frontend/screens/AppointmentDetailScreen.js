@@ -254,8 +254,8 @@ const styles = StyleSheet.create({
   },
   reminderText: {
     fontSize: 16,
-    marginLeft: 8,
     fontWeight: "600",
+    marginHorizontal: 8,
   },
 
   shareButton: {

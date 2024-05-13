@@ -1,18 +1,62 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Linking } from "react-native";
 
-const MessageCard = ({ sender, message, time, onPress }) => {
+const MAX_MESSAGE_LENGTH = 100;
+
+const MessageCard = ({ sender, message, time, link, onPress }) => {
+  const truncatedMessage = message.length > MAX_MESSAGE_LENGTH
+    ? `${message.slice(0, MAX_MESSAGE_LENGTH)}...`
+    : message;
+
+  const handleCardPress = () => {
+    if (onPress) {
+      onPress();
+    }
+
+    const formattedLink = link && link.startsWith("http") ? link : `https://${link}`;
+
+    const alertButtons = [
+      {
+        text: "Close",
+        style: "cancel",
+      },
+    ];
+
+    if (link) {
+      alertButtons.push({
+        text: "Open Link",
+        onPress: async () => {
+          try {
+            await Linking.openURL(formattedLink);
+          } catch (error) {
+            Alert.alert("Error", "Unable to open the link. Please check if you have a compatible app installed.");
+          }
+        },
+      });
+    }
+
+    Alert.alert(
+      sender,
+      link ? `${message}\n` : message,
+      alertButtons,
+      { cancelable: true }
+    );
+  };
+
   return (
-    <TouchableOpacity style={styles.messageCard} onPress={onPress}>
+    <TouchableOpacity style={styles.messageCard} onPress={handleCardPress}>
       <View style={styles.cardHeader}>
         <View style={styles.senderContainer}>
           <Text style={styles.senderText}>{sender}</Text>
         </View>
-        <View style={styles.senderContainer}>
-          <Text style={styles.timeText}>{time}</Text>
-        </View>
+        {time && (
+          <View style={styles.senderContainer}>
+            <Text style={styles.timeText}>{time}</Text>
+          </View>
+        )}
       </View>
-      <Text style={styles.messageText}>{message}</Text>
+      <Text style={styles.messageText}>{truncatedMessage}</Text>
+      {link && <Text style={styles.linkText}>{link}</Text>}
     </TouchableOpacity>
   );
 };
@@ -20,10 +64,10 @@ const MessageCard = ({ sender, message, time, onPress }) => {
 const styles = StyleSheet.create({
   messageCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 16,
     marginVertical: 8,
-    marginHorizontal: 8,
+    marginHorizontal: 16,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -37,7 +81,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
   },
   senderContainer: {
     flexDirection: "row",
@@ -56,6 +99,11 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 16,
     color: "#000",
+  },
+  linkText: {
+    fontSize: 16,
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });
 
