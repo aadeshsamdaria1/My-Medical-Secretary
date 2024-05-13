@@ -3,7 +3,6 @@ package com.mmsbackend.service
 import com.google.firebase.messaging.*
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
-import com.google.gson.GsonBuilder
 import com.mmsbackend.data.NotificationRequest
 import java.util.concurrent.ExecutionException
 
@@ -15,12 +14,9 @@ class NotificationService (val userEntityRepository: UserEntityRepository) {
     }
 
     @Throws(InterruptedException::class, ExecutionException::class)
-    fun sendMessageToToken(request: NotificationRequest) {
+    fun sendMessageToToken(request: NotificationRequest): String {
         val message = preconfigureMessageToToken(request)
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val jsonOutput = gson.toJson(message)
-        val response = sendAndGetResponse(message)
-        println("Sent message to token. Device token: ${request.deviceToken}, $response msg $jsonOutput")
+        return sendAndGetResponse(message)
     }
 
     @Throws(InterruptedException::class, ExecutionException::class)

@@ -24,7 +24,6 @@ class FirebaseConfig(val notificationProperties: NotificationProperties) {
 
              if (FirebaseApp.getApps().isEmpty()) {
                  FirebaseApp.initializeApp(options)
-                 println("Firebase application initialized") // TESTING ONLY
              }
          } catch (e: IOException) {
              throw RuntimeException("Error initializing Firebase", e)
