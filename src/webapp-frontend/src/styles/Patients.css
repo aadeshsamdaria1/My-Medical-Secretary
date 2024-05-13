@@ -126,7 +126,7 @@ body {
 .patients-table th {
   position: sticky;
   top: 0;
-  z-index: 10;
+  /*z-index: 10;*/
 }
 
 .patients-table tbody tr {

@@ -11,6 +11,8 @@ import {
   getAppointmentByPatientId,
 } from "../utils/patientsAPI";
 
+import { dummyResources } from "./DummyResources";
+
 function Patients() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
@@ -91,24 +93,7 @@ function Patients() {
           )
         : a.patientId - b.patientId
     );
-
-    const dummyResources = [
-      {
-        id: 1,
-        text: "Resource 1",
-        link: "https://example.com/resource1"
-      },
-      {
-        id: 2,
-        text: "Resource 2",
-        link: "https://example.com/resource2"
-      },
-      {
-        id: 3,
-        text: "Resource 3",
-        link: "https://example.com/resource3"
-      }
-    ];
+    
 
   return (
     <div>
@@ -150,6 +135,7 @@ function Patients() {
         <ResourceViewerPopup
           resources={dummyResources} // TODO fetch resources
           onClose={handleCloseResourceViewer}
+          selectedPatient={selectedPatient}
         />
       )}
     </div>
