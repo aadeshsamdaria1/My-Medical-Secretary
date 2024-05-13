@@ -31,4 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json
+#/src/main/resources/me-wombat-f0812-firebase-adminsdk-w8c75-f63d2eef5c.json
