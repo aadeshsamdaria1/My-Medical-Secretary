@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import "../styles/ResourceViewer.css";
 
 function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
-    const [checkedResources, setCheckedResources] = useState([]);
+  const [checkedResources, setCheckedResources] = useState([]);
+  const [editingResourceId, setEditingResourceId] = useState(null);
 
-    useEffect(() => {
-        const initialCheckedResources = resources.filter(resource =>
-          resource.patientIds.includes(selectedPatient.patientId)
-        ).map(resource => resource.id);
-        setCheckedResources(initialCheckedResources);
-      }, [resources, selectedPatient.patientId]);
+  useEffect(() => {
+    // Filter resources associated with the selected patient and set them as checked initially
+    const initialCheckedResources = resources
+      .filter((resource) => resource.patientIds.includes(selectedPatient.patientId))
+      .map((resource) => resource.id);
+    setCheckedResources(initialCheckedResources);
+  }, [resources, selectedPatient.patientId]);
 
   const handleCheckResource = (resourceId) => {
     if (checkedResources.includes(resourceId)) {
@@ -32,8 +34,27 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
   };
 
   const handleEditResource = (resourceId) => {
-    // TODO: Implement editing resource
-    console.log("Edit resource:", resourceId);
+    setEditingResourceId(resourceId);
+  };
+
+  const handleSaveResource = (resourceId) => {
+    // TODO: Implement saving resource changes
+    console.log("Save resource changes:", resourceId);
+    setEditingResourceId(null); // Reset editing state
+  };
+
+  const handleInputChange = (resourceId, field, value) => {
+    // Find the edited resource in the resources array and update its corresponding field
+    const updatedResources = resources.map((resource) => {
+      if (resource.id === resourceId) {
+        return {
+          ...resource,
+          [field]: value,
+        };
+      }
+      return resource;
+    });
+    // will need to refetch resources here
   };
 
   const handleDeleteResource = (resourceId) => {
@@ -65,8 +86,28 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
               {resources.map((resource) => (
                 <tr key={resource.id}>
                   <td>{resource.id}</td>
-                  <td>{resource.text}</td>
-                  <td>{resource.link}</td>
+                  <td>
+                    {editingResourceId === resource.id ? (
+                      <input
+                        type="text"
+                        value={resource.text}
+                        onChange={(e) => handleInputChange(resource.id, "text", e.target.value)}
+                      />
+                    ) : (
+                      resource.text
+                    )}
+                  </td>
+                  <td>
+                    {editingResourceId === resource.id ? (
+                      <input
+                        type="text"
+                        value={resource.link}
+                        onChange={(e) => handleInputChange(resource.id, "link", e.target.value)}
+                      />
+                    ) : (
+                      resource.link
+                    )}
+                  </td>
                   <td>
                     <input
                       type="checkbox"
@@ -75,9 +116,15 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
                     />
                   </td>
                   <td className="action-buttons">
-                    <button className="edit-button" onClick={() => handleEditResource(resource.id)}>
-                      Edit
-                    </button>
+                    {editingResourceId === resource.id ? (
+                      <button className="save-button" onClick={() => handleSaveResource(resource.id)}>
+                        Save
+                      </button>
+                    ) : (
+                      <button className="edit-button" onClick={() => handleEditResource(resource.id)}>
+                        Edit
+                      </button>
+                    )}
                     <button className="delete-button" onClick={() => handleDeleteResource(resource.id)}>
                       Delete
                     </button>
