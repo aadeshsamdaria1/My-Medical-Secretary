@@ -1,5 +1,6 @@
 package com.mmsbackend.service
 
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.enums.StatusType
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -89,7 +90,20 @@ class FileService(
 
         val successAppointmentIds = successfulAppointments.map {it.id}
 
+        setCancelledAppointments(successAppointmentIds.toHashSet())
+
         return Pair(failedAppointmentIds, successAppointmentIds)
+    }
+
+    private fun setCancelledAppointments(successAppointmentIds: HashSet<Int>) {
+        appointmentEntityRepository.getFutureAppointmentIds()
+            .filterNot(successAppointmentIds::contains)
+            .forEach { id ->
+                appointmentEntityRepository.findById(id).ifPresent {
+                    it.status = AppointmentStatus.CANCELLED
+                    appointmentEntityRepository.save(it)
+                }
+            }
     }
 
     companion object {

@@ -164,6 +164,7 @@ class FileServiceTest {
 
             every { appointmentEntityRepository.save( any() ) } answers { invocation.args[0] as AppointmentEntity }
             every { encoder.encode(any()) } returns "An encoded password"
+            every { appointmentEntityRepository.getFutureAppointmentIds() } returns listOf(appointmentId1)
         }
 
         @Test
