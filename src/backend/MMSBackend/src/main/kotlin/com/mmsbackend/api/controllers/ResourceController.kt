@@ -38,11 +38,12 @@ class ResourceController (
         return resourceEntityRepository.findById(id).getOrNull()
     }
 
-    @GetMapping("/get_all/{userId}")
+    @GetMapping("/get_all")
+    fun getAllResources(): List<ResourceEntity>? = resourceEntityRepository.findAll().toSet().toList()
+
+    @GetMapping("/get_all_by_id/{userId}")
     fun getAllResourcesForUser(@PathVariable userId: Int): List<ResourceEntity>? {
-
         val userDetails = securityContextHolderRetriever.getSecurityContext()
-
         return if (generalValidation.isAdminOrSpecificPatientId(userDetails, userId)) {
             getAllResourcesById(userId)
         } else {

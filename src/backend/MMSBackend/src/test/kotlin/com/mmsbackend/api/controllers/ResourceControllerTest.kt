@@ -213,6 +213,25 @@ class ResourceControllerTest {
     }
 
     @Test
+    fun `Get all resources`() {
+
+        val resourceList = listOf(
+            resource2,
+            resource3
+        )
+
+        every { resourceEntityRepository.findAll() } returns resourceList
+
+        val response = resourceController.getAllResources()
+        val expectedResponse2 = listOf(
+            resource2,
+            resource3
+        )
+
+        assertEquals(expectedResponse2, response)
+    }
+
+    @Test
     fun `Create a new resource from a valid DTO`() {
         val savedPatientIds = listOf(
             patientId,

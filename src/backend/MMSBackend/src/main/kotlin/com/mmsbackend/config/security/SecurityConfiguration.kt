@@ -62,7 +62,8 @@ class SecurityConfiguration(
                     .requestMatchers(
                         "/api/users/get_patient/**",
                         "/api/resources/get/**",
-                        "/api/resources/get_all/**",
+                        "/api/resources/get_all_by_id/**",
+                        "/api/resources/get_all",
                         "/api/facilities/get/**",
                         "/api/facilities/get_all",
                         "/api/facilities/get_all_by_type/**",
