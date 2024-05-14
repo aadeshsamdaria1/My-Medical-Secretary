@@ -2,6 +2,8 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.ResourceValidation
+import com.mmsbackend.data.AddPatientToResourceRequest
+import com.mmsbackend.data.RemovePatientFromResourceRequest
 import com.mmsbackend.dto.user.ResourceDTO
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.entity.PatientResourceEntity
@@ -213,6 +215,25 @@ class ResourceControllerTest {
     }
 
     @Test
+    fun `Get all resources`() {
+
+        val resourceList = listOf(
+            resource2,
+            resource3
+        )
+
+        every { resourceEntityRepository.findAll() } returns resourceList
+
+        val response = resourceController.getAllResources()
+        val expectedResponse2 = listOf(
+            resource2,
+            resource3
+        )
+
+        assertEquals(expectedResponse2, response)
+    }
+
+    @Test
     fun `Create a new resource from a valid DTO`() {
         val savedPatientIds = listOf(
             patientId,
@@ -222,6 +243,10 @@ class ResourceControllerTest {
         every { resourceDTO.patientIds } returns savedPatientIds
         every { patientResourceEntityRepository.save(patientResource1) } returns patientResource1
         every { patientResourceEntityRepository.save(patientResource2) } returns patientResource2
+        every { userEntityRepository.findByPatientId(patientId) } returns patient1
+        every { userEntityRepository.findByPatientId(patientId2) } returns patient2
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns emptyList()
+        every { patientResourceEntityRepository.findAllByPatientId(patientId2) } returns emptyList()
 
         val response = resourceController.createResource(resourceDTO)
         val expectedResponse = ResponseEntity.ok("Successfully added new resource with ID: $resourceId " +
@@ -231,7 +256,7 @@ class ResourceControllerTest {
     }
 
     @Test
-    fun `Create a new resource to delete patient`() {
+    fun `Only create resources for patients that exist`() {
         val savedPatientIds = listOf(
             patientId,
             patientId2
@@ -241,6 +266,9 @@ class ResourceControllerTest {
         every { patientResourceEntityRepository.save(patientResource1) } returns patientResource1
         every { patientResourceEntityRepository.save(patientResource2) } returns patientResource2
         every { userEntityRepository.findByPatientId(patientId) } returns null
+        every { userEntityRepository.findByPatientId(patientId2) } returns patient2
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns emptyList()
+        every { patientResourceEntityRepository.findAllByPatientId(patientId2) } returns emptyList()
 
         val savedPatientIds2 = listOf(
             patientId2
@@ -279,4 +307,69 @@ class ResourceControllerTest {
         assertEquals(expectedResponse, response)
     }
 
+    @Test
+    fun `Successfully add patient to resource`() {
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns emptyList()
+        val request = AddPatientToResourceRequest(
+            patientId = patientId,
+            resourceId = resourceId
+        )
+        val response = resourceController.addPatientToResource(request)
+        val expectedResponse = ResponseEntity.ok("Successfully added patient " +
+                "$patientId to resource $resourceId.")
+        assertEquals(response, expectedResponse)
+    }
+
+    @Test
+    fun `Fail to add patient to resource if patient does not exist`() {
+        every { userEntityRepository.findByPatientId(patientId) } returns null
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns emptyList()
+        val request = AddPatientToResourceRequest(
+            patientId = patientId,
+            resourceId = resourceId
+        )
+        val response = resourceController.addPatientToResource(request)
+        val expectedResponse = ResponseEntity.badRequest().body("Patient does not exist.")
+        assertEquals(response, expectedResponse)
+    }
+
+    @Test
+    fun `Fail to add patient to resource if resource does not exist`() {
+        every { resourceEntityRepository.findById(resourceId) } returns Optional.empty()
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns emptyList()
+        val request = AddPatientToResourceRequest(
+            patientId = patientId,
+            resourceId = resourceId
+        )
+        val response = resourceController.addPatientToResource(request)
+        val expectedResponse = ResponseEntity.badRequest().body("Resource does not exist.")
+        assertEquals(response, expectedResponse)
+    }
+
+    @Test
+    fun `Successfully remove patient from resource`() {
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns listOf(patientResource1)
+        justRun { patientResourceEntityRepository.deleteById(patientResourceId) }
+        val request = RemovePatientFromResourceRequest(
+            patientId = patientId,
+            resourceId = resourceId
+        )
+        val response = resourceController.removePatientFrom(request)
+        val expectedResponse = ResponseEntity.ok("Successfully removed patient " +
+                "${request.patientId} from resource ${request.resourceId}.")
+        assertEquals(response, expectedResponse)
+    }
+
+    @Test
+    fun `Successfully respond if patient already remove from resource`() {
+        every { patientResourceEntityRepository.findAllByPatientId(patientId) } returns emptyList()
+        val request = RemovePatientFromResourceRequest(
+            patientId = patientId,
+            resourceId = resourceId
+        )
+        val response = resourceController.removePatientFrom(request)
+        val expectedResponse = ResponseEntity.ok("Successfully removed patient " +
+                "${request.patientId} from resource ${request.resourceId}.")
+        assertEquals(response, expectedResponse)
+    }
 }
