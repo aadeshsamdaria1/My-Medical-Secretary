@@ -47,12 +47,12 @@ class UserControllerTest {
     @MockK
     private lateinit var adminEntity: AdminEntity
 
-    @MockK("\${admin.default-username}")
     private lateinit var rootAdminUsername: String
 
     @BeforeEach
     fun setup() {
         userValidation = UserValidation()
+        rootAdminUsername = "rootAdmin"
         userController = UserController(
                 userEntityRepository = userEntityRepository,
                 userValidation = userValidation,
@@ -162,6 +162,7 @@ class UserControllerTest {
             every { adminEntity.username } returns username
             every { userEntityRepository.findByUsername(username) } returns adminEntity
             every { userMapper.updateExistingAdmin(adminEntity, adminEntity) } returns adminEntity
+            every { userEntityRepository.findByMmsId(mmsId) } returns adminEntity
             justRun { userEntityRepository.deleteByMmsId(mmsId) }
         }
 
