@@ -55,13 +55,7 @@ admin:
   default-password: "password"
 
 server:
-  ssl:
-    key-store: classpath:springboot.p12
-    key-store-password: password
-    key-store-type: pkcs12
-    key-alias: springboot
-    key-password: password
-  port: 8080
+  forward-headers-strategy: framework
 
 passcode:
   passcode_length: 10
