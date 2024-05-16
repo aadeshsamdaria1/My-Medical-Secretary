@@ -39,7 +39,6 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
 
   const handleCheckResource = async (resourceId, checked) => {
 
-    console.log("resource check: ", resourceId);
     if (checked) {
       await addPatientToResource(resourceId, selectedPatientId);
     } else {
@@ -53,19 +52,13 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
     setEditingResource(tempresource);
   };
 
-  useEffect(() => {
-    console.log("After update: editing resource", editingResource);
-  }, [editingResource]);
 
   const handleSaveResource = async (resourceId) => {
-    // TODO: Implement saving resource changes
-    console.log("Save resource changes:", resourceId);
-    console.log(editingResource)
+
     if (resourceId === editingResource.id) {
       deleteResource(resourceId);
       const resourceWithoutId = { ...editingResource };
       delete resourceWithoutId.id;
-      console.log(resourceWithoutId);
       await addResource(resourceWithoutId);
       const fetchedResources = await getAllResources();
       setResources(fetchedResources);
@@ -120,7 +113,6 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
         link:newResource.link,
         patientIds: newResource.assignToCurrentPatient ? [selectedPatientId] : []
       }
-      console.log(selectedPatientId)
       await addResource(resource);
       setNewResource({
         text:'',
@@ -153,6 +145,7 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
                   <td>
                     {editingResource.id && editingResource.id === resource.resource.id ? (
                       <input
+                        className="edit-input"
                         type="text"
                         value={editingResource.text}
                         onChange={(e) => handleEditingResourceInputChange("text", e.target.value)}
@@ -164,6 +157,7 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
                   <td>
                     {editingResource.id && editingResource.id === resource.resource.id ? (
                       <input
+                        className="edit-input"
                         type="text"
                         value={editingResource.link}
                         onChange={(e) => handleEditingResourceInputChange("link", e.target.value)}
