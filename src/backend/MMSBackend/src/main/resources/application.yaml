@@ -6,8 +6,8 @@ spring:
       url: jdbc:mysql://docker-mysql:3306/my_medical_secretary?createDatabaseIfNotExist=true
 #      url: jdbc:mysql://localhost:3306/my_medical_secretary?createDatabaseIfNotExist=true
       username: root
-#      password: root
-      password: password
+      password: root
+#      password: password
 
 #      username: mmsadmin
 #      password: Password123!
