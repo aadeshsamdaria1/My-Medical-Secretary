@@ -17,6 +17,11 @@ class AuthController(
     val emailService: EmailService
 ) {
 
+    @GetMapping("/health")
+    fun getResource(): String {
+        return "Success"
+    }
+
     @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): ResponseEntity<Any> {
         val response = authService.authenticate(request)
