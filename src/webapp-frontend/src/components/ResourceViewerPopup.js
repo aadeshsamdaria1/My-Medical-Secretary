@@ -10,7 +10,8 @@ import {
 
 function ResourceViewerPopup({onClose, selectedPatientId }) {
   const [resources, setResources] = useState([])
-  const [editingResourceId, setEditingResourceId] = useState({
+  const [editingResource, setEditingResource] = useState({
+    id:null,
     text:'',
     link:'',
     patientIds: []
@@ -47,29 +48,39 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
     fetchAllResources();
   };
 
-  const handleEditResource = (resourceId) => {
-    setEditingResourceId(resourceId);
+  const handleEditResource =  async (resource, patientIds) => {
+    const tempresource = { ...resource, patientIds: patientIds};
+    setEditingResource(tempresource);
   };
 
-  const handleSaveResource = (resourceId) => {
+  useEffect(() => {
+    console.log("After update: editing resource", editingResource);
+  }, [editingResource]);
+
+  const handleSaveResource = async (resourceId) => {
     // TODO: Implement saving resource changes
     console.log("Save resource changes:", resourceId);
-    setEditingResourceId(null); // Reset editing state
+    console.log(editingResource)
+    if (resourceId === editingResource.id) {
+      deleteResource(resourceId);
+      const resourceWithoutId = { ...editingResource };
+      delete resourceWithoutId.id;
+      console.log(resourceWithoutId);
+      await addResource(resourceWithoutId);
+      const fetchedResources = await getAllResources();
+      setResources(fetchedResources);
+    } 
+    setEditingResource(prevState => ({
+      ...prevState,
+      id: null
+    }));
   };
 
-  const handleInputChange = (resourceId, field, value) => {
-    // Find the edited resource in the resources array and update its corresponding field
-    const updatedResources = resources.map((resource) => {
-      if (resource.id === resourceId) {
-        return {
-          ...resource,
-          [field]: value,
-        };
-      }
-      return resource;
-    });
-    console.log(updatedResources);
-    // will need to refetch resources here
+  const handleEditingResourceInputChange = (name, value) => {
+    setEditingResource(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   const handleNewResourceInputChange = (event) => {
@@ -92,6 +103,13 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
       }
     }
   };
+  
+  const handleCancelEdit = () => {
+    setEditingResource(prevState => ({
+      ...prevState,
+      id: null
+    }));
+  }
 
 
   const handleAddNewResource = async () => {
@@ -133,22 +151,22 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
               {resources.map((resource) => (
                 <tr key={resource.resource.id}>
                   <td>
-                    {editingResourceId === resource.resource.id ? (
+                    {editingResource.id && editingResource.id === resource.resource.id ? (
                       <input
                         type="text"
-                        value={resource.resource.text}
-                        onChange={(e) => handleInputChange(resource.resource.id , "text", e.target.value)}
+                        value={editingResource.text}
+                        onChange={(e) => handleEditingResourceInputChange("text", e.target.value)}
                       />
                     ) : (
                       resource.resource.text
                     )}
                   </td>
                   <td>
-                    {editingResourceId === resource.resource.id ? (
+                    {editingResource.id && editingResource.id === resource.resource.id ? (
                       <input
                         type="text"
-                        value={resource.resource.link}
-                        onChange={(e) => handleInputChange(resource.resource.id , "link", e.target.value)}
+                        value={editingResource.link}
+                        onChange={(e) => handleEditingResourceInputChange("link", e.target.value)}
                       />
                     ) : (
                       resource.resource.link
@@ -160,21 +178,29 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
                       type="checkbox"
                       checked={resource.patientIds.includes(selectedPatientId)}
                       onChange={(e) => handleCheckResource(resource.resource.id, e.target.checked)}
+                      disabled={editingResource.id && editingResource.id === resource.resource.id}
                     />
                   </td>
                   <td className="action-buttons">
-                    {editingResourceId === resource.resource.id ? (
-                      <button className="save-button" onClick={() => handleSaveResource(resource.resource.id)}>
-                        Save
-                      </button>
+                    {editingResource.id && editingResource.id === resource.resource.id ? (
+                      <>
+                        <button className="save-button" onClick={() => handleSaveResource(resource.resource.id)}>
+                          Save
+                        </button>
+                        <button className="cancel-button" onClick={() => handleCancelEdit()}>
+                          Cancel
+                        </button>
+                      </>
                     ) : (
-                      <button className="edit-button" onClick={() => handleEditResource(resource.resource.id)}>
-                        Edit
-                      </button>
+                      <>
+                        <button className="edit-button" onClick={() => handleEditResource(resource.resource, resource.patientIds)}>
+                          Edit
+                        </button>
+                        <button className="delete-button" onClick={() => handleDeleteResource(resource.resource.id)}>
+                          Delete
+                        </button>
+                      </>
                     )}
-                    <button className="delete-button" onClick={() => handleDeleteResource(resource.resource.id)}>
-                      Delete
-                    </button>
                   </td>
                 </tr>
               ))}
