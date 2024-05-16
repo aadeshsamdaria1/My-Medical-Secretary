@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ResourceViewer.css";
+import { getAllResources } from "../utils/resourcesAPI";
 
 function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
   const [checkedResources, setCheckedResources] = useState([]);
@@ -62,9 +63,11 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
     console.log("Delete resource:", resourceId);
   };
 
-  const handleAddNewResource = () => {
+  const handleAddNewResource = async () => {
     // TODO: Implement adding new resource
     console.log("Adding new resource");
+    const fetchedResources = await getAllResources();
+    console.log(fetchedResources)
   };
 
   return (

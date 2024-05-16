@@ -20,6 +20,8 @@ export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
 export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
 export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/${userId}`;
 
+export const getAllResourcesEndpoint = `${API_ENDPOINT}/resources/get_all`;
+
 
 
 // Login function
