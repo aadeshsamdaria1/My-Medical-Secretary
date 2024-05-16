@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const API_ENDPOINT = 'https://medsecapi.com/api';
+export const API_ENDPOINT = 'https://medsecapi.com:444/api';
+
 // API endpoints
 export const loginEndpoint = `${API_ENDPOINT}/login`;
 export const refreshTokenEndpoint = `${API_ENDPOINT}/refresh`;

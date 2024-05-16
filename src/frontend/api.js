@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const API_ENDPOINT = 'https://medsecapi.com/api';
+export const API_ENDPOINT = 'https://medsecapi.com:444/api';
 
 // API endpoints
 export const getUserEndpoint = (userId) => `${API_ENDPOINT}/users/get_patient/${userId}`;
