@@ -10,4 +10,7 @@ interface PatientResourceEntityRepository: JpaRepository<PatientResourceEntity, 
 
     @Query("SELECT pr FROM PatientResourceEntity pr WHERE pr.patient.patientId = :patientId")
     fun findAllByPatientId(patientId: Int): List<PatientResourceEntity>
+
+    @Query("SELECT pr.patient.patientId FROM PatientResourceEntity pr WHERE pr.resource.id = :resourceId")
+    fun findAllPatientIdsByResourceId(resourceId: Int): List<Int>
 }
