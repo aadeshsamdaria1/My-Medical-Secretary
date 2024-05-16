@@ -4,6 +4,7 @@ import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.ResourceValidation
 import com.mmsbackend.data.AddPatientToResourceRequest
 import com.mmsbackend.data.RemovePatientFromResourceRequest
+import com.mmsbackend.data.ResourceWithPatientIdResponse
 import com.mmsbackend.dto.user.ResourceDTO
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.entity.PatientResourceEntity
@@ -219,15 +220,17 @@ class ResourceControllerTest {
 
         val resourceList = listOf(
             resource2,
-            resource3
         )
 
         every { resourceEntityRepository.findAll() } returns resourceList
+        every { patientResourceEntityRepository.findAllPatientIdsByResourceId(resourceId2) } returns listOf(patientId, patientId2)
 
         val response = resourceController.getAllResources()
         val expectedResponse2 = listOf(
-            resource2,
-            resource3
+            ResourceWithPatientIdResponse(
+                listOf(patientId, patientId2),
+                resource2
+            )
         )
 
         assertEquals(expectedResponse2, response)

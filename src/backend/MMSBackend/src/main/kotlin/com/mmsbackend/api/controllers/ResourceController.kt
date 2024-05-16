@@ -4,6 +4,7 @@ import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.ResourceValidation
 import com.mmsbackend.data.AddPatientToResourceRequest
 import com.mmsbackend.data.RemovePatientFromResourceRequest
+import com.mmsbackend.data.ResourceWithPatientIdResponse
 import com.mmsbackend.dto.user.ResourceDTO
 import com.mmsbackend.jpa.entity.PatientResourceEntity
 import com.mmsbackend.jpa.entity.ResourceEntity
@@ -42,7 +43,16 @@ class ResourceController (
     }
 
     @GetMapping("/get_all")
-    fun getAllResources(): List<ResourceEntity>? = resourceEntityRepository.findAll().toSet().toList()
+    fun getAllResources(): List<ResourceWithPatientIdResponse> = resourceEntityRepository.findAll()
+        .toSet()
+        .toList()
+        .map {resource ->
+            val patientIds = patientResourceEntityRepository.findAllPatientIdsByResourceId(resource.id)
+            ResourceWithPatientIdResponse(
+                patientIds = patientIds,
+                resource = resource
+            )
+        }
 
     @GetMapping("/get_all_by_id/{userId}")
     fun getAllResourcesForUser(@PathVariable userId: Int): List<ResourceEntity>? {
