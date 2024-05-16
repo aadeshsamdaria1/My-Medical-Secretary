@@ -7,6 +7,11 @@ export default function NavBar() {
   const handleLogout = () => {
     // Perform any necessary logout logic here
     // For example, clear user session or token
+    // TODO Clear logout 
+    localStorage.setItem('jwtToken', null);
+    localStorage.setItem('refreshToken', null);
+    localStorage.setItem('userId', null)
+
 
     // Redirect to the login page
     navigate('/login');
