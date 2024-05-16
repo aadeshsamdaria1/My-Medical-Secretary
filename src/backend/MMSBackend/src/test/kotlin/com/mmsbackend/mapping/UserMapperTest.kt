@@ -7,7 +7,7 @@ import com.mmsbackend.exception.ColumnError
 import com.mmsbackend.exception.IdException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
-import com.mmsbackend.service.security.PasswordService
+import com.mmsbackend.service.security.UsernameService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -31,7 +31,7 @@ class UserMapperTest {
     private lateinit var userMapper: UserMapper
 
     @MockK
-    private lateinit var passwordService: PasswordService
+    private lateinit var usernameService: UsernameService
 
     @MockK
     private lateinit var encoder: PasswordEncoder
@@ -41,9 +41,9 @@ class UserMapperTest {
 
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper(passwordService, encoder)
-        every { passwordService.generateSecurePassword() } returns password
-        every { passwordService.generateUsernameFromName(any()) } returns username
+        every { encoder.encode(any() ) } returns password
+        userMapper = UserMapper(usernameService, encoder)
+        every { usernameService.generateUsernameFromName(any(), any()) } returns username
     }
 
     @Nested
@@ -95,8 +95,6 @@ class UserMapperTest {
 
         @Test
         fun `Map a patient DTO to user entity`() {
-            every { passwordService.generateSecurePassword() } returns temporaryPassword
-            every { encoder.encode(any() ) } returns password
 
             val patient = userMapper.mapPatientDTO(patientDTO)
             val mappedPatient = PatientEntity(
@@ -156,9 +154,6 @@ class UserMapperTest {
         @Test
         fun `Map a patient from HTML`() {
 
-            every { passwordService.generateSecurePassword() } returns temporaryPassword
-            every { encoder.encode(any() ) } returns password
-
             val rowString = listOf(
                 "Correct email", "Correct first name", "Correct middle name",
                 "Correct surname", "1/08/1965", "Correct address", "", "Correct suburb",
@@ -176,15 +171,12 @@ class UserMapperTest {
                 "State" to 8,
                 "Id" to 9
             )
-            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols)
+            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>())
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(Pair(StatusType.SUCCESS, expectedPatient))
         }
 
         @Test
         fun `Map a patient from HTML even if optional col is missing`() {
-
-            every { passwordService.generateSecurePassword() } returns temporaryPassword
-            every { encoder.encode(any() ) } returns password
 
             val rowString = listOf(
                 "Correct email", "Correct first name", "Correct middle name",
@@ -214,7 +206,7 @@ class UserMapperTest {
                  accountActive = false,
                  oneTimePasscode = null
              )
-            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols)
+            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>())
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(Pair(StatusType.SUCCESS, expectedResult))
         }
 
@@ -237,7 +229,7 @@ class UserMapperTest {
                 "State" to 8,
                 "Id" to 9
             )
-            assertThrows<Exception> { userMapper.mapHtmlPatient(rowString, cols) }
+            assertThrows<Exception> { userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>()) }
         }
 
         @Test
@@ -259,7 +251,7 @@ class UserMapperTest {
                 "State" to 8,
                 "Id" to 9
             )
-            assertThrows<ColumnError> { userMapper.mapHtmlPatient(rowString, cols) }
+            assertThrows<ColumnError> { userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>()) }
         }
 
         @Test
@@ -281,7 +273,7 @@ class UserMapperTest {
                 "State" to 8,
                 "" to 9
             )
-            assertThrows<ColumnError> { userMapper.mapHtmlPatient(rowString, cols) }
+            assertThrows<ColumnError> { userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>()) }
         }
 
         @Test
@@ -303,7 +295,7 @@ class UserMapperTest {
                 "State" to 8,
                 "Id" to 9
             )
-            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols)
+            val mappedPatient = userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>())
             val expectedResult = Pair(StatusType.FAILURE, correctId.toString())
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(expectedResult)
         }
@@ -327,7 +319,7 @@ class UserMapperTest {
                 "State" to 8,
                 "Id" to 9
             )
-            assertThrows<IdException> { userMapper.mapHtmlPatient(rowString, cols) }
+            assertThrows<IdException> { userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>()) }
         }
         @Test
         fun `Throw exception if data array has non-integer id`() {
@@ -348,7 +340,7 @@ class UserMapperTest {
                 "State" to 8,
                 "Id" to 9
             )
-            assertThrows<IdException> { userMapper.mapHtmlPatient(rowString, cols) }
+            assertThrows<IdException> { userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>()) }
         }
     }
 
@@ -362,8 +354,6 @@ class UserMapperTest {
 
         @Test
         fun `Map Admin DTO to User Entity`() {
-            every { encoder.encode(any()) } returns password
-
             val admin = userMapper.mapAdminDTO(adminDTO)
             val expectedAdmin = AdminEntity(
                 mmsId = 0,

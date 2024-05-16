@@ -9,7 +9,7 @@ import com.mmsbackend.jpa.repository.DoctorEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import com.mmsbackend.mapping.AppointmentMapper
 import com.mmsbackend.mapping.UserMapper
-import com.mmsbackend.service.security.PasswordService
+import com.mmsbackend.service.security.UsernameService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -42,14 +42,15 @@ class FileServiceTest {
     private lateinit var appointmentEntityRepository: AppointmentEntityRepository
 
     @MockK
-    private lateinit var passwordService: PasswordService
+    private lateinit var usernameService: UsernameService
 
     @MockK
     private lateinit var encoder: PasswordEncoder
 
     @BeforeEach
     fun setup() {
-        userMapper = UserMapper(passwordService, encoder)
+        every { encoder.encode(any()) } returns "An encoded password"
+        userMapper = UserMapper(usernameService, encoder)
         appointmentMapper = AppointmentMapper(
             userEntityRepository, doctorEntityRepository
         )
@@ -82,14 +83,12 @@ class FileServiceTest {
             every { userEntityRepository.findByPatientId(patientId1) } returns null
             every { userEntityRepository.findByPatientId(patientId2) } returns null
             every { userEntityRepository.save( any() ) } answers { invocation.args[0] as PatientEntity }
-            every { passwordService.generateSecurePassword() } returns UUID.randomUUID().toString()
-            every { passwordService.generateUsernameFromName(any()) } returns UUID.randomUUID().toString()
-
+            every { usernameService.generateUsernameFromName(any(), any()) } returns UUID.randomUUID().toString()
+            every { encoder.encode(any()) } returns "An encoded password"
         }
 
         @Test
         fun `Successfully read and upload a user file`() {
-            every { encoder.encode(any()) } returns "An encoded password"
             val userIds = fileService.readAndUploadUserFile(userBytes)
             val expectedUserIds = Pair(listOf<Int>(), listOf(patientId1, patientId2))
             assertThat(userIds).isEqualTo(expectedUserIds)
@@ -102,7 +101,6 @@ class FileServiceTest {
 
         @Test
         fun `Successfully read and upload a user file but some user files are failed to be uploaded`() {
-            every { encoder.encode(any()) } returns "An encoded password"
             val userIds = fileService.readAndUploadUserFile(userBytesMissReqVal)
             val expectedUserIds = Pair(listOf(patientId1), listOf(patientId2))
             assertThat(userIds).isEqualTo(expectedUserIds)
@@ -110,7 +108,6 @@ class FileServiceTest {
 
         @Test
         fun `Successfully read and upload a user file even with missing optional col`() {
-            every { encoder.encode(any()) } returns "An encoded password"
             val userIds = fileService.readAndUploadUserFile(userBytesMissOptCol)
             val expectedUserIds = Pair(listOf<Int>(), listOf(patientId1, patientId2))
             assertThat(userIds).isEqualTo(expectedUserIds)
@@ -166,6 +163,8 @@ class FileServiceTest {
             every { doctorEntityRepository.findById(doctorId2) } returns Optional.of(doctor2)
 
             every { appointmentEntityRepository.save( any() ) } answers { invocation.args[0] as AppointmentEntity }
+            every { encoder.encode(any()) } returns "An encoded password"
+            every { appointmentEntityRepository.getFutureAppointmentIds() } returns listOf(appointmentId1)
         }
 
         @Test

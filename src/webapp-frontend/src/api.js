@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
-//export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+//export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
 // API endpoints
-
 export const loginEndpoint = `${API_ENDPOINT}/login`;
 export const refreshTokenEndpoint = `${API_ENDPOINT}/refresh`;
 
@@ -28,8 +27,6 @@ export const createResourceEndpoint = `${API_ENDPOINT}/resources/create`;
 export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
 export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
 export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
-
-
 
 // Login function
 export const login = async (username, password) => {
