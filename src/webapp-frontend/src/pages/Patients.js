@@ -11,8 +11,6 @@ import {
   getAppointmentByPatientId,
 } from "../utils/patientsAPI";
 
-import { dummyResources } from "./DummyResources";
-
 function Patients() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);

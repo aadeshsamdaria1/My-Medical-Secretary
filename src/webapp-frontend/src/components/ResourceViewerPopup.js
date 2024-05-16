@@ -10,7 +10,6 @@ import {
 
 function ResourceViewerPopup({onClose, selectedPatientId }) {
   const [resources, setResources] = useState([])
-  const [checkedResources, setCheckedResources] = useState([]);
   const [editingResourceId, setEditingResourceId] = useState({
     text:'',
     link:'',
@@ -36,33 +35,16 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
   };
 
 
-  useEffect(() => {
 
-    // Filter resources associated with the selected patient and set them as checked initially
-    const initialCheckedResources = resources
-      .filter((resource) => resource.patientIds.includes(selectedPatientId))
-      .map((resource) => resource.id);
-    setCheckedResources(initialCheckedResources);
-  }, [resources]);
+  const handleCheckResource = async (resourceId, checked) => {
 
-  const handleCheckResource = (resourceId) => {
-    if (checkedResources.includes(resourceId)) {
-      setCheckedResources(checkedResources.filter((id) => id !== resourceId));
-      RemoveResourceFromPatient(resourceId);
+    console.log("resource check: ", resourceId);
+    if (checked) {
+      await addPatientToResource(resourceId, selectedPatientId);
     } else {
-      setCheckedResources([...checkedResources, resourceId]);
-      AddResourceToPatient(resourceId);
+      await removePatientFromResource(resourceId, selectedPatientId);
     }
-  };
-
-  const AddResourceToPatient = (resourceId) => {
-    // TODO: Implement adding resource to patient
-    console.log("Add resource to patient:", resourceId);
-  };
-
-  const RemoveResourceFromPatient = (resourceId) => {
-    // TODO: Implement removing resource from patient
-    console.log("Remove resource from patient:", resourceId);
+    fetchAllResources();
   };
 
   const handleEditResource = (resourceId) => {
@@ -86,6 +68,7 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
       }
       return resource;
     });
+    console.log(updatedResources);
     // will need to refetch resources here
   };
 
@@ -112,7 +95,6 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
 
 
   const handleAddNewResource = async () => {
-    // TODO: Implement adding new resource
     console.log("Adding new resource");
     try {
       const resource = {
@@ -174,9 +156,10 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
                   </td>
                   <td>
                     <input
+                      className="checkbox"
                       type="checkbox"
-                      checked={checkedResources.includes(resource.resource.id)}
-                      onChange={() => handleCheckResource(resource.resource.id)}
+                      checked={resource.patientIds.includes(selectedPatientId)}
+                      onChange={(e) => handleCheckResource(resource.resource.id, e.target.checked)}
                     />
                   </td>
                   <td className="action-buttons">
@@ -202,21 +185,22 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
           <h3>Add New Resource</h3>
           <input 
             type="text" 
+            className="textbox"
             name="text"
-            placeholder="Resource Name" 
-            style={{width: "300px", height: "40px", "fontSize": "16px"}}
+            placeholder="Resource Text" 
             value={newResource.text}
             onChange={handleNewResourceInputChange}/>
           <input
             type="text"
+            className="textbox"
             name="link"
             placeholder="Resource Link"
-            style={{width: "300px", height: "40px", "fontSize": "16px"}}
             value={newResource.link}
             onChange={handleNewResourceInputChange}/>
           <label>
-            Assign to this patient  
+            Assign new resource to current patient  
             <input
+              className="assign-to-patient-checkbox"
               type="checkbox"
               name="assignToCurrentPatient"
               checked={newResource.assignToCurrentPatient}
