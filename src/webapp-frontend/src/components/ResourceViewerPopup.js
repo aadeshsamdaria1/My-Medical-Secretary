@@ -1,18 +1,49 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ResourceViewer.css";
-import { getAllResources } from "../utils/resourcesAPI";
+import {
+  getAllResources,
+  addResource,
+  deleteResource,
+  addPatientToResource,
+  removePatientFromResource
+} from "../utils/resourcesAPI";
 
-function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
+function ResourceViewerPopup({onClose, selectedPatientId }) {
+  const [resources, setResources] = useState([])
   const [checkedResources, setCheckedResources] = useState([]);
-  const [editingResourceId, setEditingResourceId] = useState(null);
+  const [editingResourceId, setEditingResourceId] = useState({
+    text:'',
+    link:'',
+    patientIds: []
+  });
+  const [newResource, setNewResource] = useState({
+    text:'',
+    link:'',
+    assignToCurrentPatient: false
+  });
 
   useEffect(() => {
+    fetchAllResources();
+  }, []);
+
+  const fetchAllResources = async () => {
+    try {
+      const fetchedResources = await getAllResources();
+      setResources(fetchedResources);
+    } catch (error) {
+      console.error('Failed to fetch resources:', error)
+    }
+  };
+
+
+  useEffect(() => {
+
     // Filter resources associated with the selected patient and set them as checked initially
     const initialCheckedResources = resources
-      .filter((resource) => resource.patientIds.includes(selectedPatient.patientId))
+      .filter((resource) => resource.patientIds.includes(selectedPatientId))
       .map((resource) => resource.id);
     setCheckedResources(initialCheckedResources);
-  }, [resources, selectedPatient.patientId]);
+  }, [resources]);
 
   const handleCheckResource = (resourceId) => {
     if (checkedResources.includes(resourceId)) {
@@ -58,16 +89,48 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
     // will need to refetch resources here
   };
 
-  const handleDeleteResource = (resourceId) => {
-    // TODO: Implement deleting resource
-    console.log("Delete resource:", resourceId);
+  const handleNewResourceInputChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setNewResource(prevState => ({
+      ...prevState,
+      [name]: newValue
+    }));
   };
+
+
+  const handleDeleteResource = async (resourceId) => {
+    if (resourceId) {
+      try {
+        await deleteResource(resourceId);
+        fetchAllResources();
+      } catch (error) {
+        console.error("falied to delete resource")
+      }
+    }
+  };
+
 
   const handleAddNewResource = async () => {
     // TODO: Implement adding new resource
     console.log("Adding new resource");
-    const fetchedResources = await getAllResources();
-    console.log(fetchedResources)
+    try {
+      const resource = {
+        text:newResource.text,
+        link:newResource.link,
+        patientIds: newResource.assignToCurrentPatient ? [selectedPatientId] : []
+      }
+      console.log(selectedPatientId)
+      await addResource(resource);
+      setNewResource({
+        text:'',
+        link:'',
+        assignToCurrentPatient:false
+      })
+      await fetchAllResources();
+    } catch (error) {
+      console.error("failed to save new resource:", error);
+    }
   };
 
   return (
@@ -78,8 +141,7 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
           <table className="resource-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Name</th>
+                <th>Text</th>
                 <th>Link</th>
                 <th>Available to patient</th>
                 <th>Actions</th>
@@ -87,48 +149,47 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
             </thead>
             <tbody>
               {resources.map((resource) => (
-                <tr key={resource.id}>
-                  <td>{resource.id}</td>
+                <tr key={resource.resource.id}>
                   <td>
-                    {editingResourceId === resource.id ? (
+                    {editingResourceId === resource.resource.id ? (
                       <input
                         type="text"
-                        value={resource.text}
-                        onChange={(e) => handleInputChange(resource.id, "text", e.target.value)}
+                        value={resource.resource.text}
+                        onChange={(e) => handleInputChange(resource.resource.id , "text", e.target.value)}
                       />
                     ) : (
-                      resource.text
+                      resource.resource.text
                     )}
                   </td>
                   <td>
-                    {editingResourceId === resource.id ? (
+                    {editingResourceId === resource.resource.id ? (
                       <input
                         type="text"
-                        value={resource.link}
-                        onChange={(e) => handleInputChange(resource.id, "link", e.target.value)}
+                        value={resource.resource.link}
+                        onChange={(e) => handleInputChange(resource.resource.id , "link", e.target.value)}
                       />
                     ) : (
-                      resource.link
+                      resource.resource.link
                     )}
                   </td>
                   <td>
                     <input
                       type="checkbox"
-                      checked={checkedResources.includes(resource.id)}
-                      onChange={() => handleCheckResource(resource.id)}
+                      checked={checkedResources.includes(resource.resource.id)}
+                      onChange={() => handleCheckResource(resource.resource.id)}
                     />
                   </td>
                   <td className="action-buttons">
-                    {editingResourceId === resource.id ? (
-                      <button className="save-button" onClick={() => handleSaveResource(resource.id)}>
+                    {editingResourceId === resource.resource.id ? (
+                      <button className="save-button" onClick={() => handleSaveResource(resource.resource.id)}>
                         Save
                       </button>
                     ) : (
-                      <button className="edit-button" onClick={() => handleEditResource(resource.id)}>
+                      <button className="edit-button" onClick={() => handleEditResource(resource.resource.id)}>
                         Edit
                       </button>
                     )}
-                    <button className="delete-button" onClick={() => handleDeleteResource(resource.id)}>
+                    <button className="delete-button" onClick={() => handleDeleteResource(resource.resource.id)}>
                       Delete
                     </button>
                   </td>
@@ -139,9 +200,28 @@ function ResourceViewerPopup({ resources, onClose, selectedPatient }) {
         </div>
         <div className="add-resource-section">
           <h3>Add New Resource</h3>
-          <input type="text" placeholder="Resource Name" />
-          <input type="text" placeholder="Resource Link" />
-          <button onClick={handleAddNewResource}>Add</button>
+          <input 
+            type="text" 
+            name="text"
+            placeholder="Resource Name" 
+            style={{width: "300px", height: "40px", "fontSize": "16px"}}
+            value={newResource.text}
+            onChange={handleNewResourceInputChange}/>
+          <input
+            type="text"
+            name="link"
+            placeholder="Resource Link"
+            style={{width: "300px", height: "40px", "fontSize": "16px"}}
+            value={newResource.link}
+            onChange={handleNewResourceInputChange}/>
+          <label>
+            Assign to this patient  
+            <input
+              type="checkbox"
+              name="assignToCurrentPatient"
+              checked={newResource.assignToCurrentPatient}
+              onChange={handleNewResourceInputChange}/></label>
+          <button onClick={handleAddNewResource}>Add resource</button>
         </div>
         <button className="close-button" onClick={onClose}>
           Close

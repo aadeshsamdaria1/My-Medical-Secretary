@@ -133,9 +133,9 @@ function Patients() {
       </div>
       {showResourceViewer && (
         <ResourceViewerPopup
-          resources={dummyResources} // TODO fetch resources
+          // resources={dummyResources}
           onClose={handleCloseResourceViewer}
-          selectedPatient={selectedPatient}
+          selectedPatientId={selectedPatient.patientId}
         />
       )}
     </div>

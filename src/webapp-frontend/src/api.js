@@ -1,26 +1,33 @@
 import axios from 'axios';
 
-//export const API_ENDPOINT = 'https://mymedicalsecretary.uk.to:8080/api';
-export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+//export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
 // API endpoints
 
 export const loginEndpoint = `${API_ENDPOINT}/login`;
 export const refreshTokenEndpoint = `${API_ENDPOINT}/refresh`;
+
+export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
+export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
+
 export const deleteFacilityEndpoint = `${API_ENDPOINT}/facilities/delete`;
 export const createFacilityEndpoint = `${API_ENDPOINT}/facilities/create`;
 export const getAllFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
-export const uploadAppointmentFileEndpoint = `${API_ENDPOINT}/files/upload/appointments`
-export const uploadPatientFileEndpoint = `${API_ENDPOINT}/files/upload/patients`
+
 export const deleteDoctorEndpoint = `${API_ENDPOINT}/doctors/delete`;
 export const createDoctorEndpoint = `${API_ENDPOINT}/doctors/create`;
 export const getAllDoctorsEndpoint = `${API_ENDPOINT}/doctors/get_all`;
+export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/${userId}`;
 
 export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
 export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
-export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/${userId}`;
 
 export const getAllResourcesEndpoint = `${API_ENDPOINT}/resources/get_all`;
+export const createResourceEndpoint = `${API_ENDPOINT}/resources/create`;
+export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
+export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
+export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
 
 
 
