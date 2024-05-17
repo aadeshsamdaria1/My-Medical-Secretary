@@ -2,7 +2,7 @@ import * as Calendar from "expo-calendar";
 import * as Location from "expo-location";
 import { Alert, Share, Linking, Platform } from "react-native";
 
-export const onViewDoctorLocation = async (appointmentDetails) => {
+export const onViewDoctorLocation = async (address) => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -13,11 +13,10 @@ export const onViewDoctorLocation = async (appointmentDetails) => {
       return;
     }
 
-    const doctorAddress = `${appointmentDetails.doctor.address}`;
 
     // Open the location in the device's default maps app
     const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      doctorAddress
+      address
     )}`;
     await Linking.openURL(mapUrl);
   } catch (error) {
