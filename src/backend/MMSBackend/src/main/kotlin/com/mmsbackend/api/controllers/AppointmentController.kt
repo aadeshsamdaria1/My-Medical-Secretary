@@ -4,6 +4,7 @@ import com.mmsbackend.api.validation.AppointmentValidation
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.dto.appointment.UserNoteDTO
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.repository.AppointmentEntityRepository
 import com.mmsbackend.jpa.repository.DoctorEntityRepository
@@ -51,6 +52,7 @@ class AppointmentController (
 
     private fun getAppointmentsById(userId: Int): List<AppointmentEntity> {
         return appointmentEntityRepository.findByPatientId(userId)
+            .filter { it.status == AppointmentStatus.ACTIVE }
             .sortedBy { it.dateCreate }
     }
 

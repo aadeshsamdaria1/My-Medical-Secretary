@@ -1,6 +1,7 @@
 package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.enums.StatusType
 import com.mmsbackend.exception.ColumnError
 import com.mmsbackend.exception.IdException
@@ -25,7 +26,7 @@ class AppointmentMapper(
     val userEntityRepository: UserEntityRepository,
     val doctorEntityRepository: DoctorEntityRepository
 ) {
-    fun mapAppointmentDTO(appDTO: AppointmentDTO, patient: PatientEntity, doctor: DoctorEntity): AppointmentEntity{
+    fun mapAppointmentDTO(appDTO: AppointmentDTO, patient: PatientEntity, doctor: DoctorEntity): AppointmentEntity {
         return AppointmentEntity(
             id = appDTO.id,
             detail = appDTO.detail,
@@ -40,7 +41,8 @@ class AppointmentMapper(
             userNote = "",
 
             patient = patient,
-            doctor = doctor
+            doctor = doctor,
+            status = AppointmentStatus.ACTIVE
         )
     }
 
@@ -61,7 +63,8 @@ class AppointmentMapper(
 
             // Existing Fields
             id = existingApp.id,
-            dateCreate =  existingApp.dateCreate
+            dateCreate =  existingApp.dateCreate,
+            status = AppointmentStatus.ACTIVE
         )
     }
 
@@ -88,6 +91,7 @@ class AppointmentMapper(
 
                 patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId)) ?: return null,
                 doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR, appointmentId)) ?: return null,
+                status = AppointmentStatus.ACTIVE
             )
 
             Pair(StatusType.SUCCESS, appointmentEntity)

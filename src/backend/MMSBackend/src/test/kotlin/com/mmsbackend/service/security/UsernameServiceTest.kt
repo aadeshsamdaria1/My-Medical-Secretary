@@ -5,29 +5,22 @@ import com.mmsbackend.jpa.repository.UserEntityRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-class PasswordServiceTest {
+class UsernameServiceTest {
 
-    private lateinit var passwordService: PasswordService
+    private lateinit var usernameService: UsernameService
 
     @MockK
     private lateinit var userEntityRepository: UserEntityRepository
 
     @BeforeEach
     fun setup() {
-        passwordService = PasswordService(userEntityRepository)
-    }
-
-    @Test
-    fun `Successfully generate a secure password`() {
-        val password = passwordService.generateSecurePassword()
-        assertThat(password.length == PasswordService.PASSWORD_LENGTH)
+        usernameService = UsernameService(userEntityRepository)
     }
 
     @Test
@@ -36,7 +29,7 @@ class PasswordServiceTest {
         val expectedUsername = "firstname"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -46,7 +39,7 @@ class PasswordServiceTest {
         val expectedUsername = "lastname"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -56,7 +49,7 @@ class PasswordServiceTest {
         val expectedUsername = "lastname"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -66,7 +59,7 @@ class PasswordServiceTest {
         val expectedUsername = "aaaabbbb"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -76,7 +69,7 @@ class PasswordServiceTest {
         val expectedUsername = "qwert"
         every { userEntityRepository.existsByUsername( expectedUsername ) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -86,7 +79,7 @@ class PasswordServiceTest {
         val expectedUsername = "patient_a"
         every { userEntityRepository.existsByUsername( expectedUsername ) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -96,7 +89,7 @@ class PasswordServiceTest {
         val expectedUsername = "qwert"
         every { userEntityRepository.existsByUsername( expectedUsername ) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -111,7 +104,7 @@ class PasswordServiceTest {
         every { userEntityRepository.existsByUsername("firstname3") } returns true
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -121,7 +114,7 @@ class PasswordServiceTest {
         val expectedUsername = "first"
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -133,7 +126,7 @@ class PasswordServiceTest {
         every { userEntityRepository.existsByUsername( "vangogh") } returns true
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -144,7 +137,7 @@ class PasswordServiceTest {
 
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 
@@ -155,7 +148,7 @@ class PasswordServiceTest {
 
         every { userEntityRepository.existsByUsername(expectedUsername) } returns false
 
-        val username = passwordService.generateUsernameFromName(name)
+        val username = usernameService.generateUsernameFromName(name, mutableSetOf<String>())
         assertEquals(username, expectedUsername)
     }
 }

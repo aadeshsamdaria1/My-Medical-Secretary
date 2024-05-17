@@ -9,7 +9,7 @@ import com.mmsbackend.enums.StatusType
 import com.mmsbackend.exception.ColumnError
 import com.mmsbackend.exception.IdException
 import com.mmsbackend.exception.ValueException
-import com.mmsbackend.service.security.PasswordService
+import com.mmsbackend.service.security.UsernameService
 import com.mmsbackend.util.mapAddress
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -17,20 +17,22 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 @Service
 class UserMapper(
-    val passwordService: PasswordService,
-    val encoder: PasswordEncoder
+    val usernameService: UsernameService,
+    private val encoder: PasswordEncoder
 ) {
+
+    // This password is just set securely so no one can access their accounts without first activating them
+    private val defaultPassword = encoder.encode(UUID.randomUUID().toString())
 
     fun mapPatientDTO(patientDTO: PatientDTO): PatientEntity {
         val name = Name(
             firstname = patientDTO.firstname,
             surname = patientDTO.surname
         )
-
-        val plaintextPassword = passwordService.generateSecurePassword()
 
         return PatientEntity(
             firstname = patientDTO.firstname,
@@ -45,8 +47,8 @@ class UserMapper(
 
             // Generated
             mmsId = 0,
-            username = passwordService.generateUsernameFromName(name),
-            password = encoder.encode(plaintextPassword),
+            username = usernameService.generateUsernameFromName(name, emptySet()),
+            password = encoder.encode(UUID.randomUUID().toString()),
             accountActive = false,
             oneTimePasscode = null
         )
@@ -99,7 +101,11 @@ class UserMapper(
         )
     }
 
-    fun mapHtmlPatient(rowString: List<String>, columns: Map<String, Int>): Pair<StatusType, Any> {
+    fun mapHtmlPatient(
+        rowString: List<String>,
+        columns: Map<String, Int>,
+        usernames: MutableSet<String>
+    ): Pair<StatusType, Any> {
 
         return try {
             val patientId = extractID(columns, rowString)
@@ -112,7 +118,9 @@ class UserMapper(
             val surname = extractFromRow(columns, rowString, SURNAME, patientId)
             val name = Name(firstname = firstname, surname = surname)
 
-            val plainTextPassword = passwordService.generateSecurePassword()
+            // Add username to set so that we don't allow duplicates
+            val newUsername = usernameService.generateUsernameFromName(name, usernames)
+            usernames.add(newUsername)
 
             val patientEntity = PatientEntity(
                 firstname = firstname,
@@ -129,8 +137,8 @@ class UserMapper(
                 ),
                 // Randomly Generated
                 mmsId = 0,
-                username = passwordService.generateUsernameFromName(name),
-                password = encoder.encode(plainTextPassword),
+                username = newUsername,
+                password = defaultPassword,
                 accountActive = false,
                 oneTimePasscode = null
             )

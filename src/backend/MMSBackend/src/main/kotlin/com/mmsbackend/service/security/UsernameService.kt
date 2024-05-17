@@ -2,38 +2,29 @@ package com.mmsbackend.service.security
 
 import com.mmsbackend.data.Name
 import com.mmsbackend.jpa.repository.UserEntityRepository
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.security.SecureRandom
 
 @Service
-class PasswordService(
+class UsernameService(
     val userEntityRepository: UserEntityRepository,
 ) {
 
-    fun generateSecurePassword(): String {
-        val secureRandom = SecureRandom()
-        val allowedChars =
-            ('a'..'z') +
-                    ('A'..'Z') +
-                    ('0'..'9')
-
-        return (1..PASSWORD_LENGTH)
-            .map { allowedChars[secureRandom.nextInt(allowedChars.size)] }
-            .joinToString("")
-    }
-
-    fun generateUsernameFromName(name: Name): String {
+    fun generateUsernameFromName(name: Name, usernames: Set<String>): String {
         val firstname = name.firstname
         val surname = name.surname ?: ""
         val base = getBaseUsername(firstname = normalise(firstname), surname = normalise(surname))
-        return if ( !userEntityRepository.existsByUsername(base)) {
+        return if (!base.isTaken(usernames)) {
             base
         } else {
             generateSequence(1) { it + 1 }
                 .map { base + it.toString() }
-                .first { !userEntityRepository.existsByUsername(it) }
+                .first { !it.isTaken(usernames) }
         }
+    }
+
+    private fun String.isTaken(usernames: Set<String>): Boolean {
+        return userEntityRepository.existsByUsername(this)
+                || usernames.contains(this)
     }
 
     private fun normalise(name: String): String {

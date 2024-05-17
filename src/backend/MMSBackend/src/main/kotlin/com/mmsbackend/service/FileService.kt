@@ -1,5 +1,6 @@
 package com.mmsbackend.service
 
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.enums.StatusType
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -30,10 +31,13 @@ class FileService(
             .withIndex()
             .associate { (index, columnName) -> columnName to index }
 
+        val usernames = mutableSetOf<String>()
+
         val patientResults = tableRows.drop(1).map { row ->
             userMapper.mapHtmlPatient(
                 rowString = row,
-                columns = columns
+                columns = columns,
+                usernames
             )
         }
 
@@ -72,7 +76,6 @@ class FileService(
             )
         }
 
-        // TODO: Should also include appointment that isn't properly linked to patient and doctor
         val failedAppointmentIds = appointmentResults
             .filter { it.first == StatusType.FAILURE }
             .map { it.second.toString().toInt()}
@@ -87,7 +90,20 @@ class FileService(
 
         val successAppointmentIds = successfulAppointments.map {it.id}
 
+        setCancelledAppointments(successAppointmentIds.toHashSet())
+
         return Pair(failedAppointmentIds, successAppointmentIds)
+    }
+
+    private fun setCancelledAppointments(successAppointmentIds: HashSet<Int>) {
+        appointmentEntityRepository.getFutureAppointmentIds()
+            .filterNot(successAppointmentIds::contains)
+            .forEach { id ->
+                appointmentEntityRepository.findById(id).ifPresent {
+                    it.status = AppointmentStatus.CANCELLED
+                    appointmentEntityRepository.save(it)
+                }
+            }
     }
 
     companion object {

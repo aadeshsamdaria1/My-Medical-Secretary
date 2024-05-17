@@ -13,4 +13,7 @@ interface AppointmentEntityRepository : JpaRepository<AppointmentEntity, Int> {
 
     @Query("SELECT a FROM AppointmentEntity a WHERE a.patient.patientId = :patientId")
     fun findByPatientId(patientId: Int): List<AppointmentEntity>
+
+    @Query("SELECT a.id FROM AppointmentEntity a WHERE a.startDate > CURRENT_TIME()")
+    fun getFutureAppointmentIds(): List<Int>
 }
