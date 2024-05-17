@@ -11,7 +11,6 @@ import Doctors from './pages/Doctors';
 import Patients from './pages/Patients';
 import Facilities from './pages/Facilities';
 import FileUpload from './pages/FileUpload';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 
 const router = createBrowserRouter([
@@ -20,12 +19,8 @@ const router = createBrowserRouter([
     element: <App/>,
   },
   {
-    path: "login",
+    path: "/",
     element: <LoginPage/>
-  },
-  {
-    path: "home",
-    element: <HomePage/>
   },
   {
     path: "doctors",

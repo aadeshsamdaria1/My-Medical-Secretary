@@ -5,16 +5,14 @@ export default function NavBar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Perform any necessary logout logic here
-    // For example, clear user session or token
-    // TODO Clear logout 
+
+    // Clear login credentials
     localStorage.setItem('jwtToken', null);
     localStorage.setItem('refreshToken', null);
     localStorage.setItem('userId', null)
 
-
     // Redirect to the login page
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -26,7 +24,6 @@ export default function NavBar() {
         <span className="logo-text">My Medical Secretary</span>
       </div>
       <ul className="navbar-menu">
-        <li><a href="/home">Home</a></li>
         <li><a href="/file_upload">File Upload</a></li>
         <li><a href="/patients">Patients</a></li>
         <li><a href="/doctors">Doctors</a></li>

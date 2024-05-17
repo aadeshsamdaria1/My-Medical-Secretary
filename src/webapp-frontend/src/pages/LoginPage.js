@@ -8,7 +8,7 @@ const LoginPage = () => {
 
   // Callback function to navigate to the home page after successful login
   const handleLoginSuccess = () => {
-    navigate('/home');
+    navigate('/file_upload');
   };
 
   // Get the current year
