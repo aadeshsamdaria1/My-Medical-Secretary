@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+
+//export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+//export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+
 export const API_ENDPOINT = 'https://medsecapi.com:444/api';
 
 // API endpoints

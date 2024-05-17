@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Linking } from "react-native";
 import MessageCard from "../components/MessageCard";
 import * as Notifications from "expo-notifications";
+import { useResource } from "../utils/useResourceByUser";
 
-const MessageScreen = () => {
+const MessageScreen = ({ route }) => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
+  const userId = route.params.userId;
+  const resource = useResource(userId);
+
   const messages = [
     {
       sender: "Dr. Smith",
@@ -23,17 +20,16 @@ const MessageScreen = () => {
       message: "Please remember to take your medication.",
       time: "11:15 AM",
     },
-    {
-      sender: "Dr. Lee",
-      message: "Your appointment is confirmed for next week.",
-      time: "2:45 PM",
-    },
-    {
-      sender: "Clinic Admin",
-      message: "We have updated your insurance information.",
-      time: "5:20 PM",
-    },
   ];
+
+  useEffect(() => {
+    const checkNotificationPermission = async () => {
+      const { status } = await Notifications.getPermissionsAsync();
+      setIsPermissionGranted(status === "granted");
+    };
+
+    checkNotificationPermission();
+  }, []);
 
   const enableNotifications = async () => {
     const { status } = await Notifications.requestPermissionsAsync();
@@ -44,22 +40,15 @@ const MessageScreen = () => {
       );
       return;
     }
-
     setIsPermissionGranted(true);
   };
 
   const handleMessagePress = (message) => {
-    Alert.alert(
-      message.sender,
-      message.message,
-      [
-        {
-          text: "Close",
-          style: "cancel",
-        },
-      ],
-      { cancelable: true }
-    );
+    // Handle message press event
+  };
+
+  const handleLinkPress = (link) => {
+    Linking.openURL(link);
   };
 
   return (
@@ -71,16 +60,26 @@ const MessageScreen = () => {
             sender={message.sender}
             message={message.message}
             time={message.time}
-            onPress={() => handleMessagePress(message)}
+          />
+        ))}
+        {resource.map((item, index) => (
+          <MessageCard
+            key={`resource-${index}`}
+            sender="Resource"
+            message={item.text}
+            time=""
+            link={item.link}
           />
         ))}
       </ScrollView>
-      <TouchableOpacity
-        style={styles.notificationButton}
-        onPress={enableNotifications}
-      >
-        <Text style={styles.notificationButtonText}>Enable Notifications</Text>
-      </TouchableOpacity>
+      {!isPermissionGranted && (
+        <TouchableOpacity
+          style={styles.notificationButton}
+          onPress={enableNotifications}
+        >
+          <Text style={styles.notificationButtonText}>Enable Notifications</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -89,9 +88,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 16,
+    paddingTop: 16,
   },
-
   notificationButton: {
     backgroundColor: "#007AFF",
     borderRadius: 20,

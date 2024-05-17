@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,9 +14,28 @@ import {
   onViewDoctorLocation,
   getFormattedTime,
 } from "../utils/appointmentFunctions";
+import NotesModal from "../components/NotesModal";
+import { updateUserNote } from "../utils/updateUserNote";
 
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [notes, setNotes] = useState(appointmentDetails.userNote || "");
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+
+  const handleSaveNotes = async (newNotes) => {
+    try {
+      toggleModal();
+      await updateUserNote(appointmentDetails.id, newNotes);
+      setNotes(newNotes);
+    } catch (error) {
+      console.error('Failed to save notes:', error.message);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -42,7 +61,7 @@ const AppointmentDetailScreen = ({ route }) => {
           <TouchableOpacity
             style={styles.actionButton}
             onPress={() => {
-              onViewDoctorLocation(appointmentDetails);
+              onViewDoctorLocation(appointmentDetails.doctor.address);
             }}
           >
             <Text style={styles.actionButtonText}>View Doctor's Location</Text>
@@ -61,8 +80,8 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
         <Text style={styles.sectionContent}>
           {new Date(appointmentDetails.startDate).toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "short",
+            weekday: "short",
+            month: "long",
             day: "numeric",
             year: "numeric",
           })}
@@ -94,8 +113,14 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
         <Text style={styles.sectionContent}>{appointmentDetails.detail}</Text>
         <Text style={styles.sectionContent}>{appointmentDetails.reason}</Text>
+
       </View>
 
+      {/* 
+      I believe we have no document functionality, but will leave this here
+      IF we decide to implement later
+      <Text style={styles.reminderText}>{appointmentDetails.userNote}</Text>
+      
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Ionicons
@@ -119,7 +144,34 @@ const AppointmentDetailScreen = ({ route }) => {
         ) : (
           <Text style={styles.noDocumentsText}>No documents available.</Text>
         )}
+      </View> */}
+      <View style={styles.section}>
+      <View style={styles.sectionHeader}>
+        <Ionicons name="create-outline" size={24} style={styles.iconStyle} />
+        <Text style={styles.sectionTitle}>My Notes</Text>
       </View>
+      {notes ? (
+        <>
+          <Text style={styles.sectionContent}>{notes}</Text>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.actionButtonText}>Update Notes</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.sectionContent}>No notes</Text>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.actionButtonText}>Add Notes</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
 
       <View style={styles.reminderSection}>
         {appointmentDetails.note ? (
@@ -135,13 +187,21 @@ const AppointmentDetailScreen = ({ route }) => {
           <Text style={styles.reminderText}>You have no reminders.</Text>
         )}
       </View>
+      
 
       <TouchableOpacity
-        style={styles.confirmButton}
+        style={styles.shareButton}
         onPress={() => shareAppointmentDetails(appointmentDetails)}
       >
-        <Text style={styles.confirmButtonText}>Share Appointment Details</Text>
+        <Text style={styles.shareButtonText}>Share Appointment Details</Text>
       </TouchableOpacity>
+
+      <NotesModal
+        isVisible={isModalVisible}
+        onClose={toggleModal}
+        onSave={handleSaveNotes}
+        initialNotes={notes}
+      />
     </ScrollView>
   );
 };
@@ -159,34 +219,33 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#eaeaea",
-    borderRadius: 10,
+    borderRadius: 12,
     marginVertical: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 4,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginLeft: 8,
+    marginBottom: 4,
   },
   sectionContent: {
     fontWeight: "400",
     fontSize: 16,
     color: "#333",
     marginLeft: 32,
-    marginVertical: 4,
   },
   linkText: {
     fontSize: 16,
@@ -224,20 +283,20 @@ const styles = StyleSheet.create({
   },
   reminderText: {
     fontSize: 16,
-    marginLeft: 8,
     fontWeight: "600",
+    marginHorizontal: 8,
   },
 
-  confirmButton: {
+  shareButton: {
     backgroundColor: "#007aff",
-    borderRadius: 20,
+    borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginHorizontal: 16,
     marginVertical: 16,
     alignItems: "center",
   },
-  confirmButtonText: {
+  shareButtonText: {
     textTransform: "none",
     color: "#fff",
     fontSize: 16,
@@ -268,18 +327,14 @@ const styles = StyleSheet.create({
   },
 
   actionButton: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
     marginLeft: 32,
     alignSelf: "flex-start",
-    marginTop: 8,
   },
   actionButtonText: {
-    color: "#007AFF",
+    color: "#007aff",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "500",
+    textDecorationLine: "underline", 
   },
 
   iconStyle: {
