@@ -1,20 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useHandleLogout } from '../utils/useHandleLogout';
 import '../styles/Navbar.css'
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const onLogout = useHandleLogout();
 
-  const handleLogout = () => {
-
-    // Clear login credentials
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userId');
-
-    // Redirect to the login page
-    navigate('/');
-  };
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -24,7 +16,7 @@ export default function NavBar() {
   return (
     <div className="navbar">
       <div className="navbar-logo">
-        <button className="logout-button" onClick={handleLogout}>
+        <button className="logout-button" onClick={onLogout}>
           Logout
         </button>
         <span className="logo-text">My Medical Secretary</span>
