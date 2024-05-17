@@ -1,10 +1,12 @@
 import axios from 'axios';
 
+
 //export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
-export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+//export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+
+export const API_ENDPOINT = 'https://medsecapi.com:444/api';
 
 // API endpoints
-
 export const loginEndpoint = `${API_ENDPOINT}/login`;
 export const refreshTokenEndpoint = `${API_ENDPOINT}/refresh`;
 export const deleteFacilityEndpoint = `${API_ENDPOINT}/facilities/delete`;
@@ -19,8 +21,6 @@ export const getAllDoctorsEndpoint = `${API_ENDPOINT}/doctors/get_all`;
 export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
 export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
 export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/${userId}`;
-
-
 
 // Login function
 export const login = async (username, password) => {

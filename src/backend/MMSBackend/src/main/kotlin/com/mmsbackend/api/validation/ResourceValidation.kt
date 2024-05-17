@@ -8,6 +8,5 @@ import org.springframework.stereotype.Service
 class ResourceValidation {
     fun isValidResource(resource: ResourceDTO): Boolean {
         return (resource.link != null || resource.text != null)
-                && resource.patientIds.isNotEmpty()
     }
 }

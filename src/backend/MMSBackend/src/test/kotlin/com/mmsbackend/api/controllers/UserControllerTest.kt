@@ -2,10 +2,8 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.UserValidation
-import com.mmsbackend.data.AccountStatus
 import com.mmsbackend.dto.user.AdminDTO
 import com.mmsbackend.dto.user.PatientDTO
-import com.mmsbackend.exception.PatientNotFoundException
 import com.mmsbackend.jpa.entity.user.AdminEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
@@ -20,9 +18,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
@@ -51,15 +47,19 @@ class UserControllerTest {
     @MockK
     private lateinit var adminEntity: AdminEntity
 
+    private lateinit var rootAdminUsername: String
+
     @BeforeEach
     fun setup() {
         userValidation = UserValidation()
+        rootAdminUsername = "rootAdmin"
         userController = UserController(
-            userEntityRepository = userEntityRepository,
-            userValidation = userValidation,
-            userMapper = userMapper,
-            generalValidation = generalValidation,
-            securityContextHolderRetriever = securityContextHolderRetriever
+                userEntityRepository = userEntityRepository,
+                userValidation = userValidation,
+                userMapper = userMapper,
+                generalValidation = generalValidation,
+                securityContextHolderRetriever = securityContextHolderRetriever,
+                rootAdminUsername = rootAdminUsername
         )
     }
 
@@ -137,28 +137,8 @@ class UserControllerTest {
 
             val response = userController.createPatient(patientDTO)
             val expectedResponse = ResponseEntity.badRequest().body(
-                "Could not create patient. Missing ID.")
+                    "Could not create patient. Missing ID.")
             assertEquals(response, expectedResponse)
-        }
-
-        @Test
-        fun `Successfully check patient account status as true`() {
-            every { patientEntity.accountActive } returns true
-            val result = userController.getAccountStatus(patientId)
-            assertEquals(result, AccountStatus.ACTIVE)
-        }
-
-        @Test
-        fun `Successfully check patient account status as false`() {
-            every { patientEntity.accountActive } returns false
-            val result = userController.getAccountStatus(patientId)
-            assertEquals(result, AccountStatus.UNACTIVATED)
-        }
-
-        @Test
-        fun `Fail to check account status when patient not found`() {
-            every { userEntityRepository.findByPatientId(patientId) } returns null
-            assertThrows<PatientNotFoundException> { userController.getAccountStatus(patientId) }
         }
     }
 
@@ -182,6 +162,7 @@ class UserControllerTest {
             every { adminEntity.username } returns username
             every { userEntityRepository.findByUsername(username) } returns adminEntity
             every { userMapper.updateExistingAdmin(adminEntity, adminEntity) } returns adminEntity
+            every { userEntityRepository.findByMmsId(mmsId) } returns adminEntity
             justRun { userEntityRepository.deleteByMmsId(mmsId) }
         }
 
@@ -213,11 +194,19 @@ class UserControllerTest {
         }
 
         @Test
+        fun `Fail to delete root admin`() {
+            every { adminEntity.username } returns rootAdminUsername
+            val response = userController.deleteAdmin(mmsId)
+            val expectedResponse = ResponseEntity.badRequest().body("Cannot delete the root admin.")
+            assertEquals(expectedResponse, response)
+        }
+
+        @Test
         fun `Fail to delete admin if other exception occurs`() {
             every { userEntityRepository.deleteByMmsId(mmsId) } throws RuntimeException("Mocked exception")
             val response = userController.deleteAdmin(mmsId)
             val expectedResponse = ResponseEntity.badRequest().body(
-                "Admin with ID $mmsId could not be deleted: Mocked exception")
+                    "Admin with ID $mmsId could not be deleted: Mocked exception")
             assertEquals(expectedResponse, response)
         }
     }

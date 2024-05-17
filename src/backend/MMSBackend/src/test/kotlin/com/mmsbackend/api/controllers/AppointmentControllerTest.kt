@@ -4,6 +4,7 @@ import com.mmsbackend.api.validation.AppointmentValidation
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.dto.appointment.UserNoteDTO
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -123,6 +124,10 @@ class AppointmentControllerTest {
         every { appointment2.dateCreate } returns Instant.now()
         every { appointment3.dateCreate } returns Instant.now()
 
+        every { appointment1.status } returns AppointmentStatus.ACTIVE
+        every { appointment2.status } returns AppointmentStatus.ACTIVE
+        every { appointment3.status } returns AppointmentStatus.ACTIVE
+
         every { newAppointmentDTO.patientId } returns patientId
         every { newAppointmentDTO.providerId } returns providerId
         every { userEntityRepository.findByPatientId(patientId) } returns patient
@@ -167,6 +172,17 @@ class AppointmentControllerTest {
         val appointments = appointmentController.getAllAppointmentsForUser(patientId)
         val expectedAppointments = listOf(
             appointment1,
+            appointment2
+        )
+        assertEquals(expectedAppointments, appointments)
+    }
+
+    @Test
+    fun `Dont get cancelled appointments for a user ID`() {
+        every { appointment1.status } returns AppointmentStatus.CANCELLED
+
+        val appointments = appointmentController.getAllAppointmentsForUser(patientId)
+        val expectedAppointments = listOf(
             appointment2
         )
         assertEquals(expectedAppointments, appointments)
