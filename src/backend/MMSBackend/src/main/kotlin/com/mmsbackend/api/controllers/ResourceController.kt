@@ -2,9 +2,13 @@ package com.mmsbackend.api.controllers
 
 import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.api.validation.ResourceValidation
+import com.mmsbackend.data.AddPatientToResourceRequest
+import com.mmsbackend.data.RemovePatientFromResourceRequest
+import com.mmsbackend.data.ResourceWithPatientIdResponse
 import com.mmsbackend.dto.user.ResourceDTO
 import com.mmsbackend.jpa.entity.PatientResourceEntity
 import com.mmsbackend.jpa.entity.ResourceEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.PatientResourceEntityRepository
 import com.mmsbackend.jpa.repository.ResourceEntityRepository
 import com.mmsbackend.jpa.repository.UserEntityRepository
@@ -38,21 +42,27 @@ class ResourceController (
         return resourceEntityRepository.findById(id).getOrNull()
     }
 
-    @GetMapping("/get_all/{userId}")
+    @GetMapping("/get_all")
+    fun getAllResources(): List<ResourceWithPatientIdResponse> = resourceEntityRepository.findAll()
+        .toSet()
+        .toList()
+        .map {resource ->
+            val patientIds = patientResourceEntityRepository.findAllPatientIdsByResourceId(resource.id)
+            ResourceWithPatientIdResponse(
+                patientIds = patientIds,
+                resource = resource
+            )
+        }
+
+    @GetMapping("/get_all_by_id/{userId}")
     fun getAllResourcesForUser(@PathVariable userId: Int): List<ResourceEntity>? {
-
         val userDetails = securityContextHolderRetriever.getSecurityContext()
-
         return if (generalValidation.isAdminOrSpecificPatientId(userDetails, userId)) {
             getAllResourcesById(userId)
         } else {
             throw ResponseStatusException(HttpStatus.FORBIDDEN)
         }
     }
-
-    private fun getAllResourcesById(userId: Int) = patientResourceEntityRepository.findAll()
-        .filter { it.patient.patientId == userId }
-        .map { it.resource }
 
     @PostMapping("/create")
     fun createResource(@RequestBody resourceDTO: ResourceDTO): ResponseEntity<String>{
@@ -69,7 +79,7 @@ class ResourceController (
                 .mapNotNull { patientId ->
                     val patient = userEntityRepository.findByPatientId(patientId)
                     patient?.let {
-                        patientResourceEntityRepository.save(PatientResourceEntity(0, resource, patient))
+                        persistPatientEntityResource(resource, patient)
                         patient.patientId
                     }
                 }
@@ -79,6 +89,28 @@ class ResourceController (
         } else {
             ResponseEntity.badRequest().body("Could not create a new resource. No data")
         }
+    }
+
+    @PostMapping("/add_patient_to_resource")
+    fun addPatientToResource(@RequestBody request: AddPatientToResourceRequest): ResponseEntity<String> {
+        val patient = userEntityRepository.findByPatientId(request.patientId)
+            ?: return ResponseEntity.badRequest().body("Patient does not exist.")
+        val resource = resourceEntityRepository.findById(request.resourceId).getOrNull()
+            ?: return ResponseEntity.badRequest().body("Resource does not exist.")
+        persistPatientEntityResource(resource, patient)
+        return ResponseEntity.ok("Successfully added patient ${patient.patientId} to resource ${resource.id}.")
+    }
+
+    @PostMapping("/remove_patient_from_resource")
+    fun removePatientFrom(@RequestBody request: RemovePatientFromResourceRequest): ResponseEntity<String> {
+        val per = patientResourceEntityRepository.findAllByPatientId(request.patientId)
+            .filter { it.resource.id == request.resourceId }
+        if (per.isNotEmpty()){
+            val idToDelete = per[0].id
+            patientResourceEntityRepository.deleteById(idToDelete)
+        }
+        return ResponseEntity.ok("Successfully removed patient ${request.patientId} " +
+            "from resource ${request.resourceId}.")
     }
 
     @DeleteMapping("/delete/{id}")
@@ -97,4 +129,17 @@ class ResourceController (
             ResponseEntity.badRequest().body("Resource with ID $id could not be deleted: ${e.message}")
         }
     }
+
+    private fun persistPatientEntityResource(resource: ResourceEntity, patient: PatientEntity) {
+        val patientEntityResources = patientResourceEntityRepository
+            .findAllByPatientId(patient.patientId)
+            .filter { it.resource.id == resource.id }
+        if (patientEntityResources.isEmpty()){
+            patientResourceEntityRepository.save(PatientResourceEntity(0, resource, patient))
+        }
+    }
+
+    private fun getAllResourcesById(userId: Int) = patientResourceEntityRepository.findAll()
+        .filter { it.patient.patientId == userId }
+        .map { it.resource }
 }

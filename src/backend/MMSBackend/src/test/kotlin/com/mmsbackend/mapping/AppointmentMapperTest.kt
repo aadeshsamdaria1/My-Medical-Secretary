@@ -1,6 +1,7 @@
 package com.mmsbackend.mapping
 
 import com.mmsbackend.dto.appointment.AppointmentDTO
+import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.enums.StatusType
 import com.mmsbackend.exception.ColumnError
 import com.mmsbackend.exception.IdException
@@ -106,7 +107,8 @@ class AppointmentMapperTest {
                 duration = appointmentDTO.duration,
                 userNote = "",
                 patient = patient,
-                doctor = doctor
+                doctor = doctor,
+                status = AppointmentStatus.ACTIVE
         )
 
         every { userEntityRepository.findByPatientId(patientId) } returns patient

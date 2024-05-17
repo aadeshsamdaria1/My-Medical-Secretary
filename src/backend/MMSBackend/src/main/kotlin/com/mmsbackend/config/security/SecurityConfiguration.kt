@@ -30,6 +30,7 @@ class SecurityConfiguration(
                         "/api/activate",
                         "/api/refresh",
                         "/api/enter_email/**",
+                        "/api/health",
                         "/error"
                     ).permitAll()
 
@@ -50,7 +51,11 @@ class SecurityConfiguration(
                         "/api/users/get_all_patients",
                         "/api/users/delete_patient/**",
                         "/api/users/delete_admin/**",
-                        "/api/users/get_account_status/**"
+                        "/api/users/get_account_status/**",
+                        "/api/users/get_all_admins",
+                        "/api/resources/get_all",
+                        "/api/resources/add_patient_to_resource",
+                        "/api/resources/remove_patient_from_resource"
                     ).hasRole(Role.ADMIN.toString())
 
                     // Open to patients only
@@ -62,7 +67,7 @@ class SecurityConfiguration(
                     .requestMatchers(
                         "/api/users/get_patient/**",
                         "/api/resources/get/**",
-                        "/api/resources/get_all/**",
+                        "/api/resources/get_all_by_id/**",
                         "/api/facilities/get/**",
                         "/api/facilities/get_all",
                         "/api/facilities/get_all_by_type/**",
@@ -84,7 +89,6 @@ class SecurityConfiguration(
             }
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .requiresChannel { it.anyRequest().requiresSecure() }
             .build()
     }
 }

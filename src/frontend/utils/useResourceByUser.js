@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getAppointmentsByUserEndpoint } from '../api';
+import { getResourceByUserEndpoint } from '../api';
 
-export const useUpcomingAppointments = (userId) => {
-  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+export const useResource= (userId) => {
+  const [resource, setResource] = useState([]);
 
   useEffect(() => {
-    const fetchUpcomingAppointments = async () => {
-      console.log("fetchingApontments")
+    const fetchResources = async () => {
       if (!userId) return;
 
       try {
         const token = await AsyncStorage.getItem('jwtToken');
+        console.log('token', token)
         if (!token) {
           console.error('JWT token not found');
           return;
         }
 
-        const response = await fetch(getAppointmentsByUserEndpoint(userId), {
+        const response = await fetch(getResourceByUserEndpoint(userId), {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -30,13 +30,14 @@ export const useUpcomingAppointments = (userId) => {
         }
 
         const data = await response.json();
-        setUpcomingAppointments(data);
+        setResource(data);
       } catch (error) {
-        console.error('Error fetching upcoming appointments:', error.message);
+        console.error('Error fetching Resource by user:', error.message);
       }
     };
 
-    fetchUpcomingAppointments();
+    fetchResources();
   }, [userId]);
-  return upcomingAppointments;
+
+  return resource;
 };

@@ -67,6 +67,7 @@ export default function TabNavigator({ route, navigation }) {
                             <Ionicons name="notifications" size={size} color={color} />
                         ),
                     }}
+                    initialParams={{ userId: userId }}
                 />
                 <Tab.Screen 
                     name="ResourceScreen" 

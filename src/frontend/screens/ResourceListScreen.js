@@ -2,12 +2,18 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
-import hospitalIcon from '../assets/hospital.png'
-import radiologyIcon from '../assets/radiology.png';
-import pathologyIcon from '../assets/pathology.png';
-import doctorsIcon from '../assets/doctor.png';
+//import hospitalIcon from '../assets/hospital.png'
+// import radiologyIcon from '../assets/radiology.png';
+// import pathologyIcon from '../assets/pathology.png';
+// import doctorsIcon from '../assets/doctor.png';
 import useFacilitiesDetails from '../utils/useFacilitiesDetails';
 import useDoctorsByUser from '../utils/useDoctorsByUser';
+
+
+var hospitalIcon = require('../assets/hospital.png');
+var radiologyIcon = require('../assets/radiology.png');
+var pathologyIcon = require('../assets/pathology.png');
+var doctorsIcon = require('../assets/doctor.png');
 
 const categories = [
   { name: "Hospitals", icon: hospitalIcon , identifier: "HOSPITAL"},
@@ -86,6 +92,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
+    overflow: 'hidden', 
   },
   details: {
     justifyContent: 'center',
@@ -95,16 +102,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20 ,
     marginBottom: 4,
-  },
-  iconWrapper: {
-    backgroundColor: '#4F8EF7',
-    borderRadius: 25,
-    height: 50,
-    width: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-    overflow: 'hidden', 
   },
   iconImage: {
     width: '70%',
