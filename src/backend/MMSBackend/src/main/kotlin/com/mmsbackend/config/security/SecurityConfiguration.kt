@@ -52,7 +52,7 @@ class SecurityConfiguration(
                         "/api/users/delete_patient/**",
                         "/api/users/delete_admin/**",
                         "/api/users/get_account_status/**",
-                            "/api/users/get_all_admins",
+                        "/api/users/get_all_admins",
                         "/api/resources/get_all",
                         "/api/resources/add_patient_to_resource",
                         "/api/resources/remove_patient_from_resource"
