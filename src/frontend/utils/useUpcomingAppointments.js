@@ -7,6 +7,7 @@ export const useUpcomingAppointments = (userId) => {
 
   useEffect(() => {
     const fetchUpcomingAppointments = async () => {
+      console.log("fetchingApontments")
       if (!userId) return;
 
       try {

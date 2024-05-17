@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import AppointmentCard from "../components/AppointmentCard";
 import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
+
 const AppointmentListScreen = ({ route }) => {
   const userId = route.params.userId;
   const appointmentsFromApi = useUpcomingAppointments(userId);

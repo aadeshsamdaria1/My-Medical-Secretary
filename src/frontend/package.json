@@ -18,7 +18,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
     "axios": "^1.6.8",
-    "expo": "~50.0.14",
+    "expo": "^51.0.5",
     "expo-calendar": "~12.2.1",
     "expo-dev-client": "~3.3.11",
     "expo-location": "~16.5.5",

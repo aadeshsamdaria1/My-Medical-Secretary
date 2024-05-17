@@ -20,17 +20,18 @@ import { updateUserNote } from "../utils/updateUserNote";
 const AppointmentDetailScreen = ({ route }) => {
   const { appointmentDetails } = route.params;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [notes, setNotes] = useState(appointmentDetails.notes || "");
+  const [notes, setNotes] = useState(appointmentDetails.userNote || "");
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
+
   const handleSaveNotes = async (newNotes) => {
     try {
+      toggleModal();
       await updateUserNote(appointmentDetails.id, newNotes);
       setNotes(newNotes);
-      toggleModal();
     } catch (error) {
       console.error('Failed to save notes:', error.message);
     }
@@ -112,11 +113,14 @@ const AppointmentDetailScreen = ({ route }) => {
         </View>
         <Text style={styles.sectionContent}>{appointmentDetails.detail}</Text>
         <Text style={styles.sectionContent}>{appointmentDetails.reason}</Text>
-        <TouchableOpacity style={styles.actionButton} onPress={toggleModal}>
-          <Text style={styles.actionButtonText}>Add Notes</Text>
-        </TouchableOpacity>
+
       </View>
 
+      {/* 
+      I believe we have no document functionality, but will leave this here
+      IF we decide to implement later
+      <Text style={styles.reminderText}>{appointmentDetails.userNote}</Text>
+      
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Ionicons
@@ -140,7 +144,34 @@ const AppointmentDetailScreen = ({ route }) => {
         ) : (
           <Text style={styles.noDocumentsText}>No documents available.</Text>
         )}
+      </View> */}
+      <View style={styles.section}>
+      <View style={styles.sectionHeader}>
+        <Ionicons name="create-outline" size={24} style={styles.iconStyle} />
+        <Text style={styles.sectionTitle}>My Notes</Text>
       </View>
+      {notes ? (
+        <>
+          <Text style={styles.sectionContent}>{notes}</Text>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.actionButtonText}>Update Notes</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.sectionContent}>No notes</Text>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={toggleModal}
+          >
+            <Text style={styles.actionButtonText}>Add Notes</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
 
       <View style={styles.reminderSection}>
         {appointmentDetails.note ? (
@@ -151,12 +182,12 @@ const AppointmentDetailScreen = ({ route }) => {
               style={styles.iconStyle}
             />
             <Text style={styles.reminderText}>{appointmentDetails.note}</Text>
-            <Text style={styles.reminderText}>{appointmentDetails.userNote}</Text>
           </View>
         ) : (
           <Text style={styles.reminderText}>You have no reminders.</Text>
         )}
       </View>
+      
 
       <TouchableOpacity
         style={styles.shareButton}

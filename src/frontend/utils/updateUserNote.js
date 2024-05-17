@@ -10,23 +10,25 @@ export const updateUserNote = async (appointmentId, note) => {
         console.error('JWT token not found');
         return;
       }
-      console.log('Updating user note:', { appointmentId, note })
+
   
       const response = await fetch(updateUserNoteEndpoint, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': "application/json"
         },
-        body: JSON.stringify({ appointmentId, note }),
+        body: JSON.stringify({ appointmentId: appointmentId, note: note })
       });
+
   
       if (!response.ok) {
         throw new Error(`HTTP status ${response.status}`);
       }
   
-      const data = await response.json();
-      console.log('User note updated successfully:', data);
+      const data = await response;
+      
+      //console.log('User note updated successfully:', data);
       return data;
     } catch (error) {
       console.error('Error updating user note:', error.message);
