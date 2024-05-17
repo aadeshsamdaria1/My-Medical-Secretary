@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, SectionList } from "react-native";
 import AppointmentCard from "../components/AppointmentCard";
 import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
 
@@ -18,55 +18,73 @@ const AppointmentListScreen = ({ route }) => {
     .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
   const renderAppointmentCard = ({ item, index }) => (
-    <AppointmentCard testID={`appointment-card-${item.id}`} key={index} appointment={item} />
+    <AppointmentCard
+      testID={`appointment-card-${item.id}`}
+      key={index}
+      appointment={item}
+    />
   );
 
-  const renderEmptyUpcomingAppointments = () => (
-    <Text style={styles.emptyText}>You have no upcoming appointments.</Text>
+  const renderSectionHeader = ({ section: { title } }) => (
+    <Text style={styles.sectionHeader}>{title}</Text>
   );
 
-  const renderEmptyPastAppointments = () => (
-    <Text style={styles.emptyText}>You have no past appointments.</Text>
+  const renderItem = ({ item, index }) => (
+    <AppointmentCard
+      testID={`appointment-card-${item.id}`}
+      key={index}
+      appointment={item}
+    />
   );
+
+  const sections = [
+    {
+      title: "Upcoming Appointments",
+      data: upcomingAppointments,
+    },
+    {
+      title: "Past Appointments",
+      data: pastAppointments,
+    },
+  ];
+
+  const renderEmptyComponent = ({ section }) => {
+    if (section.title === "Upcoming Appointments") {
+      return (
+        <Text style={styles.emptyText}>You have no upcoming appointments.</Text>
+      );
+    } else if (section.title === "Past Appointments") {
+      return <Text style={styles.emptyText}>You have no past appointments.</Text>;
+    }
+    return null;
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Upcoming Appointments</Text>
-      {upcomingAppointments.length > 0 ? (
-        <FlatList
-          data={upcomingAppointments}
-          renderItem={renderAppointmentCard}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      ) : (
-        renderEmptyUpcomingAppointments()
-      )}
-
-      <Text style={styles.title}>Past Appointments</Text>
-      {pastAppointments.length > 0 ? (
-        <FlatList
-          data={pastAppointments}
-          renderItem={renderAppointmentCard}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      ) : (
-        renderEmptyPastAppointments()
-      )}
+      <SectionList
+        sections={sections}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        renderSectionFooter={({ section }) =>
+          section.data.length === 0 && renderEmptyComponent({ section })
+        }
+        keyExtractor={(item) => item.id.toString()}
+      />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 16,
   },
-  title: {
+  sectionHeader: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 8,
-    marginLeft: 16,
+    backgroundColor: "#f2f2f2",
+    padding: 8,
+    paddingLeft: 16,
   },
   emptyText: {
     fontSize: 16,
@@ -75,6 +93,9 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginTop: 8,
     marginBottom: 16,
+  },
+  listContainer: {
+    flex: 1,
   },
 });
 

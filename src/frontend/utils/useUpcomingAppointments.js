@@ -37,6 +37,5 @@ export const useUpcomingAppointments = (userId) => {
 
     fetchUpcomingAppointments();
   }, [userId]);
-
   return upcomingAppointments;
 };

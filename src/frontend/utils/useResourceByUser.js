@@ -11,6 +11,7 @@ export const useResource= (userId) => {
 
       try {
         const token = await AsyncStorage.getItem('jwtToken');
+        console.log('token', token)
         if (!token) {
           console.error('JWT token not found');
           return;
@@ -31,7 +32,7 @@ export const useResource= (userId) => {
         const data = await response.json();
         setResource(data);
       } catch (error) {
-        console.error('Error fetching upcoming appointments:', error.message);
+        console.error('Error fetching Resource by user:', error.message);
       }
     };
 
