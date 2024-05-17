@@ -12,6 +12,7 @@ import Patients from './pages/Patients';
 import Facilities from './pages/Facilities';
 import FileUpload from './pages/FileUpload';
 import LoginPage from './pages/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -24,19 +25,19 @@ const router = createBrowserRouter([
   },
   {
     path: "doctors",
-    element: <Doctors/>
+    element: <ProtectedRoute element={<Doctors/>}/>
   },
   {
     path: "patients",
-    element: <Patients/>
+    element: <ProtectedRoute element={<Patients/>}/>
   },
   {
     path: "facilities",
-    element: <Facilities/>
+    element: <ProtectedRoute element={<Facilities/>}/>
   },
   {
     path: "file_upload",
-    element: <FileUpload/>
+    element: <ProtectedRoute element={<FileUpload/>}/>
   }
 
 ]);

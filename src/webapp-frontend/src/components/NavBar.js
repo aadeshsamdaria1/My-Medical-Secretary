@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Navbar.css'
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -7,13 +8,18 @@ export default function NavBar() {
   const handleLogout = () => {
 
     // Clear login credentials
-    localStorage.setItem('jwtToken', null);
-    localStorage.setItem('refreshToken', null);
-    localStorage.setItem('userId', null)
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
 
     // Redirect to the login page
     navigate('/');
   };
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
 
   return (
     <div className="navbar">
@@ -24,10 +30,10 @@ export default function NavBar() {
         <span className="logo-text">My Medical Secretary</span>
       </div>
       <ul className="navbar-menu">
-        <li><a href="/file_upload">File Upload</a></li>
-        <li><a href="/patients">Patients</a></li>
-        <li><a href="/doctors">Doctors</a></li>
-        <li><a href="/facilities">Facilities</a></li>
+        <li><button onClick={() => handleNavigation('/file_upload')}>File Upload</button></li>
+        <li><button onClick={() => handleNavigation('/patients')}>Patients</button></li>
+        <li><button onClick={() => handleNavigation('/doctors')}>Doctors</button></li>
+        <li><button onClick={() => handleNavigation('/facilities')}>Facilities</button></li>
       </ul>
     </div>
   );
