@@ -2,7 +2,8 @@ import axios from "axios";
 import {
     getAllAdminsEndpoint,
     createAdminEndpoint,
-    deleteAdminByIdEndpoint
+    deleteAdminByIdEndpoint,
+    handleRequestError
 } from "../api"
 
   export const getAllAdmins = async () => {
@@ -34,12 +35,12 @@ import {
 export const deleteAdminById = async (id) => {
     try {
       const jwtToken = localStorage.getItem('jwtToken');
-      const response = await axios.delete(`${deleteAdminByIdEndpoint}/${id}`, {
+      const response = await axios.delete(deleteAdminByIdEndpoint(id), {
         headers: { Authorization: `Bearer ${jwtToken}` }
       });
       return response.data;
     } catch (error) {
-      return handleRequestError(error, axios.delete, `${deleteAdminByIdEndpoint}/${id}`);
+      return handleRequestError(error, axios.delete, deleteAdminByIdEndpoint(id));
     }
   };
   

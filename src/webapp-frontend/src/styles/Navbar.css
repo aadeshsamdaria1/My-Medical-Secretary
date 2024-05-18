@@ -5,7 +5,6 @@
   
   .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     background-color: #06b4ff;
     color: #fff;
@@ -26,6 +25,7 @@
     font-size: 16px;
     padding: 0;
     margin-right: 1rem;
+    margin-left: 1rem;
   }
   
   .logout-button:hover,
@@ -34,8 +34,10 @@
   }
   
   .logo-text {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
+    margin-right: 1rem;
+    margin-left: 1rem;
   }
   
   .navbar-menu {
@@ -47,6 +49,7 @@
   
   .navbar-menu li {
     margin-left: 1rem;
+    margin-right: 1rem;
   }
   
   .navbar-menu li button {
