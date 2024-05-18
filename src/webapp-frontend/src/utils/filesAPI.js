@@ -16,7 +16,7 @@ export const uploadAppointmentFile = async (file) => {
     const formData = new FormData(); 
     formData.append('file', file);
     return handleRequestError(error, axios.post, uploadAppointmentFileEndpoint, formData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, 'Content-Type': 'multipart/form-data' }
+      headers: {'Content-Type': 'multipart/form-data' }
     });
   }
 };
@@ -36,7 +36,7 @@ export const uploadPatientFile = async (file) => {
     const formData = new FormData(); 
     formData.append('file', file);
     return handleRequestError(error, axios.post, uploadPatientFileEndpoint, formData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, 'Content-Type': 'multipart/form-data' }
+      headers: {'Content-Type': 'multipart/form-data' }
     });
   }
 };

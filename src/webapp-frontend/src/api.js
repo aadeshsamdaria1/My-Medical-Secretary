@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
-export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
+export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+//export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
 // API endpoints
 export const loginEndpoint = `${API_ENDPOINT}/login`;
@@ -28,7 +28,6 @@ export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
 export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
 export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
 
-// Login function
 export const login = async (username, password) => {
   try {
     const response = await axios.post(loginEndpoint, {
@@ -46,49 +45,39 @@ export const login = async (username, password) => {
   }
 };
 
-// Refresh token function
 export const refreshToken = async () => {
   try {
-    const token = localStorage.getItem('refreshToken');
-    console.log(token)
-    const response = await axios.post(refreshTokenEndpoint, {token});
-    const { jwtToken } = response.data;
-    console.log(response.data)
-    localStorage.setItem('jwtToken', jwtToken);
-    return jwtToken;
+    const refreshToken = localStorage.getItem('refreshToken');
+    const response = await axios.post(refreshTokenEndpoint, {token:refreshToken, patientId:1});
+    const { token } = response.data;
+    localStorage.setItem('jwtToken', token);
+    return token;
   } catch (error) {
     // should logout patient
     console.error('Token refresh failed:', error);
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
+
     throw error;
   }
 };
 
-// // Refresh token function
-// export const refreshToken = async () => {
-//   try {
-//     const storedRefreshToken = localStorage.getItem('refreshToken');
-//     const response = await axios.post(refreshTokenEndpoint, {}, {
-//       headers: { Authorization: `Bearer ${storedRefreshToken}` }
-//     });
-//     const { jwtToken } = response.data;
-//     localStorage.setItem('jwtToken', jwtToken);
-//     return jwtToken;
-//   } catch (error) {
-//     console.error('Token refresh failed:', error);
-//     throw error;
-//   }
-// };
 
 
-
-
-// Function to handle API request errors
-export const handleRequestError = async (error, requestFunction, ...args) => {
+export const handleRequestError = async (error, requestFunction, endpoint, ...args) => {
   // If token expired, try refreshing token and retry the request
   if (error.response && error.response.status === 401) {
     try {
-      await refreshToken();
-      return await requestFunction(...args);
+      console.log("401 error (token expired), fetching new token")
+      const  newToken = await refreshToken();
+      let toReturn;
+      if (args.length === 0) {
+        toReturn = await requestFunction(endpoint, {headers: { Authorization: `Bearer ${newToken}` }});
+      } else {
+        toReturn = await requestFunction(endpoint, args[0], {headers: { Authorization: `Bearer ${newToken}` }});
+      }
+      return toReturn.data
     } catch (refreshError) {
       console.error('Failed to refresh token:', refreshError);
       throw refreshError;

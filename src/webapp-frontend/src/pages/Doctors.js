@@ -15,14 +15,6 @@ const DoctorsPage = () => {
   const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
 
 
-  const resetJwtTesting = () => {
-    console.log("resetting jwt")
-
-    // Function for testing expired JWT token, uncomment below to set to expored token
-    // when the add doctor button is pressed
-    // localStorage.setItem("jwtToken", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzQxNTkyNCwiZXhwIjoxNzEzNDE5NTI0fQ.Lb86BogS7O0Tj4H2oKHG5q2SorpBmpNRsfoDECVMxEMhYhOTvtF3kIGQabkKNjv60CtuhyOiNIh1J8m4teUsRw")
-  }
-
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -53,9 +45,7 @@ const DoctorsPage = () => {
   };
 
   const handleAddDoctor = () => {
-    // TODO Remove this testing line
-    resetJwtTesting();
-    
+
     setShowAddDoctorForm(true);
     setSelectedDoctor(null);
   };
