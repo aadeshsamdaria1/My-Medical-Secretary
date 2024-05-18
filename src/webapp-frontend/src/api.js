@@ -27,11 +27,20 @@ export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/$
 export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
 export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
 
+export const getAllAdminsEndpoint = `${API_ENDPOINT}/users/get_all_admins`;
+export const createAdminEndpoint = `${API_ENDPOINT}/users/create_admin`;
+export const deleteAdminByIdEndpoint = (adminId) => `${API_ENDPOINT}/users/delete_admin/${adminId}`;
+
+
 export const getAllResourcesEndpoint = `${API_ENDPOINT}/resources/get_all`;
 export const createResourceEndpoint = `${API_ENDPOINT}/resources/create`;
 export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
 export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
 export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
+
+
+
+
 
 export const login = async (username, password) => {
   try {
