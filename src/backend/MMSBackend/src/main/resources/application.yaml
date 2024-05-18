@@ -3,11 +3,11 @@ spring:
     name: MMSBackend
 
   datasource:
-      url: jdbc:mysql://docker-mysql:3306/my_medical_secretary?createDatabaseIfNotExist=true
-#      url: jdbc:mysql://localhost:3306/my_medical_secretary?createDatabaseIfNotExist=true
+#      url: jdbc:mysql://docker-mysql:3306/my_medical_secretary?createDatabaseIfNotExist=true
+      url: jdbc:mysql://localhost:3306/my_medical_secretary?createDatabaseIfNotExist=true
       username: root
-      password: root
-#      password: password
+#      password: root
+      password: password
 
 #      username: mmsadmin
 #      password: Password123!
@@ -28,9 +28,9 @@ spring:
 
   mail:
     port: 587
-    host: ${EMAIL_HOST:-smtp.office365.com}
-    username: ${EMAIL_USERNAME:-username}
-    password: ${EMAIL_PASSWORD:-password}
+    host: ${EMAIL_HOST:smtp.office365.com}
+    username: ${EMAIL_USERNAME:username}
+    password: ${EMAIL_PASSWORD:password}
 
     properties:
       mail:
@@ -43,14 +43,14 @@ spring:
             required: true
 
 jwt:
-  key: ${JWT_KEY:-"secret key key key key key key"}
+  key: ${JWT_KEY:"secret key key key key key key"}
   access-token-expiration: 3_600_000
   refresh-token-expiration: 86_400_000
 
 admin:
-  defaultEmail: ${ROOT_ADMIN_EMAIL:-https://email.com}
-  default-username: ${ROOT_ADMIN_USERNAME:-admin}
-  default-password: ${ROOT_ADMIN_PASSWORD:-password}
+  defaultEmail: ${ROOT_ADMIN_EMAIL:https://email.com}
+  default-username: ${ROOT_ADMIN_USERNAME:admin}
+  default-password: ${ROOT_ADMIN_PASSWORD:default_password}
 
 passcode:
   passcode_length: 10
