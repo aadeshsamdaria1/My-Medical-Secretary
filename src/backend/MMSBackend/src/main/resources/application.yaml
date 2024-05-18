@@ -43,7 +43,7 @@ spring:
             required: true
 
 jwt:
-  key: ${JWT_KEY:"secret key key key key key key"}
+  key: ${JWT_KEY:"1189196834CD548E1A8BA92E9C3C9B1F415DFCC489B7E54D3F48D2E3E4"}
   access-token-expiration: 3_600_000
   refresh-token-expiration: 86_400_000
 
