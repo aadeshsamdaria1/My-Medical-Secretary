@@ -1,0 +1,241 @@
+.make-available-button,
+.make-unavailable-button,
+.edit-button,
+.delete-button,
+.save-button,
+.cancel-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px; 
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.save-button {
+  background-color: green;
+}
+
+.make-unavailable-button {
+    background-color: rgb(0, 149, 255);
+}
+.make-unavailable-button:hover {
+    background-color: rgb(0, 96, 164);
+}
+
+.make-available-button {
+    background-color: #59d75e;
+}
+.make-available-button:hover {
+    background-color: #4caf50;
+}
+.edit-button{
+    background-color: #ff9d00;
+}
+.edit-button:hover {
+    background-color: #c79200;
+  }
+
+.delete-button, 
+.cancel-button {
+    background-color: #f44336;
+}
+  
+.delete-button:hover,
+.cancel-button:hover {
+    background-color: #af0d02;
+  }
+
+.resource-viewer-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resource-viewer-popup {
+  position: relative;
+  background-color: #ffffff;;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 70%;
+}
+
+.resource-viewer-popup h2 {
+  margin-top: 0;
+}
+
+.resource-table-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.resource-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resource-table th,
+.resource-table td {
+  border: 1px solid #92929257;
+  padding: 8px;
+  text-align: left;
+}
+
+.resource-table tbody tr:nth-child(even) {
+  background-color: #f2f2f230;
+}
+.resource-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
+.resource-table thead {
+  background-color: #8fdaff57;
+}
+
+
+.popup-title {
+    color:#06b4ff;
+    padding-bottom: 1pc;
+}
+
+.action-buttons {
+    text-align: right;
+  }
+  
+  .action-buttons button {
+    margin-left: 5px;
+  }
+  
+input.checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px; 
+  outline: none;
+  cursor: pointer;
+  border: none; 
+  background-color: #ccc; 
+}
+
+
+input.checkbox:checked {
+  background-color: #28a745;
+}
+
+input.checkbox:hover {
+  background-color: #b3b3b3; 
+}
+
+input.checkbox:hover::before {
+  background-color: green;
+}
+
+
+input.checkbox::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 4px; 
+  background-color: grey;
+  border-radius: 3px;
+}
+
+
+input.checkbox:checked::before {
+  content: "\2713"; 
+  font-size: 14px; 
+  line-height: 16px;
+  text-align: center;
+  color: white; 
+  background-color: green;
+}
+
+thead th {
+  position: sticky; 
+  top: 0; 
+  background-color: #8fdaff57; 
+}
+
+
+.add-resource-section {
+  display: block;
+  background-color: #8fdaff57;
+  padding: 20px; 
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+
+
+.add-resource-section h3 {
+  margin-bottom: 16px;
+}
+
+.add-resource-section input{
+  display:block;
+  width: 98% ;
+  padding: 10px;
+  margin-bottom: 16px; 
+  font-size: 16px;
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+}
+
+.add-resource-section input[type="checkbox"] {
+  display: inline-block; 
+  width: 20px; 
+  margin-right: 15px; 
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.add-resource-section button {
+  background-color: #007bff; 
+  color: white; 
+  padding: 10px 20px; 
+  font-size: 16px;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+  font-weight: bold;
+}
+
+.add-resource-section button:hover {
+  background-color: #0056b3; 
+}
+
+
+.resource-viewer-popup button.close-button {
+  position: absolute;
+  font-weight: bold;
+  bottom: 5%;
+  right: 50px;
+  font-size: 16px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.edit-input {
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  padding: 10px; 
+  width: 100%; 
+  box-sizing:border-box;
+}
