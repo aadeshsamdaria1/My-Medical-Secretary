@@ -38,4 +38,9 @@ interface UserEntityRepository : JpaRepository<UserEntity, Int> {
     @Transactional
     @Query("DELETE FROM AdminEntity u WHERE u.mmsId = :mmsId")
     fun deleteByMmsId(mmsId: Int)
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM AdminEntity u WHERE u.username = :username")
+    fun deleteByUsername(username: String)
 }
