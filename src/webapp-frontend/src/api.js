@@ -51,7 +51,7 @@ export const refreshToken = async () => {
   try {
     const token = localStorage.getItem('refreshToken');
     console.log(token)
-    const response = await axios.post(refreshTokenEndpoint, token);
+    const response = await axios.post(refreshTokenEndpoint, {token});
     const { jwtToken } = response.data;
     console.log(response.data)
     localStorage.setItem('jwtToken', jwtToken);
@@ -62,6 +62,24 @@ export const refreshToken = async () => {
     throw error;
   }
 };
+
+// // Refresh token function
+// export const refreshToken = async () => {
+//   try {
+//     const storedRefreshToken = localStorage.getItem('refreshToken');
+//     const response = await axios.post(refreshTokenEndpoint, {}, {
+//       headers: { Authorization: `Bearer ${storedRefreshToken}` }
+//     });
+//     const { jwtToken } = response.data;
+//     localStorage.setItem('jwtToken', jwtToken);
+//     return jwtToken;
+//   } catch (error) {
+//     console.error('Token refresh failed:', error);
+//     throw error;
+//   }
+// };
+
+
 
 
 // Function to handle API request errors
