@@ -15,19 +15,19 @@ class FirebaseConfig(val notificationProperties: NotificationProperties) {
     @PostConstruct
     fun initializeFirebase() {
 
-        println(notificationProperties.filePath)
-        val serviceAccount = FileInputStream(notificationProperties.filePath)
-
-         try {
-             val options = FirebaseOptions.builder()
-                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                 .build()
-
-             if (FirebaseApp.getApps().isEmpty()) {
-                 FirebaseApp.initializeApp(options)
-             }
-         } catch (e: IOException) {
-             throw RuntimeException("Error initializing Firebase", e)
-         }
+//        println(notificationProperties.filePath)
+//        val serviceAccount = FileInputStream(notificationProperties.filePath)
+//
+//         try {
+//             val options = FirebaseOptions.builder()
+//                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                 .build()
+//
+//             if (FirebaseApp.getApps().isEmpty()) {
+//                 FirebaseApp.initializeApp(options)
+//             }
+//         } catch (e: IOException) {
+//             throw RuntimeException("Error initializing Firebase", e)
+//         }
     }
 }

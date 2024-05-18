@@ -4,52 +4,54 @@ import com.google.firebase.messaging.*
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
 import com.mmsbackend.data.NotificationRequest
-import java.util.concurrent.ExecutionException
+import okhttp3.*
+import java.io.IOException
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 @Service
-class NotificationService (val userEntityRepository: UserEntityRepository) {
+class NotificationService (
+    val userEntityRepository: UserEntityRepository,
+    private val okHttpClient: OkHttpClient
+) {
 
     companion object {
-        const val TIME: Long = 2
+        const val EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send"
     }
 
-    @Throws(InterruptedException::class, ExecutionException::class)
+    @Throws(IOException::class)
     fun sendMessageToToken(request: NotificationRequest): String {
-        val message = preconfigureMessageToToken(request)
-        return sendAndGetResponse(message)
+        val json = preconfigureMessageToToken(request)
+        return sendAndGetResponse(json)
     }
 
-    @Throws(InterruptedException::class, ExecutionException::class)
-    private fun sendAndGetResponse(message: Message): String {
-        return FirebaseMessaging.getInstance().sendAsync(message).get()
-    }
-
-    private fun getAndroidConfig(topic: String): AndroidConfig {
-        return AndroidConfig.builder()
-            .setTtl(java.time.Duration.ofMinutes(TIME).toMillis())
-            .setCollapseKey(topic)
-            .setPriority(AndroidConfig.Priority.HIGH)
-            .setNotification(AndroidNotification.builder()
-                .setTag(topic).build()).build()
-    }
-
-    private fun getApnsConfig(topic: String): ApnsConfig {
-        return ApnsConfig.builder()
-            .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build()
-    }
-
-    private fun preconfigureMessageToToken(request: NotificationRequest): Message {
-        return preconfigureMessageBuilder(request).setToken(request.deviceToken).build()
-    }
-
-    private fun preconfigureMessageBuilder(request: NotificationRequest): Message.Builder {
-        val androidConfig = getAndroidConfig(request.topic)
-        val apnsConfig = getApnsConfig(request.topic)
-        val notification = Notification.builder()
-            .setTitle(request.title)
-            .setBody(request.body)
+    private fun sendAndGetResponse(json: String): String {
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+        val body = json.toRequestBody(mediaType)
+        val request = Request.Builder()
+            .url(EXPO_PUSH_URL)
+            .post(body)
+            .addHeader("Content-Type", "application/json")
             .build()
-        return Message.builder()
-            .setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(notification)
+
+        okHttpClient.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            return response.body.string()
+        }
+    }
+
+    private fun preconfigureMessageToToken(request: NotificationRequest): String {
+        val message = mapOf(
+            "to" to request.deviceToken,
+            "title" to request.title,
+            "body" to request.body
+        )
+        return message.toJson()
+    }
+
+    private fun Map<String, Any>.toJson(): String {
+        return jacksonObjectMapper().writeValueAsString(this)
     }
 }

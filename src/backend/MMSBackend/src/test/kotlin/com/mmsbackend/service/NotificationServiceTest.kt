@@ -1,70 +1,81 @@
 package com.mmsbackend.service
 
-import com.google.api.core.ApiFuture
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.Message
-import com.mmsbackend.config.FirebaseConfig
 import com.mmsbackend.data.NotificationRequest
 import com.mmsbackend.jpa.repository.UserEntityRepository
-import com.mmsbackend.properties.NotificationProperties
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.justRun
-import io.mockk.mockk
-import io.mockk.mockkStatic
+import okhttp3.*
+import okhttp3.Call
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.util.*
+import java.io.IOException
 
 @ExtendWith(MockKExtension::class)
 class NotificationServiceTest {
+
+    private lateinit var notificationService: NotificationService
 
     @MockK
     private lateinit var userEntityRepository: UserEntityRepository
 
     @MockK
-    private lateinit var firebaseConfig: FirebaseConfig
+    private lateinit var okHttpClient: OkHttpClient
 
     @MockK
-    private lateinit var notificationProperties: NotificationProperties
+    private lateinit var response: Response
 
-    private val  filePath = UUID.randomUUID().toString()
-
-    private val firebaseMessaging = mockk<FirebaseMessaging>()
-
-    private val apiFuture = mockk<ApiFuture<String>>()
+    @MockK
+    private lateinit var responseBody: ResponseBody
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(FirebaseMessaging::class)
-        every { notificationProperties.filePath } returns filePath
-        every { FirebaseMessaging.getInstance() } returns firebaseMessaging
-        justRun { firebaseConfig.initializeFirebase() }
-        every { firebaseMessaging.sendAsync(any<Message>()) } returns apiFuture
-        every { apiFuture.get() } returns "Success"
+        MockKAnnotations.init(this)
+        notificationService = NotificationService(userEntityRepository, okHttpClient)
+        every { okHttpClient.newCall(any()).execute() } returns response
+        every { response.body } returns responseBody
+        every { responseBody.string() } returns "{\"data\":{\"status\":\"ok\"}}"
+        every { response.close() } just Runs
     }
 
     @Test
     fun `send a message to a token`() {
-        val request = NotificationRequest("deviceToken", "topic", "Sample Title", "Sample Body")
-        val notificationService = NotificationService(userEntityRepository)
+        val request = NotificationRequest("validDeviceToken", "Sample Title", "Sample Body")
+        every { response.isSuccessful } returns true
+        val json = notificationService.sendMessageToToken(request)
 
-        val response = notificationService.sendMessageToToken(request)
-        val expectedResponse = "Success"
-
-        assertThat(response).isEqualTo(expectedResponse)
+        assertEquals("{\"data\":{\"status\":\"ok\"}}", json)
     }
 
     @Test
     fun `fail send a message because of faulty request`() {
-        val request = NotificationRequest("", "topic", "Sample Title", "Sample Body")
-        val notificationService = NotificationService(userEntityRepository)
+        val request = NotificationRequest("", "Sample Title", "Sample Body")
+        every { okHttpClient.newCall(any()).execute() } throws IOException("Unexpected code Response{}")
 
-        assertThrows<IllegalArgumentException> { notificationService.sendMessageToToken(request) }
+        assertThrows<IOException> { notificationService.sendMessageToToken(request) }
+    }
+
+    @Test
+    fun `test sending message to token with unsuccessful response`() {
+        val response = mockk<Response>()
+        val responseBody = mockk<ResponseBody>()
+
+        every { response.isSuccessful } returns false
+        every { response.body } returns responseBody
+        every { responseBody.string() } returns "Response Body"
+        every { okHttpClient.newCall(any()).execute() } returns response
+
+        val request = NotificationRequest("deviceToken", "Sample Title", "Sample Body")
+        val result = runCatching { notificationService.sendMessageToToken(request) }
+
+        assertThat(result.exceptionOrNull()).isInstanceOf(IOException::class.java)
+        assertThat(result.exceptionOrNull()?.message).isEqualTo("Unexpected code $response")
+
+        verify { response.isSuccessful }
     }
 
 }
