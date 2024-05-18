@@ -63,11 +63,11 @@ const MessageCard = ({ sender, message, time, link, onPress }) => {
 
 const styles = StyleSheet.create({
   messageCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal:16,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -87,21 +87,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   senderText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   timeText: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#666",
     opacity: 0.8,
   },
   messageText: {
-    fontSize: 16,
-    color: "#000",
+    fontSize: 14,
+    color: "#666",
   },
   linkText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "blue",
     textDecorationLine: "underline",
   },

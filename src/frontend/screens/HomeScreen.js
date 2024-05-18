@@ -58,7 +58,7 @@ const HomeScreen = ({ route }) => {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   testID="appointment-item"
-                  style={[styles.appointmentItem, { backgroundColor: 'lightblue' }]}
+                  style={[styles.appointmentItem, { backgroundColor: '#f5f5f5' }]}
                   onPress={() => showAppointmentDetails(item)}
                 >
                   <View style={styles.appointmentHeader}>
@@ -195,8 +195,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   appointmentItem: {
+    backgroundColor: "#fff",
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 8,
   },
   appointmentHeader: {
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   },
   messageItem: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 8,
   },
   messageSender: {
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   showMoreText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   noDataText: {
     fontSize: 16,

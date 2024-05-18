@@ -11,7 +11,6 @@ export const useResource= (userId) => {
 
       try {
         const token = await AsyncStorage.getItem('jwtToken');
-        console.log('token', token)
         if (!token) {
           console.error('JWT token not found');
           return;
