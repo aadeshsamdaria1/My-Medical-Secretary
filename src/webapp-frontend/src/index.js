@@ -12,6 +12,7 @@ import Patients from './pages/Patients';
 import Facilities from './pages/Facilities';
 import FileUpload from './pages/FileUpload';
 import LoginPage from './pages/LoginPage';
+import AdminManagementPage from './pages/AdminManagement'
 import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "file_upload",
     element: <ProtectedRoute element={<FileUpload/>}/>
+  },
+  {
+    path: "admin_account_management",
+    element: <ProtectedRoute element={<AdminManagementPage/>}/>
   }
 
 ]);

@@ -16,10 +16,14 @@ export default function NavBar() {
   return (
     <div className="navbar">
       <div className="navbar-logo">
+        <span className="logo-text">My Medical Secretary</span>
         <button className="logout-button" onClick={onLogout}>
           Logout
         </button>
-        <span className="logo-text">My Medical Secretary</span>
+        <button className="admin-button" onClick={() => handleNavigation('/admin_account_management')}>
+          Admin Account Management
+        </button>
+       
       </div>
       <ul className="navbar-menu">
         <li><button onClick={() => handleNavigation('/file_upload')}>File Upload</button></li>
