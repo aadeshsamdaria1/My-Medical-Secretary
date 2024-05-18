@@ -56,7 +56,8 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
   const handleSaveResource = async (resourceId) => {
 
     if (resourceId === editingResource.id) {
-      deleteResource(resourceId);
+
+      await deleteResource(resourceId);
       const resourceWithoutId = { ...editingResource };
       delete resourceWithoutId.id;
       await addResource(resourceWithoutId);
@@ -113,6 +114,12 @@ function ResourceViewerPopup({onClose, selectedPatientId }) {
         link:newResource.link,
         patientIds: newResource.assignToCurrentPatient ? [selectedPatientId] : []
       }
+
+      if (resource.text === "" && resource.link === "") {
+        // user is trying to add an empty resource
+        return
+      }
+
       await addResource(resource);
       setNewResource({
         text:'',

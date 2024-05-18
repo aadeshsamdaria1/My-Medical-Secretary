@@ -24,9 +24,7 @@ export const deleteFacilityById = async (id) => {
     });
     return response.data;
   } catch (error) {
-    return handleRequestError(error, axios.delete, `${deleteFacilityEndpoint}/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
-    });
+    return handleRequestError(error, axios.delete, `${deleteFacilityEndpoint}/${id}`);
   }
 };
 
@@ -40,9 +38,7 @@ export const createFacility = async (facilityData) => {
     console.log(response)
     return response.data;
   } catch (error) {
-    return handleRequestError(error, axios.post, createFacilityEndpoint, facilityData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
-    });
+    return handleRequestError(error, axios.post, createFacilityEndpoint, facilityData);
   }
 };
 
@@ -55,9 +51,7 @@ export const getAllFacilities = async () => {
     });
     return response.data;
   } catch (error) {
-    return handleRequestError(error, axios.get, getAllFacilitiesEndpoint, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
-    });
+    return handleRequestError(error, axios.get, getAllFacilitiesEndpoint);
   }
 };
 

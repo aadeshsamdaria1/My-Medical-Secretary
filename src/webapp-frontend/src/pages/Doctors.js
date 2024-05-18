@@ -14,6 +14,7 @@ const DoctorsPage = () => {
   const [filterValue, setFilterValue] = useState('');
   const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
 
+
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -44,6 +45,7 @@ const DoctorsPage = () => {
   };
 
   const handleAddDoctor = () => {
+
     setShowAddDoctorForm(true);
     setSelectedDoctor(null);
   };

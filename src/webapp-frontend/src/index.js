@@ -11,8 +11,8 @@ import Doctors from './pages/Doctors';
 import Patients from './pages/Patients';
 import Facilities from './pages/Facilities';
 import FileUpload from './pages/FileUpload';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -20,28 +20,24 @@ const router = createBrowserRouter([
     element: <App/>,
   },
   {
-    path: "login",
+    path: "/",
     element: <LoginPage/>
   },
   {
-    path: "home",
-    element: <HomePage/>
-  },
-  {
     path: "doctors",
-    element: <Doctors/>
+    element: <ProtectedRoute element={<Doctors/>}/>
   },
   {
     path: "patients",
-    element: <Patients/>
+    element: <ProtectedRoute element={<Patients/>}/>
   },
   {
     path: "facilities",
-    element: <Facilities/>
+    element: <ProtectedRoute element={<Facilities/>}/>
   },
   {
     path: "file_upload",
-    element: <FileUpload/>
+    element: <ProtectedRoute element={<FileUpload/>}/>
   }
 
 ]);
@@ -49,9 +45,9 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function

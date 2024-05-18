@@ -2,12 +2,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-
 //export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
 //export const API_ENDPOINT = 'https://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
 
+
 export const API_ENDPOINT = 'https://medsecapi.com:444/api';
+
 
 
 // API endpoints
