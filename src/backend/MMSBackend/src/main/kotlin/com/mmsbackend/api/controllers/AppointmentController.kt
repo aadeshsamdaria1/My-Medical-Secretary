@@ -75,7 +75,7 @@ class AppointmentController (
         val existingApp = appointmentEntityRepository.findById(appointmentDTO.id).getOrNull()
         val savedAppointment: AppointmentEntity = if (existingApp != null) {
             appointmentEntityRepository.save(appointmentMapper.updateExistingAppointment(existingApp, appointment))
-        } else{
+        } else {
             appointmentEntityRepository.save(appointment)
         }
 

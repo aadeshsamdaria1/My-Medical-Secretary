@@ -3,9 +3,7 @@ package com.mmsbackend.mapping
 import com.mmsbackend.dto.appointment.AppointmentDTO
 import com.mmsbackend.enums.AppointmentStatus
 import com.mmsbackend.enums.StatusType
-import com.mmsbackend.exception.ColumnError
-import com.mmsbackend.exception.IdException
-import com.mmsbackend.exception.ValueException
+import com.mmsbackend.exception.*
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -68,7 +66,7 @@ class AppointmentMapper(
         )
     }
 
-    fun mapHtmlAppointment(rowString: List<String>, columns: Map<String, Int>): Pair<StatusType, Any>? {
+    fun mapHtmlAppointment(rowString: List<String>, columns: Map<String, Int>): Pair<StatusType, Any> {
         return try {
             val appointmentId = extractID(columns, rowString)
             try {
@@ -89,8 +87,8 @@ class AppointmentMapper(
                 startDate = SimpleDateFormat(DATE_CREATED_PATTERN).parse(extractFromRow(columns, rowString, START_DATE, appointmentId)),
                 dateCreate =  stringToInstant(extractFromRow(columns, rowString, DATE_CREATE,appointmentId), DATE_CREATED_PATTERN),
 
-                patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId)) ?: return null,
-                doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR, appointmentId)) ?: return null,
+                patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId)),
+                doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR, appointmentId)),
                 status = AppointmentStatus.ACTIVE
             )
 
@@ -100,12 +98,14 @@ class AppointmentMapper(
         }
     }
 
-    private fun extractDoctor(stringId: String): DoctorEntity? {
+    private fun extractDoctor(stringId: String): DoctorEntity {
         return doctorEntityRepository.findById(stringId.toInt()).getOrNull()
+            ?: throw DoctorMissingException(stringId.toInt(), "Doctor missing")
     }
 
-    private fun extractPatient(stringId: String): PatientEntity? {
+    private fun extractPatient(stringId: String): PatientEntity {
         return userEntityRepository.findByPatientId(stringId.toInt())
+            ?: throw PatientMissingException(stringId.toInt(), "Patient missing")
     }
 
     private fun stringToInstant(date: String, pattern: String): Instant {
