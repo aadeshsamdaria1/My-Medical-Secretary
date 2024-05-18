@@ -17,7 +17,8 @@
     align-items: center;
   }
   
-  .logout-button {
+  .logout-button,
+  .admin-button {
     background-color: transparent;
     border: none;
     color: #fff;
@@ -27,7 +28,8 @@
     margin-right: 1rem;
   }
   
-  .logout-button:hover {
+  .logout-button:hover,
+  .admin-button:hover {
     color: #ccc;
   }
   

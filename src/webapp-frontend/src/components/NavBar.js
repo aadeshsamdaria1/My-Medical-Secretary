@@ -19,6 +19,9 @@ export default function NavBar() {
         <button className="logout-button" onClick={onLogout}>
           Logout
         </button>
+        <button className="admin-button" onClick={() => handleNavigation('/admin_account_management')}>
+          Admin Account Management
+        </button>
         <span className="logo-text">My Medical Secretary</span>
       </div>
       <ul className="navbar-menu">
