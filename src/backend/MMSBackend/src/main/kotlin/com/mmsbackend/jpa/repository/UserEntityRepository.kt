@@ -24,6 +24,9 @@ interface UserEntityRepository : JpaRepository<UserEntity, Int> {
     @Query("SELECT u FROM UserEntity u WHERE u.username = :username")
     fun findByUsername(username: String): UserEntity?
 
+    @Query("SELECT u FROM AdminEntity u")
+    fun findAllAdmins(): List<AdminEntity>
+
     fun existsByUsername(username: String): Boolean
 
     @Modifying

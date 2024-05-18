@@ -49,6 +49,11 @@ class UserController(
         return userEntityRepository.findById(id).getOrNull() as? AdminEntity
     }
 
+    @GetMapping("/get_all_admins")
+    fun getAllAdmins(): List<AdminEntity>{
+        return userEntityRepository.findAllAdmins()
+    }
+
     @PostMapping("/create_patient")
     fun createPatient(@RequestBody patientDTO: PatientDTO): ResponseEntity<String> {
         val patient = userMapper.mapPatientDTO(patientDTO)

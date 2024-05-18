@@ -45,7 +45,7 @@ const AppointmentScreen = ({ route }) => {
             )}
           </>
         ) : (
-          <Text style={styles.defaultText}>Tap a date to view its appointments ☺️!</Text>
+          <Text style={styles.defaultText}>Tap a date to view appointments ☺️!</Text>
         )}
       </View>
     );

@@ -31,6 +31,7 @@ class UserControllerTest {
 
     private lateinit var userController: UserController
     private lateinit var userValidation: UserValidation
+    private lateinit var rootAdminUsername: String
 
     @MockK
     private lateinit var userEntityRepository: UserEntityRepository
@@ -45,9 +46,10 @@ class UserControllerTest {
     private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
 
     @MockK
-    private lateinit var adminEntity: AdminEntity
+    private lateinit var patientEntity: PatientEntity
 
-    private lateinit var rootAdminUsername: String
+    @MockK
+    private lateinit var adminEntity: AdminEntity
 
     @BeforeEach
     fun setup() {
@@ -71,8 +73,6 @@ class UserControllerTest {
         private val mmsId = missingPatientId + 1
         private val username = UUID.randomUUID().toString()
 
-        @MockK
-        private lateinit var patientEntity: PatientEntity
 
         @MockK
         private lateinit var patientDTO: PatientDTO
@@ -163,6 +163,7 @@ class UserControllerTest {
             every { userEntityRepository.findByUsername(username) } returns adminEntity
             every { userMapper.updateExistingAdmin(adminEntity, adminEntity) } returns adminEntity
             every { userEntityRepository.findByMmsId(mmsId) } returns adminEntity
+            every { userEntityRepository.findAllAdmins() } returns listOf(adminEntity)
             justRun { userEntityRepository.deleteByMmsId(mmsId) }
         }
 
@@ -170,6 +171,12 @@ class UserControllerTest {
         fun `Get an admin with valid data`() {
             val admin = userController.getAdmin(mmsId)
             assertEquals(mmsId, admin?.mmsId)
+        }
+
+        @Test
+        fun `Get all admins`(){
+            val admins = userController.getAllAdmins()
+            assertEquals(admins, listOf(adminEntity))
         }
 
         @Test
