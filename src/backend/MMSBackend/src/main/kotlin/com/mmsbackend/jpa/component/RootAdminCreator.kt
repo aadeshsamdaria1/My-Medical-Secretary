@@ -47,7 +47,7 @@ class RootAdminCreator(
         return AdminEntity(
             email = email,
             username = username,
-            password = password,
+            password = encoder.encode(password),
 
             // Automatically generated
             mmsId = 0,
