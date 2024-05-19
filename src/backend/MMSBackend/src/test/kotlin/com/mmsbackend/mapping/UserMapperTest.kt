@@ -100,7 +100,7 @@ class UserMapperTest {
             val patient = userMapper.mapPatientDTO(patientDTO)
             val mappedPatient = PatientEntity(
                 0, email, password, username, patientId, firstname,
-                middleName, surname, dob, address, suburb, state, false, null
+                middleName, surname, dob, address, suburb, state, false, null, null
             )
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(patient)
         }
