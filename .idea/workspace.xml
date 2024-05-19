@@ -11,8 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="change files path">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/config/admin/RootAdminProperties.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/config/admin/RootAdminProperties.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/jpa/component/RootAdminCreator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/jpa/component/RootAdminCreator.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -136,7 +134,7 @@
       <workItem from="1711676241768" duration="4411000" />
       <workItem from="1712133243604" duration="1238000" />
       <workItem from="1714473071199" duration="1288000" />
-      <workItem from="1716097811275" duration="2037000" />
+      <workItem from="1716097811275" duration="2887000" />
     </task>
     <task id="LOCAL-00001" summary="setting up ai chatgpt workflow">
       <option name="closed" value="true" />

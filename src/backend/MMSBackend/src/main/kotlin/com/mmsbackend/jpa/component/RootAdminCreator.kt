@@ -22,6 +22,7 @@ class RootAdminCreator(
         val admin = createAdmin()
 
         userEntityRepository.deleteByUsername(admin.username)
+        userEntityRepository.deleteByMmsId(admin.mmsId)
         userEntityRepository.save(admin)
 
         // TODO: Delete in production
