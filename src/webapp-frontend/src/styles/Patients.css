@@ -181,7 +181,8 @@ body {
   font-weight: 600;
 }
 
-.resource-viewer-btn {
+.resource-viewer-btn,
+.message-viewer-btn {
   padding: 10px 16px;
   background-color: var(--primary-color);
   color: white;
@@ -190,11 +191,12 @@ body {
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
-  margin-left: auto;
+  margin-left: 10px;
   margin-top: 20px;
 }
 
-.resource-viewer-btn:hover {
+.resource-viewer-btn:hover,
+.message-viewer-btn:hover {
   background-color: var(--button-hover-color);
 }
 

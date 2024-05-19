@@ -5,6 +5,7 @@ import PatientDetail from "../components/PatientDetail";
 import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
 import ResourceViewerPopup from "../components/ResourceViewerPopup";
+import MessageViewerPopup from "../components/MessageViewerPopup";
 import "../styles/Patients.css";
 import {
   getAllPatients,
@@ -18,6 +19,7 @@ function Patients() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterByName, setFilterByName] = useState(true);
   const [showResourceViewer, setShowResourceViewer] = useState(false);
+  const [showMessageViewer, setShowMessageViewer] = useState(false);
 
   useEffect(() => {
     fetchPatients();
@@ -76,6 +78,16 @@ function Patients() {
     setShowResourceViewer(false);
   }
 
+  const handleMessageViewerClick = () => {
+    console.log("message viewer clicked");
+    setShowMessageViewer(true);
+  }
+
+  const handleCloseMessageViewer = () => {
+    console.log("closing message viwer")
+    setShowMessageViewer(false);
+  }
+
   const filteredPatients = patients
     .filter((patient) =>
       filterByName
@@ -108,6 +120,12 @@ function Patients() {
               >
                 Resource Viewer
               </button>
+              <button
+                onClick={handleMessageViewerClick}
+                className="message-viewer-btn"
+              >
+                Message Viewer
+              </button>
             </>
           )}
         </div>
@@ -129,6 +147,7 @@ function Patients() {
           </div>
         </div>
       </div>
+      <div>
       {showResourceViewer && (
         <ResourceViewerPopup
           // resources={dummyResources}
@@ -136,6 +155,18 @@ function Patients() {
           selectedPatientId={selectedPatient.patientId}
         />
       )}
+      </div>
+      <div>
+      {showMessageViewer && (
+        <MessageViewerPopup
+          onClose={handleCloseMessageViewer}
+          selectedPatientId={selectedPatient.patientId}
+          >
+        </MessageViewerPopup>
+      )}
+
+      </div>
+
     </div>
   );
 }
