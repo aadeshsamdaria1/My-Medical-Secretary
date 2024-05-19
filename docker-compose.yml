@@ -8,6 +8,10 @@ services:
       - "3306:3306"
   
   backend:
+    environment:
+      ROOT_ADMIN_EMAIL: ${ROOT_ADMIN_EMAIL}
+      ROOT_ADMIN_USERNAME: ${ROOT_ADMIN_USERNAME}
+      ROOT_ADMIN_PASSWORD: ${ROOT_ADMIN_PASSWORD}
     build:
       context: .
       dockerfile: Dockerfile.backend
