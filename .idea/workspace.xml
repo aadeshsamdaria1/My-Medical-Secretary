@@ -10,41 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="change files path">
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Agile Doc Intro.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-1/Sprint 1 Plan.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-1/Sprint 1 Retrospective.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-2/Sprint 2 Plan.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-2/Sprint 2 Retrospective.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-2/Sprint 2 Review.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint 3 Plan.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Technical Details.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Authentication Architecture Diagram.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Cyber Security.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Risk Analysis.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/API-Documentation/API Documentations Short Description.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/API-Documentation/Frontend-Backend Endpoints.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Code Review.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Development Details Short Description.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/System Architecture.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Backend Test Cases.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Backend Test Details.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Frontend Test Cases.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Frontend Testing Details.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Ethical Consideration.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Home-Page.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/DO-BE-FEEL.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/Goal Model.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Mark.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Olivia.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Personas Description.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Ron.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Sarah.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/Project Details.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Application Prototypes.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Cilinic Web App Prototypes.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/User Stories.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Team-Page.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/config/admin/RootAdminProperties.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/config/admin/RootAdminProperties.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/jpa/component/RootAdminCreator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/MMSBackend/src/main/kotlin/com/mmsbackend/jpa/component/RootAdminCreator.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,10 +91,10 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "android.gradle.sync.needed": "true",
-    "git-widget-placeholder": "uploading-sprint-2-docs",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/jonat/IdeaProjects/ME-Wombat/src/backend/MyMedicalSecretaryBackend/src/main",
+    "last_opened_file_path": "C:/Users/jonat/IdeaProjects/ME-Wombat",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -167,6 +136,7 @@
       <workItem from="1711676241768" duration="4411000" />
       <workItem from="1712133243604" duration="1238000" />
       <workItem from="1714473071199" duration="1288000" />
+      <workItem from="1716097811275" duration="2037000" />
     </task>
     <task id="LOCAL-00001" summary="setting up ai chatgpt workflow">
       <option name="closed" value="true" />

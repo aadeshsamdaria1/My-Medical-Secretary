@@ -8,4 +8,3 @@ data class RootAdminProperties(
     val defaultUsername: String,
     val defaultPassword: String
 )
-git ad

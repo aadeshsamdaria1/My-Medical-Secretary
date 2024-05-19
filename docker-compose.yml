@@ -12,6 +12,10 @@ services:
       ROOT_ADMIN_EMAIL: ${ROOT_ADMIN_EMAIL}
       ROOT_ADMIN_USERNAME: ${ROOT_ADMIN_USERNAME}
       ROOT_ADMIN_PASSWORD: ${ROOT_ADMIN_PASSWORD}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      JWT_KEY: ${JWT_KEY}
     build:
       context: .
       dockerfile: Dockerfile.backend

@@ -34,29 +34,14 @@ class RootAdminCreator(
 
     private fun createAdmin(): AdminEntity {
 
-        try {
-            val email = System.getProperty("ROOT_ADMIN_EMAIL") ?: rootAdminProperties.defaultEmail
-            val username = System.getProperty("ROOT_ADMIN_USERNAME") ?: rootAdminProperties.defaultUsername
-            val password = System.getProperty("ROOT_ADMIN_PASSWORD") ?: rootAdminProperties.defaultPassword
+        val email = System.getProperty("ROOT_ADMIN_EMAIL") ?: rootAdminProperties.defaultEmail
+        val username = System.getProperty("ROOT_ADMIN_USERNAME") ?: rootAdminProperties.defaultUsername
+        val password = System.getProperty("ROOT_ADMIN_PASSWORD") ?: rootAdminProperties.defaultPassword
 
-            println("root admin!")
-            println("Password $password")
-            println("Username $username")
-            println("Email  $email")
-            println(System.getenv().entries)
-            println(System.getProperties().entries)
-            println(System.getenv().keys)
-            println(System.getProperties().keys)
-            println(System.getenv())
-            println(System.getProperties())
-        } catch (e: Exception) {
-            println(e.message)
-            e.printStackTrace()
-        }
-
-        val email = "email"
-        val username = "admin"
-        val password = "password"
+        println("Creating root admin")
+        println("Password: $password")
+        println("Username: $username")
+        println("Email: $email")
 
         return AdminEntity(
             email = email,
