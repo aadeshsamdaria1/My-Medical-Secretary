@@ -20,9 +20,6 @@ class NotificationServiceTest {
     private lateinit var notificationService: NotificationService
 
     @MockK
-    private lateinit var userEntityRepository: UserEntityRepository
-
-    @MockK
     private lateinit var okHttpClient: OkHttpClient
 
     @MockK
@@ -34,7 +31,7 @@ class NotificationServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        notificationService = NotificationService(userEntityRepository, okHttpClient)
+        notificationService = NotificationService(okHttpClient)
         every { okHttpClient.newCall(any()).execute() } returns response
         every { response.body } returns responseBody
         every { responseBody.string() } returns "{\"data\":{\"status\":\"ok\"}}"

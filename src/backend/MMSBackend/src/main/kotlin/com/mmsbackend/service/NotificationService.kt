@@ -1,6 +1,5 @@
 package com.mmsbackend.service
 
-//import com.google.firebase.messaging.*
 import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
 import com.mmsbackend.data.NotificationRequest
@@ -12,7 +11,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 @Service
 class NotificationService (
-    val userEntityRepository: UserEntityRepository,
     private val okHttpClient: OkHttpClient
 ) {
 
