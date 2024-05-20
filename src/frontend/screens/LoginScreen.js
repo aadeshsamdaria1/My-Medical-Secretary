@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Modal } from 'react-native';
-import { API_ENDPOINT, login } from '../api';
+import { login } from '../api';
+import { activateAccountByEmail } from '../utils/resetPasswordAPI';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -23,8 +24,8 @@ const LoginScreen = ({ navigation }) => {
 
   const handleForgotPasswordSubmit = async () => {
     try {
-      // Send a request to the server to generate a 6-digit passcode and send it to the user's email
-      // ...
+      console.log("attempring to activate account with email: ", forgotPasswordEmail)
+      activateAccountByEmail(forgotPasswordEmail);
       setForgotPasswordModal(false);
       setResetPasswordModal(true);
     } catch (error) {
@@ -89,12 +90,16 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       <Modal visible={forgotPasswordModal} animationType="slide" transparent>
+        <KeyboardAvoidingView
+              style={styles.container}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={40}>
         <View style={styles.forgotPasswordModal}>
           <View style={styles.forgotPasswordContent}>
             <Text style={styles.forgotPasswordTitle}>Enter your Email</Text>
             <TextInput
               style={styles.forgotPasswordInput}
-              placeholder="Username"
+              placeholder="Email"
               value={forgotPasswordEmail}
               onChangeText={setForgotPasswordEmail}
             />
@@ -114,11 +119,19 @@ const LoginScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
-
+      
       <Modal visible={resetPasswordModal} animationType="slide" transparent>
+        <KeyboardAvoidingView
+              style={styles.container}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={40}>
         <View style={styles.forgotPasswordModal}>
           <View style={styles.forgotPasswordContent}>
+            <Text 
+                style={styles.emailResponseText}>
+                If the email you entered is present in our systems you will receive a 6-digit passcode shortly</Text>
             <Text style={styles.forgotPasswordTitle}>Enter 6-digit Passcode</Text>
             <TextInput
               style={styles.forgotPasswordInput}
@@ -159,6 +172,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
     </KeyboardAvoidingView>
   );
@@ -230,17 +244,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
   },
-  forgotPasswordButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  forgotPasswordButton: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 8,
-    flex: 1,
-    marginHorizontal: 8,
-  },
+
   forgotPasswordButtonText: {
     color: 'white',
     textAlign: 'center',
@@ -252,29 +256,7 @@ const styles = StyleSheet.create({
   forgotPasswordLinkText: {
     color: '#007AFF',
   },
-  forgotPasswordModal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  forgotPasswordContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 8,
-    width: '80%',
-  },
-  forgotPasswordTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  forgotPasswordInput: {
-    backgroundColor: '#f2f2f2',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
+
   forgotPasswordButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -286,11 +268,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 8,
   },
-  forgotPasswordButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
+  emailResponseText: {
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#007AFF"
+  }
 });
 
 export default LoginScreen;
