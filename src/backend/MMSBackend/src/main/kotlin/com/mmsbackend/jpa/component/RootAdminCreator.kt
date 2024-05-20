@@ -70,7 +70,8 @@ class RootAdminCreator(
             suburb = "A good suburb",
             state = "Victoria",
             accountActive = true,
-            oneTimePasscode = null
+            oneTimePasscode = null,
+            deviceToken = null
         )
     }
 }

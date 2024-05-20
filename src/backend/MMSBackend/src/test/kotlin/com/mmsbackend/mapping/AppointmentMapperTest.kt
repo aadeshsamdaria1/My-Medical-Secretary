@@ -64,7 +64,8 @@ class AppointmentMapperTest {
             suburb = "Correct Suburb",
             state = "Correct State",
             accountActive = true,
-            oneTimePasscode = null
+            oneTimePasscode = null,
+            deviceToken = null
         )
 
         doctor = DoctorEntity(
@@ -146,7 +147,8 @@ class AppointmentMapperTest {
                     suburb = "Incorrect Suburb",
                     state = "Incorrect State",
                     accountActive = true,
-                    oneTimePasscode = null
+                    oneTimePasscode = null,
+                    deviceToken = null
                 ),
                 doctor = DoctorEntity(
                         id = doctorId + 1,

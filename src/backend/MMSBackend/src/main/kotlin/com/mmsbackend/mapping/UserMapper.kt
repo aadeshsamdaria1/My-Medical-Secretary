@@ -50,7 +50,8 @@ class UserMapper(
             username = usernameService.generateUsernameFromName(name, emptySet()),
             password = encoder.encode(UUID.randomUUID().toString()),
             accountActive = false,
-            oneTimePasscode = null
+            oneTimePasscode = null,
+            deviceToken = null
         )
     }
 
@@ -84,7 +85,8 @@ class UserMapper(
             username = existingPatient.username,
             password = existingPatient.password,
             accountActive = existingPatient.accountActive,
-            oneTimePasscode = null
+            oneTimePasscode = null,
+            deviceToken = null
         )
     }
 
@@ -140,7 +142,8 @@ class UserMapper(
                 username = newUsername,
                 password = defaultPassword,
                 accountActive = false,
-                oneTimePasscode = null
+                oneTimePasscode = null,
+                deviceToken = null
             )
 
             Pair(StatusType.SUCCESS, patientEntity)

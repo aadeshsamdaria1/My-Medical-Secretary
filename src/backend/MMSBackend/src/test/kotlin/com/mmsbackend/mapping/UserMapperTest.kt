@@ -90,7 +90,8 @@ class UserMapperTest {
             password = password,
             username = username,
             accountActive = false,
-            oneTimePasscode = null
+            oneTimePasscode = null,
+            deviceToken = null
         )
 
         @Test
@@ -99,7 +100,7 @@ class UserMapperTest {
             val patient = userMapper.mapPatientDTO(patientDTO)
             val mappedPatient = PatientEntity(
                 0, email, password, username, patientId, firstname,
-                middleName, surname, dob, address, suburb, state, false, null
+                middleName, surname, dob, address, suburb, state, false, null, null
             )
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(patient)
         }
@@ -118,6 +119,7 @@ class UserMapperTest {
                 state = "Incorrect state",
                 accountActive = false,
                 oneTimePasscode = null,
+                deviceToken = null,
 
                 // These fields should appear in final object
                 email = "Correct email",
@@ -144,7 +146,8 @@ class UserMapperTest {
                 suburb = "Correct suburb",
                 state = "Correct state",
                 accountActive = true,
-                oneTimePasscode = null
+                oneTimePasscode = null,
+                deviceToken = null
             )
 
             val mappedPatient = userMapper.updateExistingPatient(oldPatient, newPatient)
@@ -204,7 +207,8 @@ class UserMapperTest {
                  password = password,
                  username = username,
                  accountActive = false,
-                 oneTimePasscode = null
+                 oneTimePasscode = null,
+                 deviceToken = null
              )
             val mappedPatient = userMapper.mapHtmlPatient(rowString, cols, mutableSetOf<String>())
             assertThat(mappedPatient).usingRecursiveComparison().isEqualTo(Pair(StatusType.SUCCESS, expectedResult))

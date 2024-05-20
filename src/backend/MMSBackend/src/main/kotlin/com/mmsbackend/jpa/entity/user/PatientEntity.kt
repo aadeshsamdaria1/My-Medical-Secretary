@@ -34,6 +34,8 @@ class PatientEntity(
     @JoinColumn(name = "passcodeId")
     var oneTimePasscode: OneTimePasscodeEntity?,
 
+    var deviceToken: String?
+
 ): UserEntity(
     mmsId = mmsId,
     email = email,
