@@ -49,8 +49,8 @@ class FileController(
             )
 
             if (fails.isNotEmpty()) {
-                ResponseEntity.badRequest().body("Failed to upload some appointments. Ensure they have valid data." +
-                        "Failed appointment Ids: ${fails.take(IDS_TO_DISPLAY)}...")
+                ResponseEntity.badRequest().body("Failed to upload some appointments. Ensure they have valid data" +
+                        " and that the linked patients exist. Failed appointment Ids: ${fails.take(IDS_TO_DISPLAY)}...")
             } else {
                 ResponseEntity.ok("Successfully uploaded appointments with these ids: $successes.")
             }

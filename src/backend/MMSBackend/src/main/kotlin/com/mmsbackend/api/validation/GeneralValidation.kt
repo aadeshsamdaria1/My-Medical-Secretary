@@ -17,8 +17,13 @@ class GeneralValidation(
     }
 
     fun isAdminOrSpecificPatientId(userDetails: UserDetails, requiredId: Int): Boolean {
-        val requiredUsername = userEntityRepository.findByPatientId(requiredId)?.username
-            ?: return false
+        val requiredUsername = userEntityRepository.findByPatientId(requiredId)?.username ?: return false
         return isAdminOrSpecificPatientUsername(userDetails, requiredUsername)
+    }
+
+    fun isSpecificPatient(userDetails: UserDetails, requiredId: Int): Boolean {
+        val requiredUsername = userEntityRepository.findByPatientId(requiredId)?.username ?: return false
+        return (userDetails.authorities.any { it.authority == "ROLE_PATIENT" } &&
+                userDetails.username == requiredUsername)
     }
 }
