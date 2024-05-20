@@ -1,7 +1,9 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.dto.MessageDTO
 import com.mmsbackend.jpa.entity.MessageEntity
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -13,6 +15,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
@@ -23,10 +28,32 @@ class MessageControllerTest {
     @MockK
     private lateinit var messageService: MessageService
 
+    @MockK
+    private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
+
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContext: SecurityContext
+
+    @MockK
+    private lateinit var authentication: Authentication
+
+    @MockK
+    private lateinit var userDetails: UserDetails
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        messageController = MessageController(messageService)
+        messageController = MessageController(
+            messageService,
+            generalValidation,
+            securityContextHolderRetriever)
+
+        every { securityContextHolderRetriever.getSecurityContext() } returns userDetails
+        every { securityContext.authentication } returns authentication
+        every { generalValidation.isSpecificPatient(userDetails, any()) } returns true
     }
 
     @Test
