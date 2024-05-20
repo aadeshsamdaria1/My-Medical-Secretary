@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Modal } from 'react-native';
-import { API_ENDPOINT, login } from '../api';
+import { login } from '../api';
+import { activateAccountByEmail, sendOneTimeCode } from '../utils/resetPasswordAPI';
+
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -13,6 +15,10 @@ const LoginScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSignIn = async () => {
+    if (username === "" || password === "") {
+      return;
+    }
+
     try {
       const [token, userId] = await login(username, password);
       navigation.navigate('TabNavigator', { token, userId });
@@ -22,14 +28,24 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleForgotPasswordSubmit = async () => {
+    if (forgotPasswordEmail === "") {
+      return;
+    }
     try {
-      // Send a request to the server to generate a 6-digit passcode and send it to the user's email
-      // ...
+      const response = await activateAccountByEmail(forgotPasswordEmail);
+      setPasscode("");
+      setNewPassword("");
+      setConfirmPassword("");
       setForgotPasswordModal(false);
       setResetPasswordModal(true);
+      
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred while resetting the password');
+      if (error.response && error.response.status === 404 && error.response.data) {
+        console.error(error.response.data);
+        Alert.alert('Error', error.response.data);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -39,13 +55,30 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
+    if (passcode === "") {
+      Alert.alert('Error', 'Please enter 6-digit Passcode');
+      return;
+    }
+  
+    if (newPassword === "") {
+      Alert.alert('Error', 'Password cannot be empty');
+      return;
+    }
+    
     try {
-      // Send a request to the server to verify the passcode and update the password
-      // ...
+      const response = await sendOneTimeCode(forgotPasswordEmail, passcode, newPassword);
+      setUsername(response)
+      setPassword(newPassword)
       setResetPasswordModal(false);
+      Alert.alert('Successfully set password for user' + username, );
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred while resetting the password');
+      if (error.response && error.response.status === 401 && error.response.data) {
+        Alert.alert('Error', error.response.data);
+        setPasscode("");
+      } else {
+        Alert.alert('Error', 'An error occurred while resetting the password');
+      }
     }
   };
 
@@ -64,6 +97,7 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Username"
             value={username}
             onChangeText={setUsername}
+            autoCapitalize="none"
           />
           <TextInput
             style={styles.input}
@@ -71,6 +105,7 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            autoCapitalize="none"
           />
         </View>
 
@@ -89,14 +124,19 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       <Modal visible={forgotPasswordModal} animationType="slide" transparent>
+        <KeyboardAvoidingView
+              style={styles.container}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={40}>
         <View style={styles.forgotPasswordModal}>
           <View style={styles.forgotPasswordContent}>
             <Text style={styles.forgotPasswordTitle}>Enter your Email</Text>
             <TextInput
               style={styles.forgotPasswordInput}
-              placeholder="Username"
+              placeholder="Email"
               value={forgotPasswordEmail}
               onChangeText={setForgotPasswordEmail}
+              autoCapitalize="none"
             />
             <View style={styles.forgotPasswordButtonContainer}>
               <TouchableOpacity
@@ -114,11 +154,19 @@ const LoginScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
-
+      
       <Modal visible={resetPasswordModal} animationType="slide" transparent>
+        <KeyboardAvoidingView
+              style={styles.container}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={40}>
         <View style={styles.forgotPasswordModal}>
           <View style={styles.forgotPasswordContent}>
+            <Text 
+                style={styles.emailResponseText}>
+                A verification code has been sent to your email. If you cannot find it, please check your spam folder.</Text>
             <Text style={styles.forgotPasswordTitle}>Enter 6-digit Passcode</Text>
             <TextInput
               style={styles.forgotPasswordInput}
@@ -134,6 +182,7 @@ const LoginScreen = ({ navigation }) => {
               value={newPassword}
               onChangeText={setNewPassword}
               secureTextEntry
+              autoCapitalize="none"
             />
             <Text style={styles.forgotPasswordTitle}>Confirm Password</Text>
             <TextInput
@@ -142,6 +191,7 @@ const LoginScreen = ({ navigation }) => {
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry
+              autoCapitalize="none"
             />
             <View style={styles.forgotPasswordButtonContainer}>
               <TouchableOpacity
@@ -159,6 +209,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
     </KeyboardAvoidingView>
   );
@@ -230,17 +281,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
   },
-  forgotPasswordButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  forgotPasswordButton: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 8,
-    flex: 1,
-    marginHorizontal: 8,
-  },
+
   forgotPasswordButtonText: {
     color: 'white',
     textAlign: 'center',
@@ -252,29 +293,7 @@ const styles = StyleSheet.create({
   forgotPasswordLinkText: {
     color: '#007AFF',
   },
-  forgotPasswordModal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  forgotPasswordContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 8,
-    width: '80%',
-  },
-  forgotPasswordTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  forgotPasswordInput: {
-    backgroundColor: '#f2f2f2',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
+
   forgotPasswordButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -286,11 +305,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 8,
   },
-  forgotPasswordButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
+  emailResponseText: {
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#007AFF"
+  }
 });
 
 export default LoginScreen;
