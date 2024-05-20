@@ -1,6 +1,5 @@
 package com.mmsbackend.service
 
-import com.mmsbackend.jpa.repository.UserEntityRepository
 import org.springframework.stereotype.Service
 import com.mmsbackend.data.NotificationRequest
 import okhttp3.*

@@ -1,9 +1,11 @@
 package com.mmsbackend.api.controllers
 
+import com.mmsbackend.api.validation.GeneralValidation
 import com.mmsbackend.data.DeviceTokenRequest
 import com.mmsbackend.data.NotificationRequest
 import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.jpa.repository.UserEntityRepository
+import com.mmsbackend.jpa.util.SecurityContextHolderRetriever
 import com.mmsbackend.service.NotificationService
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -16,10 +18,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.userdetails.UserDetails
 import java.io.IOException
 
 @ExtendWith(MockKExtension::class)
 class NotificationControllerTest {
+
+    private lateinit var notificationController: NotificationController
 
     @MockK
     private lateinit var notificationService: NotificationService
@@ -27,12 +34,34 @@ class NotificationControllerTest {
     @MockK
     private lateinit var patientEntityRepository: UserEntityRepository
 
-    private lateinit var notificationController: NotificationController
+    @MockK
+    private lateinit var securityContextHolderRetriever: SecurityContextHolderRetriever
+
+    @MockK
+    private lateinit var generalValidation: GeneralValidation
+
+    @MockK
+    private lateinit var securityContext: SecurityContext
+
+    @MockK
+    private lateinit var authentication: Authentication
+
+    @MockK
+    private lateinit var userDetails: UserDetails
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        notificationController = NotificationController(notificationService, patientEntityRepository)
+        notificationController = NotificationController(
+            notificationService,
+            patientEntityRepository,
+            securityContextHolderRetriever,
+            generalValidation
+        )
+
+        every { securityContextHolderRetriever.getSecurityContext() } returns userDetails
+        every { securityContext.authentication } returns authentication
+        every { generalValidation.isSpecificPatient(userDetails, any()) } returns true
     }
 
     @Test
@@ -63,7 +92,7 @@ class NotificationControllerTest {
         val patient = mockk<PatientEntity>(relaxed = true)
 
         every { patientEntityRepository.findByPatientId(request.patientId) } returns patient
-        justRun { patientEntityRepository.save(any<PatientEntity>()) }
+        every { patientEntityRepository.save(any()) } returns patient
 
         val response = notificationController.registerDeviceToken(request)
 

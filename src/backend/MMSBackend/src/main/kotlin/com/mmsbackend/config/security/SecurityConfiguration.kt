@@ -55,12 +55,16 @@ class SecurityConfiguration(
                         "/api/users/get_all_admins",
                         "/api/resources/get_all",
                         "/api/resources/add_patient_to_resource",
-                        "/api/resources/remove_patient_from_resource"
+                        "/api/resources/remove_patient_from_resource",
+                        "/api/notifications/send",
+                        "/api/notifications/deviceToken/**"
                     ).hasRole(Role.ADMIN.toString())
 
                     // Open to patients only
                     .requestMatchers(
-                        "/api/appointments/user_note/update"
+                        "/api/appointments/user_note/update",
+                        "/api/notifications/registerDeviceToken",
+                        "/api/notifications/registerDeviceToken/**"
                     ).hasRole(Role.PATIENT.toString())
 
                     // Open to patients and admins

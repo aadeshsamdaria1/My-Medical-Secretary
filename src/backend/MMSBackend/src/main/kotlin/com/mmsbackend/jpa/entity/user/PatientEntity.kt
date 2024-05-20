@@ -35,6 +35,8 @@ class PatientEntity(
     var oneTimePasscode: OneTimePasscodeEntity?,
     var deviceToken: String?
 
+    var deviceToken: String?
+
 ): UserEntity(
     mmsId = mmsId,
     email = email,
