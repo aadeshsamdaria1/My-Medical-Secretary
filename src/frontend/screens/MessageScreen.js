@@ -57,7 +57,6 @@ const MessageScreen = ({ route }) => {
         {messages.map((message, index) => (
           <MessageCard
             key={index}
-            sender={message.sender}
             message={message.message}
             time={message.time}
           />
@@ -65,7 +64,6 @@ const MessageScreen = ({ route }) => {
         {resource.map((item, index) => (
           <MessageCard
             key={`resource-${index}`}
-            sender="Resource"
             message={item.text}
             time=""
             link={item.link}

@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AppointmentCard from "../components/AppointmentCard";
-import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
+import { useAllAppointments } from "../utils/useUpcomingAppointments";
 
 const AppointmentListScreen = ({ route }) => {
   const userId = route.params.userId;
-  const appointmentsFromApi = useUpcomingAppointments(userId);
+  const appointmentsFromApi = useAllAppointments(userId);
   const [showMoreUpcoming, setShowMoreUpcoming] = useState(false);
   const [showMorePast, setShowMorePast] = useState(false);
 
