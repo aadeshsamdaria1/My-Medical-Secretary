@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Modal } from 'react-native';
 import { login } from '../api';
-import { activateAccountByEmail } from '../utils/resetPasswordAPI';
+import { activateAccountByEmail, sendOneTimeCode } from '../utils/resetPasswordAPI';
+
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ const LoginScreen = ({ navigation }) => {
     if (username === "" || password === "") {
       return;
     }
-    
+
     try {
       const [token, userId] = await login(username, password);
       navigation.navigate('TabNavigator', { token, userId });
@@ -31,13 +32,20 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
     try {
-      console.log("attempting to activate account with email: ", forgotPasswordEmail)
-      await activateAccountByEmail(forgotPasswordEmail);
+      const response = await activateAccountByEmail(forgotPasswordEmail);
+      setPasscode("");
+      setNewPassword("");
+      setConfirmPassword("");
       setForgotPasswordModal(false);
       setResetPasswordModal(true);
+      
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred while resetting the password');
+      if (error.response && error.response.status === 404 && error.response.data) {
+        console.error(error.response.data);
+        Alert.alert('Error', error.response.data);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -47,17 +55,30 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    if (newPassword === "") {
-      // do not allow empty passwords
+    if (passcode === "") {
+      Alert.alert('Error', 'Please enter 6-digit Passcode');
       return;
     }
-
+  
+    if (newPassword === "") {
+      Alert.alert('Error', 'Password cannot be empty');
+      return;
+    }
+    
     try {
-
+      const response = await sendOneTimeCode(forgotPasswordEmail, passcode, newPassword);
+      setUsername(response)
+      setPassword(newPassword)
       setResetPasswordModal(false);
+      Alert.alert('Successfully set password for user' + username, );
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred while resetting the password');
+      if (error.response && error.response.status === 401 && error.response.data) {
+        Alert.alert('Error', error.response.data);
+        setPasscode("");
+      } else {
+        Alert.alert('Error', 'An error occurred while resetting the password');
+      }
     }
   };
 
@@ -145,7 +166,7 @@ const LoginScreen = ({ navigation }) => {
           <View style={styles.forgotPasswordContent}>
             <Text 
                 style={styles.emailResponseText}>
-                If the email you entered is present in our systems you will receive a 6-digit passcode shortly</Text>
+                A verification code has been sent to your email. If you cannot find it, please check your spam folder.</Text>
             <Text style={styles.forgotPasswordTitle}>Enter 6-digit Passcode</Text>
             <TextInput
               style={styles.forgotPasswordInput}
