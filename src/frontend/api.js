@@ -18,6 +18,8 @@ export const getFacilitiesEndpoint = `${API_ENDPOINT}/facilities/get_all`;
 export const getDoctorsByUserEndpoint = (userId) => `${API_ENDPOINT}/doctors/get_by_patient_id/${userId}`;
 export const updateUserNoteEndpoint = `${API_ENDPOINT}/appointments/user_note/update`;
 export const getResourceByUserEndpoint = (userId) => `${API_ENDPOINT}/resources/get_all_by_id/${userId}`;
+export const activateAccountByEmailEndpoint = (email) => `${API_ENDPOINT}/enter_email/${email}`;
+export const sendOneTimeCodeEndpoint = `${API_ENDPOINT}/activate`;
 
 // Login function
 export const login = async (username, password) => {
