@@ -5,6 +5,7 @@ import com.mmsbackend.data.LoginRequest
 import com.mmsbackend.data.LoginResponse
 import com.mmsbackend.data.UpdatePasswordRequest
 import com.mmsbackend.exception.PatientNotFoundException
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import com.mmsbackend.service.EmailService
 import com.mmsbackend.service.security.AuthService
 import com.mmsbackend.service.security.OneTimePasscodeAuthService
@@ -46,6 +47,9 @@ class AuthControllerTest {
 
     @MockK
     private lateinit var emailService: EmailService
+
+    @MockK
+    private lateinit var patient: PatientEntity
 
     @BeforeEach
     fun setup() {
@@ -94,21 +98,22 @@ class AuthControllerTest {
 
     @Test
     fun `Successfully activate account`() {
-        every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns true
+        every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns Pair(true, patient)
+        every { patient.username } returns "username"
 
         val request = ActivateRequest(
             email = email,
             oneTimeCode = "One Time Code",
             password = "New Password"
         )
-        val expectedResponse = ResponseEntity.ok().body("Account activated successfully.")
+        val expectedResponse = ResponseEntity.ok().body("username")
         val response = authController.activate(request)
         assertEquals(expectedResponse, response)
     }
 
     @Test
     fun `Fail to activate account when auth fails`() {
-        every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns false
+        every { oneTimePasscodeAuthService.authenticateOneTimePasscode( any() ) } returns Pair(false, null)
 
         val request = ActivateRequest(
             email = email,

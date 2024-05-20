@@ -174,3 +174,9 @@
   .table-header {
     background-color: #ccc;
   }
+
+  .error-mess {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+  }
