@@ -191,7 +191,9 @@ class FileServiceTest {
         @Test
         fun `Throw exception if patient does not exist`() {
             every { userEntityRepository.findByPatientId(patientId2) } returns null
-            assertThrows<PatientMissingException>{fileService.readAndUploadAppointmentFile(appointmentBytes)}
+            val appointmentIds = fileService.readAndUploadAppointmentFile(appointmentBytes)
+            val expectedIds = Pair(listOf(appointmentId2), listOf(appointmentId1))
+            assertThat(appointmentIds).isEqualTo(expectedIds)
         }
 
         @Test
