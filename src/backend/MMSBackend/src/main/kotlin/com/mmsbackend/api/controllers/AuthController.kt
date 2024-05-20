@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     val authService: AuthService,
     val oneTimePasscodeAuthService: OneTimePasscodeAuthService,
-    val emailService: EmailService
+    val emailService: EmailService,
 ) {
 
     @GetMapping("/health")
@@ -59,8 +59,9 @@ class AuthController(
 
     @PostMapping("/activate")
     fun activate(@RequestBody request: ActivateRequest): ResponseEntity<Any> {
-        return if (oneTimePasscodeAuthService.authenticateOneTimePasscode(request)) {
-            ResponseEntity.ok().body("Account activated successfully.")
+        val response = oneTimePasscodeAuthService.authenticateOneTimePasscode(request)
+        return if (response.first) {
+            ResponseEntity.ok().body(response.second?.username)
         } else{
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid one-time code.")
         }
