@@ -16,7 +16,7 @@ const LoginForm = ({ onLoginSuccess }) => {
     }
 
     try {
-        const response = await login(username, password);
+        await login(username, password);
         onLoginSuccess();
     } catch (error) {
 
