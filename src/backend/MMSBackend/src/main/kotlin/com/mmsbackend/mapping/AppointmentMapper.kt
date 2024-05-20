@@ -87,7 +87,8 @@ class AppointmentMapper(
                 startDate = SimpleDateFormat(DATE_CREATED_PATTERN).parse(extractFromRow(columns, rowString, START_DATE, appointmentId)),
                 dateCreate =  stringToInstant(extractFromRow(columns, rowString, DATE_CREATE,appointmentId), DATE_CREATED_PATTERN),
 
-                patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId)),
+                patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId))
+                    ?: return Pair(StatusType.FAILURE, appointmentId),
                 doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR, appointmentId)),
                 status = AppointmentStatus.ACTIVE
             )
@@ -103,9 +104,8 @@ class AppointmentMapper(
             ?: throw DoctorMissingException(stringId.toInt(), "Doctor missing")
     }
 
-    private fun extractPatient(stringId: String): PatientEntity {
+    private fun extractPatient(stringId: String): PatientEntity? {
         return userEntityRepository.findByPatientId(stringId.toInt())
-            ?: throw PatientMissingException(stringId.toInt(), "Patient missing")
     }
 
     private fun stringToInstant(date: String, pattern: String): Instant {

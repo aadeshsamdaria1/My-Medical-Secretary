@@ -81,8 +81,8 @@ class FileControllerTest {
     fun `Successfully upload appointments file but have failed appointments`() {
         every { fileService.readAndUploadAppointmentFile(appointmentBytes) } returns Pair(failedIds2, appointmentIds)
         val response = fileController.uploadAppointmentFile(appointmentFile)
-        val expectedResponse = ResponseEntity.badRequest().body("Failed to upload some appointments. Ensure they have valid data." +
-                "Failed appointment Ids: [10, 11, 21, 20]...")
+        val expectedResponse = ResponseEntity.badRequest().body("Failed to upload some appointments. " +
+                "Ensure they have valid data and that the linked patients exist. Failed appointment Ids: [10, 11, 21, 20]...")
         assertEquals(expectedResponse, response)
     }
 
