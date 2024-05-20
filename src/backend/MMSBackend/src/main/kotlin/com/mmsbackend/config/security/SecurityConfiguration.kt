@@ -57,7 +57,10 @@ class SecurityConfiguration(
                         "/api/resources/add_patient_to_resource",
                         "/api/resources/remove_patient_from_resource",
                         "/api/notifications/send",
-                        "/api/notifications/deviceToken/**"
+                        "/api/notifications/deviceToken/**",
+                        "/api/messages/sendMessage",
+                        "/api/messages/delete/**"
+
                     ).hasRole(Role.ADMIN.toString())
 
                     // Open to patients only
@@ -78,7 +81,8 @@ class SecurityConfiguration(
                         "/api/doctors/get/**",
                         "/api/doctors/get_by_patient/id/**",
                         "/api/appointments/get/**",
-                        "/api/appointments/get_all"
+                        "/api/appointments/get_all",
+                        "/api/messages/getMessages"
                     ).hasAnyRole(
                         Role.ADMIN.toString(),
                         Role.PATIENT.toString()

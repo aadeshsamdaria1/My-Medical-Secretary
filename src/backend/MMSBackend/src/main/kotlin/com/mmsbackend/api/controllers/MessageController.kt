@@ -6,7 +6,7 @@ import com.mmsbackend.service.MessageService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/api/messages")
 class MessageController(private val messageService: MessageService) {
 
     @PostMapping("/sendMessage")
@@ -19,7 +19,7 @@ class MessageController(private val messageService: MessageService) {
         return messageService.getMessagesByPatientId(patientId)
     }
 
-    @DeleteMapping("/message/{messageId}")
+    @DeleteMapping("/delete/{messageId}")
     fun deleteMessage(@PathVariable messageId: Int) {
         messageService.deleteMessage(messageId)
     }
