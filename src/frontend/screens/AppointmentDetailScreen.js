@@ -46,7 +46,7 @@ const AppointmentDetailScreen = ({ route }) => {
             DR. {appointmentDetails.doctor.name}
           </Text>
 
-          {appointmentDetails.status === "UNCONFIRMED" && (
+          {/* {appointmentDetails.status === "UNCONFIRMED" && (
             <View style={styles.statusBadge}>
               <Text style={styles.statusBadgeText}>Unconfirmed</Text>
             </View>
@@ -55,7 +55,7 @@ const AppointmentDetailScreen = ({ route }) => {
             <View style={styles.confirmBadge}>
               <Text style={styles.statusBadgeText}>Confirmed</Text>
             </View>
-          )}
+          )} */}
         </View>
         <View>
           <TouchableOpacity
@@ -233,13 +233,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#333",
     marginLeft: 8,
   },
   sectionContent: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "400",
     color: "#333",
     marginLeft: 32,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reminderText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     marginLeft: 8,
   },
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     marginLeft: 32,
   },
   actionButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     color: "#007aff",
     textDecorationLine: "underline",
@@ -279,30 +279,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   shareButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#fff",
     textTransform: "none",
   },
-  statusBadge: {
-    backgroundColor: "orange",
-    borderRadius: 4,
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-    marginLeft: 8,
-  },
-  confirmBadge: {
-    backgroundColor: "green",
-    borderRadius: 4,
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-    marginLeft: 8,
-  },
-  statusBadgeText: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "white",
-  },
+  // statusBadge: {
+  //   backgroundColor: "orange",
+  //   borderRadius: 4,
+  //   paddingVertical: 2,
+  //   paddingHorizontal: 4,
+  //   marginLeft: 8,
+  // },
+  // confirmBadge: {
+  //   backgroundColor: "green",
+  //   borderRadius: 4,
+  //   paddingVertical: 2,
+  //   paddingHorizontal: 4,
+  //   marginLeft: 8,
+  // },
+  // statusBadgeText: {
+  //   fontSize: 12,
+  //   fontWeight: "bold",
+  //   color: "white",
+  // },
   iconStyle: {
     fontSize: 24,
     color: "#007aff",

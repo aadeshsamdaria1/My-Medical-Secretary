@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { onViewDoctorLocation } from '../utils/appointmentFunctions';
 
 const DoctorDetailScreen = ({ route }) => {
   const { doctor } = route.params;
@@ -25,6 +26,14 @@ const DoctorDetailScreen = ({ route }) => {
             <Text style={styles.detailValue}>{value}</Text>
           </View>
         ))}
+        {doctor.address && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => onViewDoctorLocation(doctor.address)}
+        >
+          <Text style={styles.buttonText}>View Location</Text>
+        </TouchableOpacity>
+      )}
       </View>
     </View>
   );
@@ -60,6 +69,19 @@ const styles = StyleSheet.create({
   },
   detailValue: {
     fontSize: 16,
+  },
+  button: {
+    backgroundColor: "#007aff",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20,
+    alignItems: "center",
+  },
+  buttonText: {
+    textTransform: "none",
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 
