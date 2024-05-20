@@ -14,6 +14,10 @@ const LoginScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSignIn = async () => {
+    if (username === "" || password === "") {
+      return;
+    }
+    
     try {
       const [token, userId] = await login(username, password);
       navigation.navigate('TabNavigator', { token, userId });
@@ -23,9 +27,12 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleForgotPasswordSubmit = async () => {
+    if (forgotPasswordEmail === "") {
+      return;
+    }
     try {
-      console.log("attempring to activate account with email: ", forgotPasswordEmail)
-      activateAccountByEmail(forgotPasswordEmail);
+      console.log("attempting to activate account with email: ", forgotPasswordEmail)
+      await activateAccountByEmail(forgotPasswordEmail);
       setForgotPasswordModal(false);
       setResetPasswordModal(true);
     } catch (error) {
@@ -40,9 +47,13 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
+    if (newPassword === "") {
+      // do not allow empty passwords
+      return;
+    }
+
     try {
-      // Send a request to the server to verify the passcode and update the password
-      // ...
+
       setResetPasswordModal(false);
     } catch (error) {
       console.error('Error:', error);
@@ -65,6 +76,7 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Username"
             value={username}
             onChangeText={setUsername}
+            autoCapitalize="none"
           />
           <TextInput
             style={styles.input}
@@ -72,6 +84,7 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            autoCapitalize="none"
           />
         </View>
 
@@ -102,6 +115,7 @@ const LoginScreen = ({ navigation }) => {
               placeholder="Email"
               value={forgotPasswordEmail}
               onChangeText={setForgotPasswordEmail}
+              autoCapitalize="none"
             />
             <View style={styles.forgotPasswordButtonContainer}>
               <TouchableOpacity
@@ -147,6 +161,7 @@ const LoginScreen = ({ navigation }) => {
               value={newPassword}
               onChangeText={setNewPassword}
               secureTextEntry
+              autoCapitalize="none"
             />
             <Text style={styles.forgotPasswordTitle}>Confirm Password</Text>
             <TextInput
@@ -155,6 +170,7 @@ const LoginScreen = ({ navigation }) => {
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry
+              autoCapitalize="none"
             />
             <View style={styles.forgotPasswordButtonContainer}>
               <TouchableOpacity
