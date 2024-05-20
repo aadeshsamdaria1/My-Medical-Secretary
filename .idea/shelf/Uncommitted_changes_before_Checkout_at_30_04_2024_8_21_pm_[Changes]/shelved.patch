@@ -1,0 +1,26 @@
+Index: .github/workflows/ai-pr-review.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>name: pr-review\r\non:\r\n  pull_request:\r\n    types: [opened, synchronize]\r\njobs:\r\n  review:\r\n    name: ChatGPT code review\r\n    runs-on: ubuntu-latest\r\n    steps:\r\n      - uses: agogear/chatgpt-pr-review@0.0.11\r\n        with:\r\n          openai_api_key: ${{ secrets.OPENAI_API_KEY }}\r\n          github_token: ${{ secrets.GITHUB_TOKEN }}\r\n          github_pr_id: ${{ github.event.number }}\r\n          files: \"*.kt, *.js, *.json, *.css\"\r\n          openai_model: \"gpt-4-turbo\"
+===================================================================
+diff --git a/.github/workflows/ai-pr-review.yml b/.github/workflows/ai-pr-review.yml
+--- a/.github/workflows/ai-pr-review.yml	
++++ b/.github/workflows/ai-pr-review.yml	
+@@ -1,16 +1,0 @@
+-name: pr-review
+-on:
+-  pull_request:
+-    types: [opened, synchronize]
+-jobs:
+-  review:
+-    name: ChatGPT code review
+-    runs-on: ubuntu-latest
+-    steps:
+-      - uses: agogear/chatgpt-pr-review@0.0.11
+-        with:
+-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+-          github_token: ${{ secrets.GITHUB_TOKEN }}
+-          github_pr_id: ${{ github.event.number }}
+-          files: "*.kt, *.js, *.json, *.css"
+-          openai_model: "gpt-4-turbo"
+\ No newline at end of file

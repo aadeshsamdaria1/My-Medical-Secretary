@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > AppointmentController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mmsbackend.api.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: AppointmentController (com.mmsbackend.api.controllers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AppointmentController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/36)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AppointmentController$getAllAppointmentsForUser$$inlined$sortedBy$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.mmsbackend.api.controllers
+&nbsp;
+&nbsp;import com.mmsbackend.api.validation.AppointmentValidation
+&nbsp;import com.mmsbackend.dto.appointment.AppointmentDTO
+&nbsp;import com.mmsbackend.dto.appointment.UserNoteDTO
+&nbsp;import com.mmsbackend.jpa.entity.AppointmentEntity
+&nbsp;import com.mmsbackend.jpa.repository.AppointmentEntityRepository
+&nbsp;import com.mmsbackend.jpa.repository.DoctorEntityRepository
+&nbsp;import com.mmsbackend.jpa.repository.UserEntityRepository
+&nbsp;import com.mmsbackend.mapping.AppointmentMapper
+&nbsp;import org.springframework.http.ResponseEntity
+&nbsp;import org.springframework.web.bind.annotation.*
+&nbsp;import kotlin.jvm.optionals.getOrNull
+&nbsp;
+<b class="nc">&nbsp;@RestController</b>
+&nbsp;@RequestMapping(&quot;/api/appointments&quot;)
+&nbsp;class AppointmentController (
+<b class="nc">&nbsp;    val appointmentEntityRepository: AppointmentEntityRepository,</b>
+<b class="nc">&nbsp;    val appointmentMapper: AppointmentMapper,</b>
+<b class="nc">&nbsp;    val userEntityRepository: UserEntityRepository,</b>
+<b class="nc">&nbsp;    val doctorEntityRepository: DoctorEntityRepository,</b>
+<b class="nc">&nbsp;    val appointmentValidation: AppointmentValidation,</b>
+&nbsp;) {
+&nbsp;    @GetMapping(&quot;/get/{id}&quot;)
+&nbsp;    fun getAppointment(@PathVariable id: Int): AppointmentEntity? {
+<b class="nc">&nbsp;        return appointmentEntityRepository.findById(id).getOrNull()</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/get_all/{userId}&quot;)
+&nbsp;    fun getAllAppointmentsForUser(@PathVariable userId: Int): List&lt;AppointmentEntity&gt;? {
+<b class="nc">&nbsp;        return appointmentEntityRepository.findAll().filter { appointment -&gt;</b>
+<b class="nc">&nbsp;            appointment.patient.patientId == userId</b>
+<b class="nc">&nbsp;        }.sortedBy {</b>
+&nbsp;            it.dateCreate
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(&quot;/create&quot;)
+&nbsp;    fun createAppointment(@RequestBody appointmentDTO: AppointmentDTO): ResponseEntity&lt;String&gt; {
+&nbsp;
+<b class="nc">&nbsp;        val patient = userEntityRepository.findByPatientId(appointmentDTO.patientId)</b>
+<b class="nc">&nbsp;            ?: return ResponseEntity.badRequest().body(&quot;Could not create appointment. &quot; +</b>
+<b class="nc">&nbsp;                &quot;Patient with id ${appointmentDTO.patientId} does not exist or is not a patient.&quot;)</b>
+&nbsp;
+<b class="nc">&nbsp;        val doctor = doctorEntityRepository.findById(appointmentDTO.providerId).getOrNull()</b>
+<b class="nc">&nbsp;            ?: return ResponseEntity.badRequest().body(&quot;Could not create appointment. &quot; +</b>
+<b class="nc">&nbsp;                &quot;Provider(doctor) with id ${appointmentDTO.providerId} does not exist.&quot;)</b>
+&nbsp;
+<b class="nc">&nbsp;        val appointment = appointmentMapper.mapAppointmentDTO(appointmentDTO, patient, doctor)</b>
+<b class="nc">&nbsp;        if (!appointmentValidation.isValidAppointment(appointment)){</b>
+<b class="nc">&nbsp;            return ResponseEntity.badRequest().body(&quot;Could not create appointment. Invalid fields.&quot;)</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        val existingApp = appointmentEntityRepository.findById(appointmentDTO.id).getOrNull()</b>
+<b class="nc">&nbsp;        val savedAppointment: AppointmentEntity = if (existingApp != null) {</b>
+<b class="nc">&nbsp;            appointmentEntityRepository.save(appointmentMapper.updateExistingAppointment(existingApp, appointment))</b>
+<b class="nc">&nbsp;        } else{</b>
+<b class="nc">&nbsp;            appointmentEntityRepository.save(appointment)</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return ResponseEntity.ok(&quot;Successfully ${if (existingApp != null) &quot;updated&quot; else &quot;created new&quot;} &quot; +</b>
+<b class="nc">&nbsp;                &quot;appointment with Genie ID: ${savedAppointment.id}.&quot;)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(&quot;/user_note/update&quot;)
+&nbsp;    fun updateUserNote(@RequestBody userNoteDTO: UserNoteDTO): ResponseEntity&lt;String&gt; {
+<b class="nc">&nbsp;        val appointment = appointmentEntityRepository.findById(userNoteDTO.appointmentId).getOrNull()</b>
+<b class="nc">&nbsp;            ?: return ResponseEntity.badRequest().body(&quot;Could not update user note for appointment with ID &quot; +</b>
+<b class="nc">&nbsp;                    &quot;${userNoteDTO.appointmentId}. Appointment does not exist.&quot;)</b>
+<b class="nc">&nbsp;        appointment.userNote = userNoteDTO.note</b>
+<b class="nc">&nbsp;        appointmentEntityRepository.save(appointment)</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok(&quot;Successfully updated user note for appointment ${userNoteDTO.appointmentId}.&quot;)</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-14 00:33</div>
+</div>
+</body>
+</html>
