@@ -38,6 +38,6 @@ describe('FileUpload', () => {
     render(<MemoryRouter> <FileUpload /> </MemoryRouter>);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     fireEvent.click(submitButton);
-    expect(screen.getByText('Please select a file to upload.')).toBeInTheDocument();
+    expect(screen.getByText('Please select a file to upload')).toBeInTheDocument();
   });
 });

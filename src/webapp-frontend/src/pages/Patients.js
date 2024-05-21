@@ -5,6 +5,7 @@ import PatientDetail from "../components/PatientDetail";
 import SearchBar from "../components/SearchBar";
 import AppointmentsTable from "../components/AppointmentTable";
 import ResourceViewerPopup from "../components/ResourceViewerPopup";
+import patientIcon from "../assets/patient-logo.png"
 import MessageViewerPopup from "../components/MessageViewerPopup";
 import "../styles/Patients.css";
 import {
@@ -109,10 +110,11 @@ function Patients() {
     <div>
       <NavBar />
       <div className="patients-container">
-      <div className="patients-detail">
-          <PatientDetail patient={selectedPatient} />
-          {selectedPatient && (
+        <div className="patients-detail">
+          
+          {selectedPatient ? (
             <>
+              <PatientDetail patient={selectedPatient} />
               <AppointmentsTable appointments={appointments} />
               <button
                 onClick={handleResourceViewerClick}
@@ -127,7 +129,15 @@ function Patients() {
                 Message Viewer
               </button>
             </>
-          )}
+          ) : (
+            
+              <div className="patient-logo">
+              <img src={patientIcon} alt="Patient Logo" />
+              </div>
+          
+          )
+            
+          }
         </div>
         <div className="patients-list">
           <div className="patients-list-header">
