@@ -38,6 +38,9 @@ export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
 export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
 export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
 
+export const sendMessageToPatientEndpoint = `${API_ENDPOINT}/messages/sendMessage`;
+export const getAllMessagesByPatient = (patientId) => `${API_ENDPOINT}/messages/getMessages/${patientId}`;
+export const deleteMessageByIdEndpoint = (messageId) => `${API_ENDPOINT}/messages/delete/${messageId}`;
 
 
 
