@@ -2,10 +2,10 @@ import axios from 'axios';
 
 
 
-export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+//export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
 //export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
-//export const API_ENDPOINT = 'https://medsecapi.com:444/api';
+export const API_ENDPOINT = 'https://medsecapi.com:444/api';
 
 
 // API endpoints
@@ -38,6 +38,9 @@ export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
 export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
 export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
 
+export const sendMessageToPatientEndpoint = `${API_ENDPOINT}/messages/sendMessage`;
+export const getAllMessagesByPatient = (patientId) => `${API_ENDPOINT}/messages/getMessages/${patientId}`;
+export const deleteMessageByIdEndpoint = (messageId) => `${API_ENDPOINT}/messages/delete/${messageId}`;
 
 
 
