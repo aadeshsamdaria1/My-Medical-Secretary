@@ -3,24 +3,24 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Linking } 
 import MessageCard from "../components/MessageCard";
 import * as Notifications from "expo-notifications";
 import { useResource } from "../utils/useResourceByUser";
+import { useMessage } from "../utils/useMessageByUser";
 
 const MessageScreen = ({ route }) => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   const userId = route.params.userId;
   const resource = useResource(userId);
+  const message = useMessage(userId);
 
-  const messages = [
-    {
-      sender: "Dr. Smith",
-      message: "Your test results are ready.",
-      time: "9:30 AM",
-    },
-    {
-      sender: "Nurse Olivia",
-      message: "Please remember to take your medication.",
-      time: "11:15 AM",
-    },
-  ];
+  // const message = [
+  //   {
+  //     patientId: 999999999,
+  //     text: "Your test results are ready.",
+  //   },
+  //   {
+  //     patientId: 999999999,
+  //     text: "For many of you, these subjects represent an important moment — the transition from theoretical knowledge to practical application, from student to industry innovator. This is your arena to apply agile methodologies, collaborate effectively, and engage with industry clients, perhaps for the first time. We understand the challenges ahead and have designed these notes to smooth your path to becoming a confident software engineer.",
+  //   },
+  // ];
 
   useEffect(() => {
     const checkNotificationPermission = async () => {
@@ -54,18 +54,16 @@ const MessageScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {messages.map((message, index) => (
+        {message.map((message, index) => (
           <MessageCard
             key={index}
-            message={message.message}
-            time={message.time}
+            message={message.text}
           />
         ))}
         {resource.map((item, index) => (
           <MessageCard
             key={`resource-${index}`}
             message={item.text}
-            time=""
             link={item.link}
           />
         ))}

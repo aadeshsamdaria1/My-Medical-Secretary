@@ -1,19 +1,28 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Linking } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Linking,
+} from "react-native";
 
 const MAX_MESSAGE_LENGTH = 100;
 
-const MessageCard = ({ message, time, link, onPress }) => {
-  const truncatedMessage = message.length > MAX_MESSAGE_LENGTH
-    ? `${message.slice(0, MAX_MESSAGE_LENGTH)}...`
-    : message;
+const MessageCard = ({ message, link, onPress }) => {
+  const truncatedMessage =
+    message.length > MAX_MESSAGE_LENGTH
+      ? `${message.slice(0, MAX_MESSAGE_LENGTH)}...`
+      : message;
 
   const handleCardPress = () => {
     if (onPress) {
       onPress();
     }
 
-    const formattedLink = link && link.startsWith("http") ? link : `https://${link}`;
+    const formattedLink =
+      link && link.startsWith("http") ? link : `https://${link}`;
 
     const alertButtons = [
       {
@@ -29,25 +38,24 @@ const MessageCard = ({ message, time, link, onPress }) => {
           try {
             await Linking.openURL(formattedLink);
           } catch (error) {
-            Alert.alert("Error", "Unable to open the link. Please check if you have a compatible app installed.");
+            Alert.alert(
+              "Error",
+              "Unable to open the link. Please check if you have a compatible app installed."
+            );
           }
         },
       });
     }
 
-    Alert.alert(
-      null,
-      link ? `${message}\n` : message,
-      alertButtons,
-      { cancelable: true }
-    );
+    Alert.alert(null, link ? `${message}\n` : message, alertButtons, {
+      cancelable: true,
+    });
   };
 
   return (
     <TouchableOpacity style={styles.messageCard} onPress={handleCardPress}>
       <View style={styles.messageHeader}>
         <Text style={styles.messageText}>{truncatedMessage}</Text>
-        {time && <Text style={styles.timeText}>{time}</Text>}
       </View>
       {link && <Text style={styles.linkText}>{link}</Text>}
     </TouchableOpacity>
@@ -78,11 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     flexShrink: 1,
-  },
-  timeText: {
-    fontSize: 12,
-    color: "#666",
-    marginLeft: 8,
   },
   linkText: {
     fontSize: 14,
