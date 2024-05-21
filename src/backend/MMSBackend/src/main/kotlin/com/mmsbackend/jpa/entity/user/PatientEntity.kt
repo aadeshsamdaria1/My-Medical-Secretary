@@ -33,6 +33,7 @@ class PatientEntity(
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     @JoinColumn(name = "passcodeId")
     var oneTimePasscode: OneTimePasscodeEntity?,
+    var deviceToken: String?
 
 ): UserEntity(
     mmsId = mmsId,

@@ -11,6 +11,7 @@ const PatientList = ({ patients, onSelectPatient }) => {
             <th>Name</th>
             <th>Date of Birth</th>
             <th>Email</th>
+            <th>Account Status</th>
           </tr>
         </thead>
         <tbody>
@@ -23,6 +24,7 @@ const PatientList = ({ patients, onSelectPatient }) => {
               <td>{`${patient.firstname} ${patient.surname}`}</td>
               <td>{new Date(patient.dob).toLocaleDateString()}</td>
               <td>{patient.email}</td>
+              <td>{patient.accountActive ? "Active" : "Inactive"}</td>
             </tr>
           ))}
         </tbody>

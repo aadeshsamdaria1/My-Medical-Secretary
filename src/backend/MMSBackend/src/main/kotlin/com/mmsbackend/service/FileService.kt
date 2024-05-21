@@ -69,7 +69,7 @@ class FileService(
             .withIndex()
             .associate { (index, columnName) -> columnName to index }
 
-        val appointmentResults = tableRows.drop(1).mapNotNull { row ->
+        val appointmentResults = tableRows.drop(1).map { row ->
             appointmentMapper.mapHtmlAppointment(
                 rowString = row,
                 columns = columns

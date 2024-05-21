@@ -16,9 +16,7 @@ export const getAllResources = async () => {
       });
       return response.data;
     } catch (error) {
-      return handleRequestError(error, axios.get, getAllResourcesEndpoint, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-      });
+      return handleRequestError(error, axios.get, getAllResourcesEndpoint);
     }
 };
 
@@ -31,9 +29,7 @@ export const addResource = async (newResource) => {
       console.log("Resource added successfully:", response.data);
       return response.data;
     } catch (error) {
-      return handleRequestError(error, axios.post, createResourceEndpoint, newResource, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` }
-      });
+      return handleRequestError(error, axios.post, createResourceEndpoint, newResource);
     }
 };
   
@@ -46,9 +42,7 @@ export const addResource = async (newResource) => {
       console.log("Resource deleted successfully");
       return response.data;
     } catch (error) {
-      return handleRequestError(error, axios.delete, `${deleteResourceEndpoint}/${resourceId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` }
-      });
+      return handleRequestError(error, axios.delete, `${deleteResourceEndpoint}/${resourceId}`);
     }
   };
 
@@ -67,8 +61,6 @@ export const addPatientToResource = async (resourceId, patientId) => {
       return handleRequestError(error, axios.post, addPatientToResourceEndpoint, {
         resourceId: resourceId,
         patientId: patientId
-      }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` }
       });
     }
   };
@@ -88,8 +80,6 @@ export const removePatientFromResource = async (resourceId, patientId) => {
       return handleRequestError(error, axios.post, removePatientFromResourceEndpoint, {
         resourceId: resourceId,
         patientId: patientId
-      }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` }
       });
     }
   };

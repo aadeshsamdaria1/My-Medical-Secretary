@@ -54,8 +54,8 @@ class FileControllerTest {
     fun `Successfully upload patients file but have failed users`() {
         every { fileService.readAndUploadUserFile(patientBytes) } returns Pair(failedIds, userIds)
         val response = fileController.uploadUserFile(userFile)
-        val expectedResponse = ResponseEntity.ok("Successfully created users with " +
-                "these ids: $userIds, but failed to upload these ids: $failedIds.")
+        val expectedResponse = ResponseEntity.badRequest().body("Failed to upload some patients. Ensure they have valid data. " +
+                "Failed patient Ids: [9, 8, 7]...")
         assertEquals(expectedResponse, response)
     }
 
@@ -81,8 +81,8 @@ class FileControllerTest {
     fun `Successfully upload appointments file but have failed appointments`() {
         every { fileService.readAndUploadAppointmentFile(appointmentBytes) } returns Pair(failedIds2, appointmentIds)
         val response = fileController.uploadAppointmentFile(appointmentFile)
-        val expectedResponse = ResponseEntity.ok("Successfully uploaded appointments with these " +
-                "ids: $appointmentIds, but failed to upload these ids: $failedIds2.")
+        val expectedResponse = ResponseEntity.badRequest().body("Failed to upload some appointments. " +
+                "Ensure they have valid data and that the linked patients exist. Failed appointment Ids: [10, 11, 21, 20]...")
         assertEquals(expectedResponse, response)
     }
 

@@ -2,12 +2,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+//export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
+//export const API_ENDPOINT = 'https://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
-export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
-// export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
 
-// export const API_ENDPOINT = 'https://medsecapi.com:444/api';
+export const API_ENDPOINT = 'https://medsecapi.com:444/api';
+
 
 
 // API endpoints
@@ -18,6 +19,8 @@ export const getDoctorsByUserEndpoint = (userId) => `${API_ENDPOINT}/doctors/get
 export const updateUserNoteEndpoint = `${API_ENDPOINT}/appointments/user_note/update`;
 export const getResourceByUserEndpoint = (userId) => `${API_ENDPOINT}/resources/get_all_by_id/${userId}`;
 export const getMessageByUserEndpoint = (userId) => `${API_ENDPOINT}/messages/getMessages/${userId}`;
+export const activateAccountByEmailEndpoint = (email) => `${API_ENDPOINT}/enter_email/${email}`;
+export const sendOneTimeCodeEndpoint = `${API_ENDPOINT}/activate`;
 
 // Login function
 export const login = async (username, password) => {

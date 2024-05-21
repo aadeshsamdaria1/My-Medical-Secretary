@@ -13,6 +13,8 @@ const DoctorsPage = () => {
   const [filterCount, setFilterCount] = useState(null);
   const [filterValue, setFilterValue] = useState('');
   const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   useEffect(() => {
     fetchDoctors();
@@ -41,9 +43,11 @@ const DoctorsPage = () => {
 
   const handleDoctorSelect = (doctor) => {
     setSelectedDoctor(doctor);
+    setErrorMessage("");
   };
 
   const handleAddDoctor = () => {
+    setErrorMessage("");
     setShowAddDoctorForm(true);
     setSelectedDoctor(null);
   };
@@ -54,8 +58,12 @@ const DoctorsPage = () => {
         await deleteDoctor(selectedDoctor.id);
         setSelectedDoctor(null);
         fetchDoctors();
+        setErrorMessage("");
       } catch (error) {
         console.error("Failed to delete doctor:", error);
+        if (error.response && error.response.status === 400 && error.response.data) {
+          setErrorMessage(error.response.data);
+        }
       }
       
       
@@ -74,6 +82,7 @@ const DoctorsPage = () => {
         website: selectedDoctor.website,
       };
       try {
+        setErrorMessage("");
         await updateDoctor(updatedDoctor);
         setSelectedDoctor(null);
         fetchDoctors();
@@ -85,6 +94,7 @@ const DoctorsPage = () => {
   };
 
   const handleCloseDoctor = () => {
+    setErrorMessage("");
     setSelectedDoctor(null);
   };
 
@@ -310,6 +320,11 @@ const DoctorsPage = () => {
                         className="doctor-input"
                     />
                     </div>
+                </div>
+                <div>
+                    {errorMessage && (
+                      <div className="error-mess">{errorMessage}</div>
+                    )}
                 </div>
                 <div className="doctor-actions">
                     <button onClick={handleDeleteDoctor} className="delete-btn">

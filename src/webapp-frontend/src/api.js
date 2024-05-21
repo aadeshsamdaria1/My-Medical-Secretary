@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 
+
 //export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
 //export const API_ENDPOINT = 'http://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
 
@@ -26,13 +27,21 @@ export const getDoctorsByIdEndpoint = (userId) => `${API_ENDPOINT}/doctors/get/$
 export const getAllPatientsEndpoint = `${API_ENDPOINT}/users/get_all_patients`
 export const getAllAppointmentByIdEndpoint = (userId) => `${API_ENDPOINT}/appointments/get_all/${userId}`;
 
+export const getAllAdminsEndpoint = `${API_ENDPOINT}/users/get_all_admins`;
+export const createAdminEndpoint = `${API_ENDPOINT}/users/create_admin`;
+export const deleteAdminByIdEndpoint = (adminId) => `${API_ENDPOINT}/users/delete_admin/${adminId}`;
+
+
 export const getAllResourcesEndpoint = `${API_ENDPOINT}/resources/get_all`;
 export const createResourceEndpoint = `${API_ENDPOINT}/resources/create`;
 export const deleteResourceEndpoint = `${API_ENDPOINT}/resources/delete`;
 export const addPatientToResourceEndpoint = `${API_ENDPOINT}/resources/add_patient_to_resource`;
 export const removePatientFromResourceEndpoint = `${API_ENDPOINT}/resources/remove_patient_from_resource`;
 
-// Login function
+
+
+
+
 export const login = async (username, password) => {
   try {
     const response = await axios.post(loginEndpoint, {
@@ -50,30 +59,39 @@ export const login = async (username, password) => {
   }
 };
 
-// Refresh token function
 export const refreshToken = async () => {
   try {
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    const response = await axios.post(refreshTokenEndpoint, {}, {
-      headers: { Authorization: `Bearer ${storedRefreshToken}` }
-    });
-    const { jwtToken } = response.data;
-    localStorage.setItem('jwtToken', jwtToken);
-    return jwtToken;
+    const refreshToken = localStorage.getItem('refreshToken');
+    const response = await axios.post(refreshTokenEndpoint, {token:refreshToken, patientId:1});
+    const { token } = response.data;
+    localStorage.setItem('jwtToken', token);
+    return token;
   } catch (error) {
+    // should logout patient
     console.error('Token refresh failed:', error);
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
+
     throw error;
   }
 };
 
 
-// Function to handle API request errors
-export const handleRequestError = async (error, requestFunction, ...args) => {
+
+export const handleRequestError = async (error, requestFunction, endpoint, ...args) => {
   // If token expired, try refreshing token and retry the request
   if (error.response && error.response.status === 401) {
     try {
-      await refreshToken();
-      return await requestFunction(...args);
+      console.log("401 error (token expired), fetching new token")
+      const  newToken = await refreshToken();
+      let toReturn;
+      if (args.length === 0) {
+        toReturn = await requestFunction(endpoint, {headers: { Authorization: `Bearer ${newToken}` }});
+      } else {
+        toReturn = await requestFunction(endpoint, args[0], {headers: { Authorization: `Bearer ${newToken}` }});
+      }
+      return toReturn.data
     } catch (refreshError) {
       console.error('Failed to refresh token:', refreshError);
       throw refreshError;

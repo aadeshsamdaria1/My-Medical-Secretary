@@ -1,6 +1,8 @@
 package com.mmsbackend.service
 
 import com.mmsbackend.exception.ColumnError
+import com.mmsbackend.exception.DoctorMissingException
+import com.mmsbackend.exception.PatientMissingException
 import com.mmsbackend.jpa.entity.AppointmentEntity
 import com.mmsbackend.jpa.entity.DoctorEntity
 import com.mmsbackend.jpa.entity.user.PatientEntity
@@ -187,19 +189,17 @@ class FileServiceTest {
         }
 
         @Test
-        fun `Do not upload appointments for which linked patient doesnt exist`() {
+        fun `Throw exception if patient does not exist`() {
             every { userEntityRepository.findByPatientId(patientId2) } returns null
-
             val appointmentIds = fileService.readAndUploadAppointmentFile(appointmentBytes)
-            assertThat(appointmentIds).isEqualTo(Pair(listOf<Int>(),listOf(appointmentId1)))
+            val expectedIds = Pair(listOf(appointmentId2), listOf(appointmentId1))
+            assertThat(appointmentIds).isEqualTo(expectedIds)
         }
 
         @Test
         fun `Do not upload appointments for which linked doctor doesnt exist`() {
             every { doctorEntityRepository.findById(doctorId1) } returns Optional.empty()
-
-            val appointmentIds = fileService.readAndUploadAppointmentFile(appointmentBytes)
-            assertThat(appointmentIds).isEqualTo(Pair(listOf<Int>(),listOf(appointmentId2)))
+            assertThrows<DoctorMissingException>{fileService.readAndUploadAppointmentFile(appointmentBytes)}
         }
     }
 }

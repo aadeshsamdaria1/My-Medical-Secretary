@@ -21,7 +21,6 @@ class OneTimePasscodeAuthServiceTest {
 
     private lateinit var oneTimePasscodeAuthService: OneTimePasscodeAuthService
 
-    private val patientId = Random.nextInt()
     private val encodedPassword = UUID.randomUUID().toString()
     private val encodedPasscode = UUID.randomUUID().toString()
     private val passcode = UUID.randomUUID().toString()
@@ -68,7 +67,7 @@ class OneTimePasscodeAuthServiceTest {
                 password = password
             )
         )
-        assertEquals(response, true)
+        assertEquals(response, Pair(true, patient))
     }
 
     @Test
@@ -82,7 +81,7 @@ class OneTimePasscodeAuthServiceTest {
                 password = password
             )
         )
-        assertEquals(response, false)
+        assertEquals(response, Pair(false, null))
     }
 
     @Test
@@ -97,6 +96,6 @@ class OneTimePasscodeAuthServiceTest {
                 password = password
             )
         )
-        assertEquals(response, false)
+        assertEquals(response, Pair(false, null))
     }
 }

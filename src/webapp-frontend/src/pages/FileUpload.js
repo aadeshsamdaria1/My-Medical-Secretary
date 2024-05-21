@@ -50,25 +50,25 @@ const FileUpload = () => {
 
   const handleSubmit = async () => {
     if (!file) {
-      setError('Please select a file to upload.');
+      setError('Please select a file to upload');
       setSuccessMessage('');
       return;
     }
 
     if (!fileType) {
-      setError('Please select a file type.');
+      setError('Please select a file type');
       setSuccessMessage('');
       return;
     }
     try {
-      setProgressMessage("Upload in progress");
+      setProgressMessage("Upload in progress - Do not exit page until upload is complete");
       console.log('Submitting file:', file);
       if (fileType === 'patient') {
         await uploadPatientFile(file);
-        setSuccessMessage(`Patient file '${fileName}' uploaded successfully.`);
+        setSuccessMessage(`Patient file '${fileName}' uploaded successfully`);
       } else if (fileType === 'appointment') {
         await uploadAppointmentFile(file);
-        setSuccessMessage(`Appointment file '${fileName}' uploaded successfully.`);
+        setSuccessMessage(`Appointment file '${fileName}' uploaded successfully`);
       }
       setFileName('')
       setFile(null)
@@ -76,7 +76,16 @@ const FileUpload = () => {
       
     } catch (error) {
       console.error('Error uploading file:', error);
-      setError('Error uploading file. Please try again.')
+      
+      if (error.response && error.response.status === 400 && error.response.data) {
+        // Display at most 500 characters from response error
+        const maxLength = 500;
+        const text = error.response.data;
+        const truncatedError = text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        setError(truncatedError);
+      } else {
+        setError('Error uploading file. Please try again');
+      }
       setSuccessMessage('');
     } finally {
       setProgressMessage('');

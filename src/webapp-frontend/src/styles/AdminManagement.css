@@ -1,0 +1,108 @@
+.admin-management-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .admin-list-container {
+    width: 50%;
+  }
+  
+  .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .admin-table th {
+    background-color: #afe4ff;
+  }
+  
+  .admin-form-container {
+    width: 45%;
+    padding: 20px;
+    background-color: #8fdaff57;
+    border-radius: 5px;
+  }
+  
+  .admin-form-container h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    
+  }
+  
+  .admin-form-container div {
+    margin-bottom: 10px;
+    
+  }
+  
+  .admin-form-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .admin-form-container input {
+    width: 98%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    align-items: center;
+  }
+  
+  .admin-form-container button {
+    display: block;
+    width: 20%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .admin-form-container button:hover {
+    background-color: #45a049;
+  }
+
+  .error {
+    color:red;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+.admin-list-container button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px; 
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    outline: none;
+    transition: background-color 0.3s ease;
+    background-color: #f44336;
+  }
+
+  .admin-list-container button:hover {
+    background-color: #af0d02;
+  }
+
+  .admin-list-container h3 {
+    margin-bottom: 10px;
+  }
+
+  

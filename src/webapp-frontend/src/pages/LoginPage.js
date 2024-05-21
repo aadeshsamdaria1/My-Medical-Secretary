@@ -1,15 +1,15 @@
 import React from 'react';
 import LoginForm from '../components/LoginForm';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Login.css'; // Import CSS file
+import '../styles/Login.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  // Callback function to navigate to the home page after successful login
   const handleLoginSuccess = () => {
-    navigate('/home');
+    navigate('/file_upload');
   };
+
 
   // Get the current year
   const currentYear = new Date().getFullYear();
@@ -23,7 +23,9 @@ const LoginPage = () => {
         <section className="login-section">
           <h2 className="login-title">Admin Login</h2>
           <div className="login-form-container">
-            <LoginForm onLoginSuccess={handleLoginSuccess} />
+            <LoginForm 
+              onLoginSuccess={handleLoginSuccess} 
+            />
           </div>
         </section>
       </main>
