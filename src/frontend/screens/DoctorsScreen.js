@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 5,
+    color: "#007AFF"
   },
   doctorExpertise: {
     fontSize: 16,

@@ -15,8 +15,8 @@ const AppointmentCard = ({ appointment, testID }) => {
     <TouchableOpacity onPress={handlePress} testID={testID}>
       <View style={styles.card}>
         <View style={styles.details}>
-          <Text style={styles.title}>Dr.{appointment.doctor.name}</Text>
-          <Text style={styles.date}>{appointment.detail}</Text>
+          <Text style={styles.title}>{appointment.detail}</Text>
+          <Text style={styles.date}>{appointment.doctor.name}</Text>
           <View style={styles.datetimeWrapper}>
             <Text style={styles.date}>
               {new Date(appointment.startDate).toLocaleDateString("en-US", {
@@ -24,9 +24,16 @@ const AppointmentCard = ({ appointment, testID }) => {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
+                hour12: true,
               })}
             </Text>
-            <Text style={styles.time}>{appointment.startTime}</Text>
+            <Text style={styles.time}>{new Date(`1970-01-01T${appointment.startTime}`)
+                        .toLocaleString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true,
+                        })
+                        .toUpperCase()}</Text>
           </View>
         </View>
       </View>
@@ -60,6 +67,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "600",
     fontSize: 16,
+    color: "#007AFF"
   },
   datetimeWrapper: {
     flexDirection: "row",

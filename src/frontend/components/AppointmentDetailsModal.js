@@ -10,17 +10,42 @@ const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
             {appointment ? (
               <>
                 <Text style={styles.modalTitle}>Appointment Details</Text>
-                {appointment.detail && <Text style={styles.modalDetail}>Detail: {appointment.detail}</Text>}
-                {appointment.reason && <Text style={styles.modalDetail}>Reason: {appointment.reason}</Text>}
-                {appointment.note && <Text style={styles.modalDetail}>Note: {appointment.note}</Text>}
-                {appointment.startDate && <Text style={styles.modalDetail}>Date: {new Date(appointment.startDate).toLocaleDateString()}</Text>}
-                {appointment.startTime && 
+                {appointment.detail && (
                   <Text style={styles.modalDetail}>
-                    Time: {new Date(`1970-01-01T${appointment.startTime}`).toLocaleString('en-US', {hour: 'numeric',minute: '2-digit',hour12: true,}).toUpperCase()}
-                  </Text>}
-                {appointment.duration && <Text style={styles.modalDetail}>Duration: {appointment.duration} minutes</Text>}
+                    <Text style={{ fontWeight: 'bold' }}>Detail:</Text> {appointment.detail}
+                  </Text>
+                )}
+                {appointment.reason && (
+                  <Text style={styles.modalDetail}>
+                    <Text style={{ fontWeight: 'bold' }}>Reason:</Text> {appointment.reason}
+                  </Text>
+                )}
+                {appointment.note && (
+                  <Text style={styles.modalDetail}>
+                    <Text style={{ fontWeight: 'bold' }}>Note:</Text> {appointment.note}
+                  </Text>
+                )}
+                {appointment.startDate && (
+                  <Text style={styles.modalDetail}>
+                    <Text style={{ fontWeight: 'bold' }}>Date:</Text> {new Date(appointment.startDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </Text>
+                )}
+                {appointment.startTime && (
+                  <Text style={styles.modalDetail}>
+                    <Text style={{ fontWeight: 'bold' }}>Time:</Text> {new Date(`1970-01-01T${appointment.startTime}`).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toUpperCase()}
+                  </Text>
+                )}
+                {appointment.duration && (
+                  <Text style={styles.modalDetail}>
+                    <Text style={{ fontWeight: 'bold' }}>Duration:</Text> {appointment.duration / 10} minutes
+                  </Text>
+                )}
+                {appointment.doctor.name && (
+                  <Text style={styles.modalDetail}>
+                    <Text style={{ fontWeight: 'bold' }}>Doctor:</Text> {appointment.doctor.name}
+                  </Text>
+                )}
                 {/* <Text style={styles.modalTitle}>Doctor's Details</Text> */}
-                {appointment.doctor.name && <Text style={styles.modalDetail}>Doctor: {appointment.doctor.name}</Text>}
                 {/* {appointment.doctor.expertise && <Text style={styles.modalDetail}>Expertise: {appointment.doctor.expertise}</Text>}
                 {appointment.doctor.contact && <Text style={styles.modalDetail}>Contact: {appointment.doctor.contact}</Text>}
                 {appointment.doctor.email && <Text style={styles.modalDetail}>Email: {appointment.doctor.email}</Text>}
@@ -60,6 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 12,
+    color: "blue"
   },
   modalDetail: {
     fontSize: 16,

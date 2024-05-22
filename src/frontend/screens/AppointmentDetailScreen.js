@@ -43,19 +43,9 @@ const AppointmentDetailScreen = ({ route }) => {
         <View style={styles.sectionHeader}>
           <Ionicons name="person-outline" size={24} style={styles.iconStyle} />
           <Text style={styles.sectionTitle}>
-            DR. {appointmentDetails.doctor.name}
+            {appointmentDetails.doctor.name}
           </Text>
 
-          {/* {appointmentDetails.status === "UNCONFIRMED" && (
-            <View style={styles.statusBadge}>
-              <Text style={styles.statusBadgeText}>Unconfirmed</Text>
-            </View>
-          )}
-          {appointmentDetails.status === "CONFIRMED" && (
-            <View style={styles.confirmBadge}>
-              <Text style={styles.statusBadgeText}>Confirmed</Text>
-            </View>
-          )} */}
         </View>
         <View>
           <TouchableOpacity
@@ -152,7 +142,7 @@ const AppointmentDetailScreen = ({ route }) => {
       </View>
       {notes ? (
         <>
-          <Text style={styles.sectionContent}>{notes}</Text>
+          <Text style={styles.notes}>{notes}</Text>
           <TouchableOpacity
             style={styles.actionButton}
             onPress={toggleModal}
@@ -162,7 +152,7 @@ const AppointmentDetailScreen = ({ route }) => {
         </>
       ) : (
         <>
-          <Text style={styles.sectionContent}>No notes</Text>
+          <Text style={styles.noNotes}>No notes</Text>
           <TouchableOpacity
             style={styles.actionButton}
             onPress={toggleModal}
@@ -243,6 +233,22 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#333",
     marginLeft: 32,
+  },
+  noNotes: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "grey",
+    marginLeft: 32,
+    fontStyle:"italic",
+    marginBottom:4,
+  },
+  notes: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: "black",
+    marginLeft: 32,
+    fontStyle:"normal",
+    marginBottom:4,
   },
   reminderSection: {
     backgroundColor: "#e6f7ff",

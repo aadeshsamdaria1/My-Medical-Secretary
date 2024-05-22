@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 5,
+    color: "#007AFF"
   },
   facilityAddress: {
     color: '#666',
