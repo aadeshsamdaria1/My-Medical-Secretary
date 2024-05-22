@@ -16,7 +16,7 @@ const FacilityDetailScreen = ({ route }) => {
     <View style={styles.container}>
       <Text style={styles.title}>{name}</Text>
       {Object.entries(otherDetails).map(([key, value]) => {
-        if (value !== null) {
+        if (value !== "" && key !=="facilityType") {
           return (
             <View key={key} style={styles.detailContainer}>
               <Text style={styles.fieldName}>
@@ -44,8 +44,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    //justifyContent: 'center',
-    //alignItems: 'center',
+
   },
   title: {
     fontWeight: "bold",
