@@ -46,7 +46,7 @@ const AppointmentDetailScreen = ({ route }) => {
             DR. {appointmentDetails.doctor.name}
           </Text>
 
-          {appointmentDetails.status === "UNCONFIRMED" && (
+          {/* {appointmentDetails.status === "UNCONFIRMED" && (
             <View style={styles.statusBadge}>
               <Text style={styles.statusBadgeText}>Unconfirmed</Text>
             </View>
@@ -55,7 +55,7 @@ const AppointmentDetailScreen = ({ route }) => {
             <View style={styles.confirmBadge}>
               <Text style={styles.statusBadgeText}>Confirmed</Text>
             </View>
-          )}
+          )} */}
         </View>
         <View>
           <TouchableOpacity
@@ -214,12 +214,10 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   section: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
     padding: 16,
     marginHorizontal: 8,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eaeaea",
-    borderRadius: 12,
     marginVertical: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -235,61 +233,45 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#333",
     marginLeft: 8,
-    marginBottom: 4,
   },
   sectionContent: {
+    fontSize: 14,
     fontWeight: "400",
-    fontSize: 16,
     color: "#333",
     marginLeft: 32,
   },
-  linkText: {
-    fontSize: 16,
-    color: "#007BFF",
-    textDecorationLine: "underline",
-    marginLeft: 32,
-    fontWeight: "500",
-  },
-  documentItem: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  documentText: {
-    fontSize: 16,
-    color: "#4894FE",
-    textDecorationLine: "underline",
-    marginLeft: 32,
-    marginBottom: 8,
-  },
-  noDocumentsText: {
-    fontSize: 16,
-    color: "#666",
-    marginLeft: 32,
-  },
-
   reminderSection: {
-    padding: 16,
     backgroundColor: "#e6f7ff",
-    borderRadius: 10,
+    borderRadius: 12,
+    padding: 16,
     marginHorizontal: 8,
+    marginVertical: 8,
   },
   reminderItem: {
     flexDirection: "row",
     alignItems: "center",
   },
   reminderText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
-    marginHorizontal: 8,
+    marginLeft: 8,
   },
-
+  actionButton: {
+    marginLeft: 32,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#007aff",
+    textDecorationLine: "underline",
+  },
   shareButton: {
     backgroundColor: "#007aff",
-    borderRadius: 10,
+    borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginHorizontal: 16,
@@ -297,49 +279,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   shareButtonText: {
-    textTransform: "none",
-    color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
+    color: "#fff",
+    textTransform: "none",
   },
-  statusBadge: {
-    alignSelf: "flex-start",
-    backgroundColor: "orange",
-    borderRadius: 4,
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-    marginTop: 4,
-    marginLeft: 8,
-  },
-  statusBadgeText: {
-    color: "white",
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  confirmBadge: {
-    alignSelf: "flex-start",
-    backgroundColor: "green",
-    borderRadius: 4,
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-    marginTop: 4,
-    marginLeft: 8,
-  },
-
-  actionButton: {
-    marginLeft: 32,
-    alignSelf: "flex-start",
-  },
-  actionButtonText: {
-    color: "#007aff",
-    fontSize: 16,
-    fontWeight: "500",
-    textDecorationLine: "underline", 
-  },
-
+  // statusBadge: {
+  //   backgroundColor: "orange",
+  //   borderRadius: 4,
+  //   paddingVertical: 2,
+  //   paddingHorizontal: 4,
+  //   marginLeft: 8,
+  // },
+  // confirmBadge: {
+  //   backgroundColor: "green",
+  //   borderRadius: 4,
+  //   paddingVertical: 2,
+  //   paddingHorizontal: 4,
+  //   marginLeft: 8,
+  // },
+  // statusBadgeText: {
+  //   fontSize: 12,
+  //   fontWeight: "bold",
+  //   color: "white",
+  // },
   iconStyle: {
+    fontSize: 24,
     color: "#007aff",
-    alignSelf: "center",
   },
 });
 

@@ -1,19 +1,28 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Linking } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Linking,
+} from "react-native";
 
 const MAX_MESSAGE_LENGTH = 100;
 
-const MessageCard = ({ sender, message, time, link, onPress }) => {
-  const truncatedMessage = message.length > MAX_MESSAGE_LENGTH
-    ? `${message.slice(0, MAX_MESSAGE_LENGTH)}...`
-    : message;
+const MessageCard = ({ message, link, onPress }) => {
+  const truncatedMessage =
+    message.length > MAX_MESSAGE_LENGTH
+      ? `${message.slice(0, MAX_MESSAGE_LENGTH)}...`
+      : message;
 
   const handleCardPress = () => {
     if (onPress) {
       onPress();
     }
 
-    const formattedLink = link && link.startsWith("http") ? link : `https://${link}`;
+    const formattedLink =
+      link && link.startsWith("http") ? link : `https://${link}`;
 
     const alertButtons = [
       {
@@ -29,33 +38,25 @@ const MessageCard = ({ sender, message, time, link, onPress }) => {
           try {
             await Linking.openURL(formattedLink);
           } catch (error) {
-            Alert.alert("Error", "Unable to open the link. Please check if you have a compatible app installed.");
+            Alert.alert(
+              "Error",
+              "Unable to open the link. Please check if you have a compatible app installed."
+            );
           }
         },
       });
     }
 
-    Alert.alert(
-      sender,
-      link ? `${message}\n` : message,
-      alertButtons,
-      { cancelable: true }
-    );
+    Alert.alert(null, link ? `${message}\n` : message, alertButtons, {
+      cancelable: true,
+    });
   };
 
   return (
     <TouchableOpacity style={styles.messageCard} onPress={handleCardPress}>
-      <View style={styles.cardHeader}>
-        <View style={styles.senderContainer}>
-          <Text style={styles.senderText}>{sender}</Text>
-        </View>
-        {time && (
-          <View style={styles.senderContainer}>
-            <Text style={styles.timeText}>{time}</Text>
-          </View>
-        )}
+      <View style={styles.messageHeader}>
+        <Text style={styles.messageText}>{truncatedMessage}</Text>
       </View>
-      <Text style={styles.messageText}>{truncatedMessage}</Text>
       {link && <Text style={styles.linkText}>{link}</Text>}
     </TouchableOpacity>
   );
@@ -63,45 +64,31 @@ const MessageCard = ({ sender, message, time, link, onPress }) => {
 
 const styles = StyleSheet.create({
   messageCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     marginVertical: 8,
     marginHorizontal: 16,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
+    borderWidth: 1,
+    borderColor: "#DDD",
   },
-  cardHeader: {
+  messageHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  senderContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  senderText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
-  },
-  timeText: {
-    fontSize: 15,
-    color: "#666",
-    opacity: 0.8,
-  },
   messageText: {
-    fontSize: 16,
-    color: "#000",
+    fontSize: 14,
+    color: "#333",
+    flexShrink: 1,
   },
   linkText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "blue",
     textDecorationLine: "underline",
   },

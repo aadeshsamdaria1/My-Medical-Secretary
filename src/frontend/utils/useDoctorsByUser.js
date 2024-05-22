@@ -26,7 +26,6 @@ const useDoctorsByUser = (userId) => {
           throw new Error(`HTTP status ${response.status}`);
         }
         const data = await response.json();
-        console.log(data)
         setDoctors(data);
       } catch (error) {
         console.error('Error fetching doctors:', error.message);

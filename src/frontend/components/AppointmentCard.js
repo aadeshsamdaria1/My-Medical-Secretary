@@ -16,6 +16,7 @@ const AppointmentCard = ({ appointment, testID }) => {
       <View style={styles.card}>
         <View style={styles.details}>
           <Text style={styles.title}>Dr.{appointment.doctor.name}</Text>
+          <Text style={styles.date}>{appointment.detail}</Text>
           <View style={styles.datetimeWrapper}>
             <Text style={styles.date}>
               {new Date(appointment.startDate).toLocaleDateString("en-US", {
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     marginVertical: 8,
     marginHorizontal: 16,
     shadowColor: "#000",
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 5,
   },
   details: {
     justifyContent: "center",
@@ -59,20 +60,19 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "600",
     fontSize: 16,
-    marginBottom: 6,
   },
   datetimeWrapper: {
     flexDirection: "row",
     alignItems: "center",
   },
   date: {
-    fontSize: 16,
-    color: "#333",
+    fontSize: 14,
+    color: "#666",
     marginRight: 8,
   },
   time: {
-    fontSize: 16,
-    color: "#333",
+    fontSize: 14,
+    color: "#666",
   },
 });
 

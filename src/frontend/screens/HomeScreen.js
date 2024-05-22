@@ -3,13 +3,21 @@ import { Modal, ScrollView, StyleSheet, View, Text, FlatList, TouchableOpacity, 
 import AppointmentDetailsModal from '../components/AppointmentDetailsModal';
 import { useUserDetails } from "../utils/useUserDetails";
 import { useUpcomingAppointments } from "../utils/useUpcomingAppointments";
+import { useMessage } from "../utils/useMessageByUser";
 
 const HomeScreen = ({ route }) => {
   const userId = route.params?.userId;
-  const recentMessages = [
-    { id: '1', sender: 'Nurse Mary', message: 'Please remember to take your medication. This is a longer message to demonstrate the functionality.' },
-    { id: '2', sender: 'Dr. John Doe', message: 'Your test results are ready.' },
-  ];
+  const recentMessages = useMessage(userId);
+  // const recentMessages = [
+  //   {
+  //     patientId: 999999999,
+  //     text: "Your test results are ready.",
+  //   },
+  //   {
+  //     patientId: 999999999,
+  //     text: "For many of you, these subjects represent an important moment — the transition from theoretical knowledge to practical application, from student to industry innovator. This is your arena to apply agile methodologies, collaborate effectively, and engage with industry clients, perhaps for the first time. We understand the challenges ahead and have designed these notes to smooth your path to becoming a confident software engineer.",
+  //   },
+  // ];
   // Screen data
   const [showMoreAppointments, setShowMoreAppointments] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -58,7 +66,7 @@ const HomeScreen = ({ route }) => {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   testID="appointment-item"
-                  style={[styles.appointmentItem, { backgroundColor: 'lightblue' }]}
+                  style={[styles.appointmentItem, { backgroundColor: '#f5f5f5' }]}
                   onPress={() => showAppointmentDetails(item)}
                 >
                   <View style={styles.appointmentHeader}>
@@ -118,14 +126,13 @@ const HomeScreen = ({ route }) => {
           {recentMessages.length > 0 ? (
             <FlatList
               data={showMoreMessages ? recentMessages : recentMessages.slice(0, 2)}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item, index) => `${item.patientId}-${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[styles.messageItem, { backgroundColor: '#f5f5f5' }]}
-                  onPress={() => handleMessagePress(item.message)}
+                  onPress={() => handleMessagePress(item.text)}
                 >
-                  <Text style={styles.messageSender}>{item.sender}</Text>
-                  <Text style={styles.messageText}>{item.message.length > 50 ? `${item.message.slice(0, 50)}...` : item.message}</Text>
+                  <Text style={styles.messageText}>{item.text.length > 50 ? `${item.text.slice(0, 50)}...` : item.text}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -195,8 +202,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   appointmentItem: {
+    backgroundColor: "#fff",
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 8,
   },
   appointmentHeader: {
@@ -231,7 +239,7 @@ const styles = StyleSheet.create({
   },
   messageItem: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 8,
   },
   messageSender: {
@@ -252,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   showMoreText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   noDataText: {
     fontSize: 16,
