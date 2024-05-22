@@ -11,16 +11,6 @@ const MessageScreen = ({ route }) => {
   const resource = useResource(userId);
   const message = useMessage(userId);
 
-  // const message = [
-  //   {
-  //     patientId: 999999999,
-  //     text: "Your test results are ready.",
-  //   },
-  //   {
-  //     patientId: 999999999,
-  //     text: "For many of you, these subjects represent an important moment — the transition from theoretical knowledge to practical application, from student to industry innovator. This is your arena to apply agile methodologies, collaborate effectively, and engage with industry clients, perhaps for the first time. We understand the challenges ahead and have designed these notes to smooth your path to becoming a confident software engineer.",
-  //   },
-  // ];
 
   useEffect(() => {
     const checkNotificationPermission = async () => {
