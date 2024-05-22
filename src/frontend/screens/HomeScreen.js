@@ -43,7 +43,7 @@ const HomeScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Hi, {userName}</Text>
+        <Text style={styles.headerText}>Welcome, {userName}</Text>
       </View>
 
       <View style={styles.dashboard}>

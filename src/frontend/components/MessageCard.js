@@ -8,21 +8,14 @@ import {
   Linking,
 } from "react-native";
 
-const MAX_MESSAGE_LENGTH = 100;
+const MessageCard = ({ message, link, timeCreated, onPress }) => {
 
-const MessageCard = ({ message, link, onPress }) => {
-  const truncatedMessage =
-    message.length > MAX_MESSAGE_LENGTH
-      ? `${message.slice(0, MAX_MESSAGE_LENGTH)}...`
-      : message;
+  const formattedTime = new Date(timeCreated).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
 
   const handleCardPress = () => {
     if (onPress) {
       onPress();
     }
-
-    const formattedLink =
-      link && link.startsWith("http") ? link : `https://${link}`;
 
     const alertButtons = [
       {
@@ -31,40 +24,24 @@ const MessageCard = ({ message, link, onPress }) => {
       },
     ];
 
-    if (link) {
-      alertButtons.push({
-        text: "Open Link",
-        onPress: async () => {
-          try {
-            await Linking.openURL(formattedLink);
-          } catch (error) {
-            Alert.alert(
-              "Error",
-              "Unable to open the link. Please check if you have a compatible app installed."
-            );
-          }
-        },
-      });
-    }
-
-    Alert.alert(null, link ? `${message}\n` : message, alertButtons, {
+    Alert.alert(formattedTime, message, alertButtons, {
       cancelable: true,
     });
   };
 
   return (
     <TouchableOpacity style={styles.messageCard} onPress={handleCardPress}>
+      <Text style={styles.timeText}>{formattedTime}</Text>
       <View style={styles.messageHeader}>
-        <Text style={styles.messageText}>{truncatedMessage}</Text>
+        <Text style={styles.messageText}>{message}</Text>
       </View>
-      {link && <Text style={styles.linkText}>{link}</Text>}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   messageCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#007AFF22",
     borderRadius: 12,
     padding: 12,
     marginVertical: 8,
@@ -83,14 +60,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   messageText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#333",
     flexShrink: 1,
+
   },
-  linkText: {
-    fontSize: 14,
-    color: "blue",
-    textDecorationLine: "underline",
+  timeText: {
+    fontSize: 16,
+    color: "#888",
+    marginBottom: 8,
   },
 });
 
