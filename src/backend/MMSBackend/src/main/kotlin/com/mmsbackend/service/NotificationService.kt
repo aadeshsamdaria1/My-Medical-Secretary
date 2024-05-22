@@ -5,8 +5,12 @@ import com.mmsbackend.data.NotificationRequest
 import okhttp3.*
 import java.io.IOException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.mmsbackend.jpa.entity.AppointmentEntity
+import com.mmsbackend.jpa.entity.user.PatientEntity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Service
 class NotificationService (
@@ -50,5 +54,17 @@ class NotificationService (
 
     private fun Map<String, Any>.toJson(): String {
         return jacksonObjectMapper().writeValueAsString(this)
+    }
+
+    fun sendAppointmentReminder(patient: PatientEntity, appointment: AppointmentEntity) {
+        val dateFormat = SimpleDateFormat("EEE MMM dd yyyy", Locale.ENGLISH)
+        val formattedDate = dateFormat.format(appointment.startDate)
+
+        val request = NotificationRequest(
+            deviceToken = patient.deviceToken ?: throw IllegalArgumentException("Device token is missing"),
+            title = "Appointment Reminder",
+            body = "You have an appointment on $formattedDate at ${appointment.startTime}. Please be on time."
+        )
+        sendMessageToToken(request)
     }
 }

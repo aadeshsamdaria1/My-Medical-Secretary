@@ -38,6 +38,7 @@ class AppointmentMapper(
 
             userNote = "",
 
+            lastNotifiedTime = null,
             patient = patient,
             doctor = doctor,
             status = AppointmentStatus.ACTIVE
@@ -45,6 +46,9 @@ class AppointmentMapper(
     }
 
     fun updateExistingAppointment(existingApp: AppointmentEntity, updatedApp: AppointmentEntity): AppointmentEntity {
+        val dateChanged = existingApp.startDate != updatedApp.startDate
+        val timeChanged = existingApp.startTime != updatedApp.startTime
+
         return AppointmentEntity(
 
             // Updated Fields
@@ -62,7 +66,8 @@ class AppointmentMapper(
             // Existing Fields
             id = existingApp.id,
             dateCreate =  existingApp.dateCreate,
-            status = AppointmentStatus.ACTIVE
+            status = AppointmentStatus.ACTIVE,
+            lastNotifiedTime = if (dateChanged || timeChanged) null else existingApp.lastNotifiedTime
         )
     }
 
@@ -90,7 +95,8 @@ class AppointmentMapper(
                 patient = extractPatient(extractFromRow(columns, rowString, PATIENT, appointmentId))
                     ?: return Pair(StatusType.FAILURE, appointmentId),
                 doctor = extractDoctor(extractFromRow(columns, rowString, DOCTOR, appointmentId)),
-                status = AppointmentStatus.ACTIVE
+                status = AppointmentStatus.ACTIVE,
+                lastNotifiedTime = null
             )
 
             Pair(StatusType.SUCCESS, appointmentEntity)

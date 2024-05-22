@@ -28,6 +28,8 @@ data class AppointmentEntity(
     // Can be edited by the user
     var userNote: String?,
 
+    var lastNotifiedTime: Instant? = null,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     val patient: PatientEntity,
