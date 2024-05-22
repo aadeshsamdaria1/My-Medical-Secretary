@@ -11,7 +11,7 @@ export const registerDeviceToken = async (userId) => {
   try {
       const expoPushToken =  await AsyncStorage.getItem("expoPushToken");
       if (expoPushToken) {
-        console.log("registering token")
+        //console.log("registering token")
         const jwtToken = await AsyncStorage.getItem('jwtToken');
         await fetch(registerDeviceTokenEndpoint, {
           method: 'POST',
@@ -73,7 +73,7 @@ export async function registerForPushNotificationsAsync() {
             projectId,
           })
         ).data;
-        console.log(pushTokenString);
+        //console.log(pushTokenString);
         AsyncStorage.setItem("expoPushToken", pushTokenString);
         return pushTokenString;
       } catch (e) {

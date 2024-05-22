@@ -45,7 +45,6 @@ export default function App() {
     };
   }, []);
 
-  console.log(expoPushToken)
 
   
   return (
