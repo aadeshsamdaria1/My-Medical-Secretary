@@ -75,10 +75,6 @@ export const addAppointmentToCalendar = async (appointmentDetails) => {
     return;
   }
 
-  const defaultCalendarSource =
-    Platform.OS === "ios"
-      ? await getDefaultCalendarSource()
-      : { isLocalAccount: true, name: "Expo Calendar" };
 
   const calendars = await Calendar.getCalendarsAsync(
     Calendar.EntityTypes.EVENT
@@ -87,27 +83,50 @@ export const addAppointmentToCalendar = async (appointmentDetails) => {
     calendars.find((calendar) => calendar.allowsModifications) || calendars[0];
 
   try {
-    const startDate = new Date(appointmentDetails.startDate);
-    const utcStartDate = new Date(startDate.toISOString());
-    const endDate = new Date(
-      utcStartDate.setMinutes(
-        utcStartDate.getMinutes() + appointmentDetails.duration
-      )
-    );
+    const startDatePart = appointmentDetails.startDate.split('T')[0];
+    const dateTimeString = `${startDatePart}T${appointmentDetails.startTime}`;
+    const startDateTime = new Date(dateTimeString);
+ 
+
+    const endDateTime = getEndTime(appointmentDetails.startDate, appointmentDetails.startTime, appointmentDetails.duration);
+    const formattedTime = getFormattedTime(appointmentDetails.startDate, appointmentDetails.startTime, appointmentDetails.duration);
 
     const eventDetails = {
-      title: `Appointment with Dr. ${appointmentDetails.doctor.name}`,
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      title: `Appointment with ${appointmentDetails.doctor.name}, ${appointmentDetails.detail}`,
+      startDate: startDateTime,
+      startTime: startDateTime,
+      endDate: endDateTime,
+      endTime: endDateTime,
       timeZone: "UTC",
       location: appointmentDetails.doctor.address,
       notes: appointmentDetails.note,
     };
 
-    console.log("Adding event to calendar:", eventDetails);
-
-    await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
-    Alert.alert("Success", "Appointment added to your calendar");
+    Alert.alert(
+      `${eventDetails.title}`,
+      `\n${startDateTime.toLocaleDateString('en-US', {day: 'numeric', month: 'long', year:'numeric'})}\n${formattedTime}\n\nLocation: ${eventDetails.location}\n`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Add to Calendar",
+          onPress: async () => {
+            try {
+              await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
+              Alert.alert("Success", "Appointment added to your calendar");
+            } catch (error) {
+              console.error("Error adding event to calendar:", error);
+              Alert.alert(
+                "Error",
+                "There was an error adding the appointment to your calendar."
+              );
+            }
+          },
+        },
+      ]
+    );
   } catch (error) {
     console.error("Error adding event to calendar:", error);
     Alert.alert(
@@ -129,8 +148,7 @@ export const getDefaultCalendarSource = async () => {
 
 export const getFormattedTime = (startDate, startTime, duration) => {
   const startDateTime = new Date(`${startDate.split("T")[0]}T${startTime}`);
-
-  const endTime = new Date(startDateTime.getTime() + duration * 60000);
+  const endTime = getEndTime(startDate, startTime, duration)
 
   const options = { hour: "2-digit", minute: "2-digit", hour12: true };
 
@@ -139,3 +157,11 @@ export const getFormattedTime = (startDate, startTime, duration) => {
 
   return `${formattedStartTime} to ${formattedEndTime}`;
 };
+
+const getEndTime = (startDate, startTime, duration) => {
+  // Somewhat ambiguous but assuming duration in appoiuntments is minutes * 10
+  const startDateTime = new Date(`${startDate.split("T")[0]}T${startTime}`);
+
+  const endTime = new Date(startDateTime.getTime() + duration * 6000);
+  return endTime;
+}
