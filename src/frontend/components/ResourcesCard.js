@@ -56,13 +56,12 @@ const styles = StyleSheet.create({
   },
   resourceTitle: {
     fontSize: 16,
-    color: "#333",
+    color: "#222",
     flexShrink: 1,
   },
   resourceLink: {
     fontSize: 16,
-    color: "blue",
-    textDecorationLine: "underline",
+    color: "#007Aff",
     marginTop: 4,
   },
 });

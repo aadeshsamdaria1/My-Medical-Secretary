@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 12,
-    color: "blue"
+    color: "#007AFF"
   },
   modalDetail: {
     fontSize: 16,

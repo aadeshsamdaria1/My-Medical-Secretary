@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   facilityName: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 22,
     marginBottom: 5,
     color: "#007AFF"
   },
