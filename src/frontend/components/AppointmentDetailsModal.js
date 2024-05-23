@@ -45,12 +45,6 @@ const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
                     <Text style={{ fontWeight: 'bold' }}>Doctor:</Text> {appointment.doctor.name}
                   </Text>
                 )}
-                {/* <Text style={styles.modalTitle}>Doctor's Details</Text> */}
-                {/* {appointment.doctor.expertise && <Text style={styles.modalDetail}>Expertise: {appointment.doctor.expertise}</Text>}
-                {appointment.doctor.contact && <Text style={styles.modalDetail}>Contact: {appointment.doctor.contact}</Text>}
-                {appointment.doctor.email && <Text style={styles.modalDetail}>Email: {appointment.doctor.email}</Text>}
-                {appointment.doctor.website && <Text style={styles.modalDetail}>Website: {appointment.doctor.website}</Text>}
-                {appointment.doctor.address && <Text style={styles.modalDetail}>Address: {appointment.doctor.address}</Text>} */}
               </>
             ) : (
               <Text style={styles.modalDetail}>Error while loading appointment details</Text>
@@ -65,7 +59,6 @@ const AppointmentDetailsModal = ({ visible, appointment, onClose }) => (
   );
 
 const styles = StyleSheet.create({
-  // ... (styles)
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -76,16 +69,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 16,
     borderRadius: 8,
-    width: '80%', // Set a fixed width for the modal content
+    width: '80%',
   },
   scrollViewContent: {
-    flexGrow: 1, // Allow the ScrollView content to grow and take up available space
+    flexGrow: 1,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 12,
-    color: "blue"
+    color: "#007AFF"
   },
   modalDetail: {
     fontSize: 16,

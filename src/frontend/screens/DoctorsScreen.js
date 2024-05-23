@@ -50,13 +50,14 @@ const styles = StyleSheet.create({
   },
   doctorName: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 22,
     marginBottom: 5,
     color: "#007AFF"
   },
   doctorExpertise: {
-    fontSize: 16,
-    marginBottom: 5
+    fontSize: 18,
+    marginBottom: 5,
+    color:"#636363"
   }
 });
 

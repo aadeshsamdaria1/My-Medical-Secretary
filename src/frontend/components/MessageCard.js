@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    color: "#333",
+    color: "#222",
     flexShrink: 1,
 
   },

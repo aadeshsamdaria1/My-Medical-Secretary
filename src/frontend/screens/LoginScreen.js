@@ -22,7 +22,6 @@ const LoginScreen = ({ navigation }) => {
 
     try {
       const [token, userId] = await login(username, password);
-      // TODO send expo token here
       registerDeviceToken(userId);
       navigation.navigate('TabNavigator', { token, userId });
     } catch (error) {
@@ -35,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
     try {
-      const response = await activateAccountByEmail(forgotPasswordEmail);
+      await activateAccountByEmail(forgotPasswordEmail);
       setPasscode("");
       setNewPassword("");
       setConfirmPassword("");

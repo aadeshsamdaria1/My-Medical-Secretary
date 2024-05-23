@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { onViewDoctorLocation } from "../utils/appointmentFunctions";
+import { handleLinkPress, handleCallPress } from "../utils/nativeLinkFunctions";
 
 const FacilityDetailScreen = ({ route }) => {
   const { facility } = route.params;
   const navigation = useNavigation();
-  const { id, name, ...otherDetails } = facility;
+  const { id, name, address, website, contact, ...otherDetails } = facility;
 
   useEffect(() => {
     navigation.setOptions({ title: "" });
@@ -16,7 +17,7 @@ const FacilityDetailScreen = ({ route }) => {
     <View style={styles.container}>
       <Text style={styles.title}>{name}</Text>
       {Object.entries(otherDetails).map(([key, value]) => {
-        if (value !== "" && key !=="facilityType") {
+        if (value !== "" && key !== "facilityType") {
           return (
             <View key={key} style={styles.detailContainer}>
               <Text style={styles.fieldName}>
@@ -28,13 +29,35 @@ const FacilityDetailScreen = ({ route }) => {
         }
         return null;
       })}
-      {facility.address && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => onViewDoctorLocation(facility.address)}
-        >
-          <Text style={styles.buttonText}>View Location</Text>
+      {website && (
+        <TouchableOpacity onPress={() => handleLinkPress(website)}>
+          <View style={styles.detailContainer}>
+            <Text style={styles.fieldName}>Website</Text>
+            <Text style={styles.link}>{website}</Text>
+          </View>
         </TouchableOpacity>
+      )}
+      {contact && (
+        <TouchableOpacity onPress={() => handleCallPress(contact)}>
+          <View style={styles.detailContainer}>
+            <Text style={styles.fieldName}>Contact</Text>
+            <Text style={styles.link}>{contact}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      {address && (
+        <View>
+          <View style={styles.detailContainer}>
+            <Text style={styles.fieldName}>Address</Text>
+            <Text style={styles.detail}>{address}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => onViewDoctorLocation(address)}
+          >
+            <Text style={styles.buttonText}>View Location</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -44,7 +67,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-
   },
   title: {
     fontWeight: "bold",
@@ -57,7 +79,7 @@ const styles = StyleSheet.create({
   },
   fieldName: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   },
   detail: {
     fontSize: 16,
@@ -75,5 +97,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  link: {
+    fontSize: 16,
+    color: "#007AFF"
+  },
 });
+
 export default FacilityDetailScreen;

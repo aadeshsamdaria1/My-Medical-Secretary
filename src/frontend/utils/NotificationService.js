@@ -2,8 +2,9 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
-import { registerDeviceTokenEndpoint } from '../api';
+import { registerDeviceTokenEndpoint, getActiveJwt } from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
@@ -12,7 +13,7 @@ export const registerDeviceToken = async (userId) => {
       const expoPushToken =  await AsyncStorage.getItem("expoPushToken");
       if (expoPushToken) {
         //console.log("registering token")
-        const jwtToken = await AsyncStorage.getItem('jwtToken');
+        const jwtToken = await getActiveJwt();
         await fetch(registerDeviceTokenEndpoint, {
           method: 'POST',
           headers: {
