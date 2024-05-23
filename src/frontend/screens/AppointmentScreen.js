@@ -11,27 +11,47 @@ const Tab = createMaterialTopTabNavigator();
 const AppointmentScreen = ({ route }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const userId = route.params.userId;
+  const [selectedMonth, setSelectedMonth] = useState( new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  
 
   const onDaySelect = (day) => {
     setSelectedDate(day.dateString);
   };
+
+  const onMonthChange = (month, year) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+  };
+
 
   const CalendarTab = () => {
     const appointmentsFromApi = useUpcomingAppointments(userId);
     const selectedAppointments = appointmentsFromApi.filter(
       (appointment) => appointment.startDate.split("T")[0] === selectedDate
     );
+
+    const formattedDate = selectedDate
+    ? new Date(selectedDate).toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      })
+    : '';
   
     return (
       <View style={styles.container}>
         <AppointmentCalendar
           appointmentsFromApi={appointmentsFromApi}
           onDaySelect={onDaySelect}
+          onMonthChange={onMonthChange}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
           testID="calendar"
         />
         {selectedDate ? (
           <>
-            <Text style={styles.title}>On this date...</Text>
+            <Text style={styles.title}>{formattedDate}.</Text>
             {selectedAppointments.length > 0 ? (
               selectedAppointments.map((appointment, index) => (
                 <AppointmentCard

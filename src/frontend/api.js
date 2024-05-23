@@ -21,6 +21,7 @@ export const getResourceByUserEndpoint = (userId) => `${API_ENDPOINT}/resources/
 export const getMessageByUserEndpoint = (userId) => `${API_ENDPOINT}/messages/getMessages/${userId}`;
 export const activateAccountByEmailEndpoint = (email) => `${API_ENDPOINT}/enter_email/${email}`;
 export const sendOneTimeCodeEndpoint = `${API_ENDPOINT}/activate`;
+export const registerDeviceTokenEndpoint = `${API_ENDPOINT}/notifications/registerDeviceToken`;
 
 // Login function
 export const login = async (username, password) => {

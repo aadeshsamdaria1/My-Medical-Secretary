@@ -1,26 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Linking } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import MessageCard from "../components/MessageCard";
 import * as Notifications from "expo-notifications";
 import { useResource } from "../utils/useResourceByUser";
 import { useMessage } from "../utils/useMessageByUser";
+import ResourcesCard from "../components/ResourcesCard";
 
 const MessageScreen = ({ route }) => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   const userId = route.params.userId;
   const resource = useResource(userId);
   const message = useMessage(userId);
-
-  // const message = [
-  //   {
-  //     patientId: 999999999,
-  //     text: "Your test results are ready.",
-  //   },
-  //   {
-  //     patientId: 999999999,
-  //     text: "For many of you, these subjects represent an important moment — the transition from theoretical knowledge to practical application, from student to industry innovator. This is your arena to apply agile methodologies, collaborate effectively, and engage with industry clients, perhaps for the first time. We understand the challenges ahead and have designed these notes to smooth your path to becoming a confident software engineer.",
-  //   },
-  // ];
 
   useEffect(() => {
     const checkNotificationPermission = async () => {
@@ -43,41 +33,38 @@ const MessageScreen = ({ route }) => {
     setIsPermissionGranted(true);
   };
 
-  const handleMessagePress = (message) => {
-    // Handle message press event
-  };
-
-  const handleLinkPress = (link) => {
-    Linking.openURL(link);
-  };
-
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {message.map((message, index) => (
+    <ScrollView>
+      <Text style={styles.header}>All Messages</Text>
+      {message.length > 0 ? (
+        message.map((msg, index) => (
           <MessageCard
             key={index}
-            message={message.text}
+            message={msg.text}
+            timeCreated={msg.timeCreated}
           />
-        ))}
-        {resource.map((item, index) => (
-          <MessageCard
-            key={`resource-${index}`}
-            message={item.text}
-            link={item.link}
-          />
-        ))}
-      </ScrollView>
-      {!isPermissionGranted && (
-        <TouchableOpacity
-          style={styles.notificationButton}
-          onPress={enableNotifications}
-        >
-          <Text style={styles.notificationButtonText}>Enable Notifications</Text>
-        </TouchableOpacity>
+        ))
+      ) : (
+        <Text style={styles.noDataText}>No messages have been shared with you yet.</Text>
       )}
-    </View>
-  );
+      <Text style={styles.header}>Links to Additional Resources</Text>
+      {resource.length > 0 ? (
+        <ResourcesCard resources={resource} />
+      ) : (
+        <Text style={styles.noDataText}>No resources have been shared with you yet.</Text>
+      )}
+    </ScrollView>
+    {!isPermissionGranted && (
+      <TouchableOpacity
+        style={styles.notificationButton}
+        onPress={enableNotifications}
+      >
+        <Text style={styles.notificationButtonText}>Enable Notifications</Text>
+      </TouchableOpacity>
+    )}
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
@@ -85,6 +72,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingTop: 16,
+  },
+  header: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginVertical: 10,
+    marginHorizontal: 16,
   },
   notificationButton: {
     backgroundColor: "#007AFF",
@@ -100,6 +93,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  noDataText: {
+    margin: 10,
+    marginLeft: 20,
+    fontSize: 17,
+    color: "grey"
+
+  }
 });
 
 export default MessageScreen;

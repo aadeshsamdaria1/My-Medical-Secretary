@@ -21,7 +21,7 @@ export default function TabNavigator({ route, navigation }) {
                         backgroundColor: 'white',
                     },
                     headerTintColor: 'black',
-                    headerRight: () => <ProfileIcon />,
+                    // headerRight: () => <ProfileIcon />,
                     headerLeft: () => (
                       <Ionicons
                         name="log-out-outline"

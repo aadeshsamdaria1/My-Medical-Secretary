@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar } from "react-native-calendars";
 
-const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
+const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect, onMonthChange, selectedMonth, selectedYear }) => {
   const markedDates = appointmentsFromApi.reduce((acc, appointment) => {
     const formattedDate = appointment.startDate.split("T")[0];
     acc[formattedDate] = {
@@ -13,16 +13,18 @@ const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
     return acc;
   }, {});
 
-
   return (
     <Calendar
       testID="calendar"
       onDayPress={(day) => {
         onDaySelect(day);
       }}
-
+      onVisibleMonthsChange={(months) => {
+        const { year, month } = months[0];
+        onMonthChange(month, year);
+      }}
       markedDates={markedDates}
-
+      current={`${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`}
       theme={{
         'stylesheet.calendar.main': {
           week: {
@@ -58,6 +60,5 @@ const AppointmentCalendar = ({ appointmentsFromApi, onDaySelect }) => {
     />
   );
 };
-
 
 export default AppointmentCalendar;

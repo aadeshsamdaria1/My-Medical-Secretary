@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Modal } from 'react-native';
 import { login } from '../api';
 import { activateAccountByEmail, sendOneTimeCode } from '../utils/resetPasswordAPI';
+import { registerDeviceToken } from '../utils/NotificationService';
 
 
 const LoginScreen = ({ navigation }) => {
@@ -21,6 +22,8 @@ const LoginScreen = ({ navigation }) => {
 
     try {
       const [token, userId] = await login(username, password);
+      // TODO send expo token here
+      registerDeviceToken(userId);
       navigation.navigate('TabNavigator', { token, userId });
     } catch (error) {
       Alert.alert('Error', 'Invalid username or password');

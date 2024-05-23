@@ -8,24 +8,14 @@ import { useMessage } from "../utils/useMessageByUser";
 const HomeScreen = ({ route }) => {
   const userId = route.params?.userId;
   const recentMessages = useMessage(userId);
-  // const recentMessages = [
-  //   {
-  //     patientId: 999999999,
-  //     text: "Your test results are ready.",
-  //   },
-  //   {
-  //     patientId: 999999999,
-  //     text: "For many of you, these subjects represent an important moment — the transition from theoretical knowledge to practical application, from student to industry innovator. This is your arena to apply agile methodologies, collaborate effectively, and engage with industry clients, perhaps for the first time. We understand the challenges ahead and have designed these notes to smooth your path to becoming a confident software engineer.",
-  //   },
-  // ];
-  // Screen data
+
   const [showMoreAppointments, setShowMoreAppointments] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showMoreMessages, setShowMoreMessages] = useState(false);
   const userName = useUserDetails(userId);
   const upcomingAppointments = useUpcomingAppointments(userId);
-  // Screen controllers
+
   const showAppointmentDetails = (appointment) => {
     setSelectedAppointment(appointment);
     setShowAppointmentModal(true);
@@ -49,11 +39,11 @@ const HomeScreen = ({ route }) => {
       { cancelable: true }
     );
   };
-  // Screen UI
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Hi, {userName}</Text>
+        <Text style={styles.headerText}>Welcome, {userName}</Text>
       </View>
 
       <View style={styles.dashboard}>
@@ -71,8 +61,9 @@ const HomeScreen = ({ route }) => {
                 >
                   <View style={styles.appointmentHeader}>
                     <View style={styles.appointmentDoctorInfo}>
-                      <Text style={[styles.appointmentDoctorName, { textAlign: 'center' }]}>{item.doctor.name}</Text>
-                      <Text style={[styles.appointmentDetail, { textAlign: 'center' }]}>{item.detail}</Text>
+                      <Text style={[styles.appointmentDoctorName, { textAlign: 'center' }]}>{item.detail}</Text>
+                      <Text style={[styles.appointmentDetail, { textAlign: 'center' }]}>{item.doctor.name}</Text>
+                      <Text style={[styles.appointmentDetail, { textAlign: 'center' }]}>{item.reason}</Text>
                     </View>
                   </View>
                   <View style={styles.appointmentDetails}>
@@ -82,10 +73,7 @@ const HomeScreen = ({ route }) => {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
-                      })}
-                    </Text>
-                    <Text style={styles.appointmentTime}>
-                      {new Date(`1970-01-01T${item.startTime}`)
+                      })} {new Date(`1970-01-01T${item.startTime}`)
                         .toLocaleString('en-US', {
                           hour: 'numeric',
                           minute: '2-digit',
@@ -93,6 +81,7 @@ const HomeScreen = ({ route }) => {
                         })
                         .toUpperCase()}
                     </Text>
+
                   </View>
                 </TouchableOpacity>
               )}
@@ -216,12 +205,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   appointmentDoctorName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: "#06b4ff",
+    color: "#007AFF",
+    marginBottom: 5
   },
   appointmentDetail: {
     fontSize: 14,
-    color: '#666',
+    color: 'black',
   },
   appointmentDetails: {
     flexDirection: 'row',
@@ -230,12 +222,12 @@ const styles = StyleSheet.create({
   },
   appointmentDate: {
     fontSize: 14,
-    color: '#666',
+    color: 'black',
   },
   appointmentTime: {
     fontSize: 14,
     color: '#666',
-    color: 'red'
+    color: 'blue'
   },
   messageItem: {
     padding: 12,

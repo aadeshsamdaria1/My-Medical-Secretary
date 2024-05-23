@@ -26,7 +26,7 @@ export const updateUserNote = async (appointmentId, note) => {
         throw new Error(`HTTP status ${response.status}`);
       }
   
-      const data = await response;
+      const data = response;
       
       //console.log('User note updated successfully:', data);
       return data;
