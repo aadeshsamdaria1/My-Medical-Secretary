@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {jwtDecode} from 'jwt-decode';
 
 //export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
 //export const API_ENDPOINT = 'https://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
@@ -23,7 +23,6 @@ export const activateAccountByEmailEndpoint = (email) => `${API_ENDPOINT}/enter_
 export const sendOneTimeCodeEndpoint = `${API_ENDPOINT}/activate`;
 export const registerDeviceTokenEndpoint = `${API_ENDPOINT}/notifications/registerDeviceToken`;
 
-// Login function
 export const login = async (username, password) => {
   try {
     const response = await axios.post(`${API_ENDPOINT}/login`, {
@@ -33,6 +32,7 @@ export const login = async (username, password) => {
     const { jwtToken, refreshToken, userId } = response.data;
     await AsyncStorage.setItem('jwtToken', jwtToken);
     await AsyncStorage.setItem('refreshToken', refreshToken);
+    await AsyncStorage.setItem('userId', String(userId));
     return [jwtToken, userId];
   } catch (error) {
     console.error('Login failed:', error);
@@ -40,16 +40,35 @@ export const login = async (username, password) => {
   }
 };
 
-// Refresh token function
-export const refreshToken = async () => {
+export const getActiveJwt = async () => {
+  try {
+    const jwtToken = await AsyncStorage.getItem("jwtToken");
+    const decoded = jwtDecode(jwtToken);
+    const currentTime = Date.now() / 1000;
+
+    if (decoded.exp < currentTime + 10) {
+      return refreshToken();
+    } else {
+      return jwtToken;
+    }
+    
+  } catch (error) {
+    throw error;
+  }
+
+};
+
+const refreshToken = async () => {
   try {
     const refreshToken = await AsyncStorage.getItem('refreshToken');
-    const response = await axios.post(`${API_ENDPOINT}/refresh`, {}, {
-      headers: { Authorization: `Bearer ${refreshToken}` }
+    const userId = await AsyncStorage.getItem('userId');
+    const response = await axios.post(`${API_ENDPOINT}/refresh`, {
+      patientId : userId,
+      token: refreshToken
     });
-    const { jwtToken } = response.data;
-    await AsyncStorage.setItem('jwtToken', jwtToken);
-    return jwtToken;
+    const { token } = response.data;
+    await AsyncStorage.setItem('jwtToken', token);
+    return token;
   } catch (error) {
     console.error('Token refresh failed:', error);
     throw error;

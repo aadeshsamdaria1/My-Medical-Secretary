@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getAppointmentsByUserEndpoint } from '../api';
+import { getAppointmentsByUserEndpoint, getActiveJwt } from '../api';
 
 export const useUpcomingAppointments = (userId) => {
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
@@ -10,11 +10,7 @@ export const useUpcomingAppointments = (userId) => {
       if (!userId) return;
 
       try {
-        const token = await AsyncStorage.getItem('jwtToken');
-        if (!token) {
-          console.error('JWT token not found');
-          return;
-        }
+        const token = await getActiveJwt();
 
         const response = await fetch(getAppointmentsByUserEndpoint(userId), {
           method: 'GET',
@@ -62,11 +58,7 @@ export const useAllAppointments = (userId) => {
       if (!userId) return;
 
       try {
-        const token = await AsyncStorage.getItem('jwtToken');
-        if (!token) {
-          console.error('JWT token not found');
-          return;
-        }
+        const token = await getActiveJwt();
 
         const response = await fetch(getAppointmentsByUserEndpoint(userId), {
           method: 'GET',

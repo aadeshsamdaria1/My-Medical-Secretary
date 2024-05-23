@@ -1,17 +1,11 @@
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, StyleSheet } from "react-native";
-import { updateUserNoteEndpoint } from "../api";
+import { updateUserNoteEndpoint, getActiveJwt } from "../api";
 
 export const updateUserNote = async (appointmentId, note) => {
     try {
-      const token = await AsyncStorage.getItem('jwtToken');
-      if (!token) {
-        console.error('JWT token not found');
-        return;
-      }
-
-  
+      const token = await getActiveJwt();
       const response = await fetch(updateUserNoteEndpoint, {
         method: 'POST',
         headers: {

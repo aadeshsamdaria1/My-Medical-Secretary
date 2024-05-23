@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUserEndpoint } from '../api';
+import { getUserEndpoint, getActiveJwt } from '../api';
 
 export const useUserDetails = (userId) => {
   const [userName, setUserName] = useState('');
@@ -10,11 +10,7 @@ export const useUserDetails = (userId) => {
       if (!userId) return;
 
       try {
-        const token = await AsyncStorage.getItem('jwtToken');
-        if (!token) {
-          console.error('JWT token not found');
-          return;
-        }
+        const token = await getActiveJwt();
 
         const response = await fetch(getUserEndpoint(userId), {
           method: 'GET',
@@ -25,7 +21,6 @@ export const useUserDetails = (userId) => {
         });
 
         if (!response.ok) {
-          // Handle different response statuses here if needed
           throw new Error(`HTTP status ${response.status}`);
         }
 

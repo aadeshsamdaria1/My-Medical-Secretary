@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getDoctorsByUserEndpoint } from '../api';
+import { getDoctorsByUserEndpoint, getActiveJwt } from '../api';
 
 const useDoctorsByUser = (userId) => {
   const [doctors, setDoctors] = useState([]);
@@ -8,12 +8,7 @@ const useDoctorsByUser = (userId) => {
   useEffect(() => {
     const fetchDoctorsByUser = async () => {
       try {
-        const token = await AsyncStorage.getItem('jwtToken');
-        if (!token) {
-          console.error('JWT token not found');
-          return;
-        }
-
+        const token = await getActiveJwt();
         const response = await fetch(getDoctorsByUserEndpoint(userId), {
             method: 'GET',
             headers: {
