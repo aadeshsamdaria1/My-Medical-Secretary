@@ -58,16 +58,16 @@ class RootAdminCreator(
 
         return PatientEntity(
             mmsId = 0, // Automatically generated
-            email = "sophievond@outlook.com",
+            email = "johncitizen@outlook.com",
             password = encoder.encode("password"),
-            username = "patient_test_31",
+            username = "john31",
             patientId = 999999999,
             firstname = "John",
             middleName = "Smith",
             surname = "Citizen",
             dob = Instant.now(),
-            address = "1 Patient street, patient",
-            suburb = "A good suburb",
+            address = "1 Falkner street",
+            suburb = "Kensington",
             state = "Victoria",
             accountActive = true,
             oneTimePasscode = null,
