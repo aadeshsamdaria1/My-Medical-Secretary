@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "frontend",
+    "name": "My Medical Secretary",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/mms.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,22 +15,26 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sophie12345.frontend",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/mms.png",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile":"./google-services.json"
+      "googleServicesFile": "process.env.SECRET_FILE",
+      "package": "com.sophie12345.frontend"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "ec760c60-473c-49ea-93de-77370766fa90"
+        "projectId": "0126b387-3171-4ea8-9242-9d7ff80529c9"
       }
-    }
+    },
+    "owner": "sophie12345"
   }
 }
