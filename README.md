@@ -8,7 +8,7 @@ Aadesh Samdaria - Product Owner
 
 Andre Soetrisno - Scrum Master
 
-Sophie Von Doussa - Lead Frontend Developer
+Sophie von Doussa - Lead Frontend Developer
 
 Jonathan Latti - Lead Backend Developer
 
@@ -17,10 +17,14 @@ Shaolong Xu - Backend Developer
 Yuan Cao - Frontend Developer
 
 ## Deployment 
-The mobile app cannot be deployed at this stage, as we do not have finalised details for logging in to the google playstore and app store accounts required. The backend and web app are temporarily hosted at the team's own private server. The web app can be seen at "http://mymedicalsecretary.uk.to:3000/", and the backend API can be accessed at "http://mymedicalsecretary.uk.to:8080/api/REQUEST". However, this server is not as reliable as the AWS server they will eventually be deployed on, so there are occasionally issues with accessing these hosted resources. Given this, a video of the web and mobile apps is available for viewing in the demo section below.
+The backend and the web app are currently deployed on the client's AWS EC2 instance. The web app can be accessed through the link "https://medsecapi.com/". The mobile app cannot be deployed at this stage. We have been able to build the .apk and .ipa files but are having issues with deployment. Given this, we have included a video demonstrating the UI and features of the mobile app in the youtube link below.
+
+## Demo (Sprint 3) Mobile App
+https://www.youtube.com/watch?v=hgyfC3yfLnw
 
 ## Demo (Sprint 2)
 https://youtu.be/oWE2iZLScWE 
+
 
 ## Workflow
 Branch Naming Conventions
