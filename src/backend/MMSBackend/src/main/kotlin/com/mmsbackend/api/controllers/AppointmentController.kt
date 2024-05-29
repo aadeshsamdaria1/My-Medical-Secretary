@@ -21,10 +21,7 @@ import kotlin.jvm.optionals.getOrNull
 @RequestMapping("/api/appointments")
 class AppointmentController (
     val appointmentEntityRepository: AppointmentEntityRepository,
-    val appointmentMapper: AppointmentMapper,
     val userEntityRepository: UserEntityRepository,
-    val doctorEntityRepository: DoctorEntityRepository,
-    val appointmentValidation: AppointmentValidation,
     val generalValidation: GeneralValidation,
     val securityContextHolderRetriever: SecurityContextHolderRetriever
 ) {
@@ -50,39 +47,6 @@ class AppointmentController (
         }
     }
 
-    private fun getAppointmentsById(userId: Int): List<AppointmentEntity> {
-        return appointmentEntityRepository.findByPatientId(userId)
-            .filter { it.status == AppointmentStatus.ACTIVE }
-            .sortedBy { it.dateCreate }
-    }
-
-    @PostMapping("/create")
-    fun createAppointment(@RequestBody appointmentDTO: AppointmentDTO): ResponseEntity<String> {
-
-        val patient = userEntityRepository.findByPatientId(appointmentDTO.patientId)
-            ?: return ResponseEntity.badRequest().body("Could not create appointment. " +
-                "Patient with id ${appointmentDTO.patientId} does not exist or is not a patient.")
-
-        val doctor = doctorEntityRepository.findById(appointmentDTO.providerId).getOrNull()
-            ?: return ResponseEntity.badRequest().body("Could not create appointment. " +
-                "Provider(doctor) with id ${appointmentDTO.providerId} does not exist.")
-
-        val appointment = appointmentMapper.mapAppointmentDTO(appointmentDTO, patient, doctor)
-        if (!appointmentValidation.isValidAppointment(appointment)){
-            return ResponseEntity.badRequest().body("Could not create appointment. Invalid fields.")
-        }
-
-        val existingApp = appointmentEntityRepository.findById(appointmentDTO.id).getOrNull()
-        val savedAppointment: AppointmentEntity = if (existingApp != null) {
-            appointmentEntityRepository.save(appointmentMapper.updateExistingAppointment(existingApp, appointment))
-        } else {
-            appointmentEntityRepository.save(appointment)
-        }
-
-        return ResponseEntity.ok("Successfully ${if (existingApp != null) "updated" else "created new"} " +
-                "appointment with Genie ID: ${savedAppointment.id}.")
-    }
-
     @PostMapping("/user_note/update")
     fun updateUserNote(@RequestBody userNoteDTO: UserNoteDTO): ResponseEntity<String> {
         val userDetails = securityContextHolderRetriever.getSecurityContext()
@@ -100,5 +64,11 @@ class AppointmentController (
         } else {
             throw ResponseStatusException(HttpStatus.FORBIDDEN)
         }
+    }
+
+    private fun getAppointmentsById(userId: Int): List<AppointmentEntity> {
+        return appointmentEntityRepository.findByPatientId(userId)
+            .filter { it.status == AppointmentStatus.ACTIVE }
+            .sortedBy { it.dateCreate }
     }
 }

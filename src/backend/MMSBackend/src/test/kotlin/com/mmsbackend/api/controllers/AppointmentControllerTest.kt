@@ -102,10 +102,7 @@ class AppointmentControllerTest {
     fun setup() {
         appointmentController = AppointmentController(
             appointmentEntityRepository,
-            appointmentMapper,
             userEntityRepository,
-            doctorEntityRepository,
-            appointmentValidation,
             generalValidation,
             securityContextHolderRetriever
         )
@@ -186,52 +183,6 @@ class AppointmentControllerTest {
             appointment2
         )
         assertEquals(expectedAppointments, appointments)
-    }
-
-    @Test
-    fun `Successfully create appointment`() {
-        val response = appointmentController.createAppointment(newAppointmentDTO)
-        val expectedResponse = ResponseEntity.ok("Successfully created new appointment with " +
-                "Genie ID: $newAppointmentId.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Successfully update existing appointment`() {
-        every { appointmentEntityRepository.findById(newAppointmentDTOId) } returns Optional.of(newAppointment)
-
-        val response = appointmentController.createAppointment(newAppointmentDTO)
-        val expectedResponse = ResponseEntity.ok("Successfully updated appointment with " +
-                "Genie ID: $newAppointmentId.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Fail to create appointment with non-existent patient`() {
-        every { userEntityRepository.findByPatientId(patientId) } returns null
-
-        val response = appointmentController.createAppointment(newAppointmentDTO)
-        val expectedResponse = ResponseEntity.badRequest().body("Could not create appointment. " +
-                "Patient with id $patientId does not exist or is not a patient.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Fail to create appointment with non-existent doctor`() {
-        every { doctorEntityRepository.findById(providerId) } returns Optional.empty()
-
-        val response = appointmentController.createAppointment(newAppointmentDTO)
-        val expectedResponse = ResponseEntity.badRequest().body("Could not create appointment. " +
-                "Provider(doctor) with id $providerId does not exist.")
-        assertEquals(expectedResponse, response)
-    }
-
-    @Test
-    fun `Do not create appointment if fields invalid`() {
-        every { appointmentValidation.isValidAppointment(newAppointment) } returns false
-        val response = appointmentController.createAppointment(newAppointmentDTO)
-        val expectedResponse = ResponseEntity.badRequest().body("Could not create appointment. Invalid fields.")
-        assertEquals(expectedResponse, response)
     }
 
     @Test

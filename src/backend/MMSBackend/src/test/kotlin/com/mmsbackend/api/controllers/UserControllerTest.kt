@@ -121,25 +121,6 @@ class UserControllerTest {
             val patient = userController.getPatient(missingPatientId)
             assertNull(patient?.patientId)
         }
-
-        @Test
-        fun `Create patient from valid DTO`() {
-            val response = userController.createPatient(patientDTO)
-            val expectedResponse = ResponseEntity.ok("Successfully created / updated " +
-                    "patient with Genie ID: $patientId, mms ID: $mmsId.")
-            assertEquals(response, expectedResponse)
-        }
-
-        @Test
-        fun `Fail to create new patient if patient invalid`() {
-
-            every { patientEntity.patientId } returns 0
-
-            val response = userController.createPatient(patientDTO)
-            val expectedResponse = ResponseEntity.badRequest().body(
-                    "Could not create patient. Missing ID.")
-            assertEquals(response, expectedResponse)
-        }
     }
 
     @Nested

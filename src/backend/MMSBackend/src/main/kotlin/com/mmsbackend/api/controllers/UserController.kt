@@ -54,19 +54,6 @@ class UserController(
         return userEntityRepository.findAllAdmins()
     }
 
-    @PostMapping("/create_patient")
-    fun createPatient(@RequestBody patientDTO: PatientDTO): ResponseEntity<String> {
-        val patient = userMapper.mapPatientDTO(patientDTO)
-
-        if (!userValidation.isValidPatient(patient)) {
-            return ResponseEntity.badRequest().body("Could not create patient. Missing ID.")
-        }
-
-        val savedPatient = patient.persist(userEntityRepository, userMapper)
-        return ResponseEntity.ok("Successfully created / updated patient with " +
-                "Genie ID: ${savedPatient.patientId}, mms ID: ${savedPatient.mmsId}.")
-    }
-
     @PostMapping("/create_admin")
     fun createAdmin(@RequestBody adminDTO: AdminDTO): ResponseEntity<String> {
         val admin = userMapper.mapAdminDTO(adminDTO)
