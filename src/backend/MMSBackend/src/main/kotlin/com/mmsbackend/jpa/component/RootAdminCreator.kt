@@ -24,13 +24,6 @@ class RootAdminCreator(
         userEntityRepository.deleteByUsername(admin.username)
         userEntityRepository.deleteByMmsId(admin.mmsId)
         userEntityRepository.save(admin)
-
-        // TODO: Delete in production
-        val patient = createPatient()
-
-        if (!userEntityRepository.existsByUsername(patient.username)) {
-            userEntityRepository.save(patient)
-        }
     }
 
     private fun createAdmin(): AdminEntity {
@@ -39,11 +32,6 @@ class RootAdminCreator(
         val username = System.getProperty("ROOT_ADMIN_USERNAME") ?: rootAdminProperties.defaultUsername
         val password = System.getProperty("ROOT_ADMIN_PASSWORD") ?: rootAdminProperties.defaultPassword
 
-        println("Creating root admin")
-        println("Password: $password")
-        println("Username: $username")
-        println("Email: $email")
-
         return AdminEntity(
             email = email,
             username = username,
@@ -51,27 +39,6 @@ class RootAdminCreator(
 
             // Automatically generated
             mmsId = 0,
-        )
-    }
-
-    private fun createPatient(): PatientEntity {
-
-        return PatientEntity(
-            mmsId = 0, // Automatically generated
-            email = "johncitizen@outlook.com",
-            password = encoder.encode("password"),
-            username = "john31",
-            patientId = 999999999,
-            firstname = "John",
-            middleName = "Smith",
-            surname = "Citizen",
-            dob = Instant.now(),
-            address = "1 Falkner street",
-            suburb = "Kensington",
-            state = "Victoria",
-            accountActive = true,
-            oneTimePasscode = null,
-            deviceToken = null
         )
     }
 }
