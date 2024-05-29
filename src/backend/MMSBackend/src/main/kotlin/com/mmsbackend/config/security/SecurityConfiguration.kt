@@ -37,7 +37,6 @@ class SecurityConfiguration(
                     // Open to admins only
                     .requestMatchers(
                         "/api/users/create_admin",
-                        "/api/users/create_patient",
                         "/api/users/get_admin/**",
                         "/api/files/**",
                         "/api/resources/create",
@@ -47,7 +46,6 @@ class SecurityConfiguration(
                         "/api/doctors/create",
                         "/api/doctors/delete/**",
                         "/api/doctors/get_all",
-                        "/api/appointments/create",
                         "/api/users/get_all_patients",
                         "/api/users/delete_patient/**",
                         "/api/users/delete_admin/**",
