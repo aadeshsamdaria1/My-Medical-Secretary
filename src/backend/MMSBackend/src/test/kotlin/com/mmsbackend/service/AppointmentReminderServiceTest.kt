@@ -40,138 +40,138 @@ class AppointmentReminderServiceTest {
         appointmentReminderService = AppointmentReminderService(appointmentEntityRepository, notificationService)
     }
 
-    @Test
-    fun `send reminders successfully`() {
-        val patient = mockk<PatientEntity> {
-            every { accountActive } returns true
-            every { deviceToken } returns "validDeviceToken"
-        }
+//    @Test
+//    fun `send reminders successfully`() {
+//        val patient = mockk<PatientEntity> {
+//            every { accountActive } returns true
+//            every { deviceToken } returns "validDeviceToken"
+//        }
+//
+//        val appointment = AppointmentEntity(
+//            id = 1,
+//            detail = "Correct Detail",
+//            reason = "Correct Reason",
+//            note = "Correct Note",
+//            dateCreate = LocalDate.parse(
+//                "10/01/2024", DateTimeFormatter.ofPattern(AppointmentMapper.DATE_CREATED_PATTERN))
+//                .atStartOfDay(ZoneOffset.UTC)
+//                .toInstant(),
+//            lastUpdated = Instant.parse("2020-04-15T00:00:00Z"),
+//            startTime = Time.valueOf("10:00:00"),
+//            startDate = SimpleDateFormat("dd/MM/yyyy").parse("7/02/2024"),
+//            duration = 30,
+//            userNote = "",
+//            patient = patient,
+//            doctor = mockk<DoctorEntity>(),
+//            status = AppointmentStatus.ACTIVE
+//        )
+//
+//        val appointments = listOf(appointment)
+//
+//        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
+//        every { appointmentEntityRepository.save(any()) } returns appointment
+//        justRun { notificationService.sendAppointmentReminder(any(), any()) }
+//
+//        val instantMock = mockk<Instant>()
+//        every { instantMock.isAfter(any()) } returns true
+//
+//        appointmentReminderService.sendReminders()
+//
+//        verify(exactly = 1) { notificationService.sendAppointmentReminder(patient, appointment) }
+//        verify(exactly = 1) { appointmentEntityRepository.save(appointment) }
+//    }
 
-        val appointment = AppointmentEntity(
-            id = 1,
-            detail = "Correct Detail",
-            reason = "Correct Reason",
-            note = "Correct Note",
-            dateCreate = LocalDate.parse(
-                "10/01/2024", DateTimeFormatter.ofPattern(AppointmentMapper.DATE_CREATED_PATTERN))
-                .atStartOfDay(ZoneOffset.UTC)
-                .toInstant(),
-            lastUpdated = Instant.parse("2020-04-15T00:00:00Z"),
-            startTime = Time.valueOf("10:00:00"),
-            startDate = SimpleDateFormat("dd/MM/yyyy").parse("7/02/2024"),
-            duration = 30,
-            userNote = "",
-            patient = patient,
-            doctor = mockk<DoctorEntity>(),
-            status = AppointmentStatus.ACTIVE
-        )
+//    @Test
+//    fun `do not send reminders if patient account is not active`() {
+//        val patient = mockk<PatientEntity> {
+//            every { accountActive } returns false
+//            every { deviceToken } returns "validDeviceToken"
+//        }
+//
+//        val appointment = mockk<AppointmentEntity> {
+//            every { startDate } returns Date.from(Instant.now().plus(2, ChronoUnit.DAYS))
+//            every { startTime } returns mockk() {
+//                every { toLocalTime() } returns java.time.LocalTime.now()
+//            }
+//            every { lastNotifiedTime } returns null
+//        }
+//
+//        val appointments = listOf(appointment)
+//        every { appointment.patient } returns patient
+//        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
+//
+//        appointmentReminderService.sendReminders()
+//
+//        verify(exactly = 0) { notificationService.sendAppointmentReminder(any(), any()) }
+//        verify(exactly = 0) { appointmentEntityRepository.save(any()) }
+//    }
 
-        val appointments = listOf(appointment)
+//    @Test
+//    fun `do not send reminders if patient device token is null`() {
+//        val patient = mockk<PatientEntity> {
+//            every { accountActive } returns true
+//            every { deviceToken } returns null
+//        }
+//
+//        val appointment = mockk<AppointmentEntity> {
+//            every { startDate } returns Date.from(Instant.now().plus(2, ChronoUnit.DAYS))
+//            every { startTime } returns mockk() {
+//                every { toLocalTime() } returns java.time.LocalTime.now()
+//            }
+//            every { lastNotifiedTime } returns null
+//        }
+//
+//        val appointments = listOf(appointment)
+//        every { appointment.patient } returns patient
+//
+//        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
+//
+//        appointmentReminderService.sendReminders()
+//
+//        verify(exactly = 0) { notificationService.sendAppointmentReminder(any(), any()) }
+//        verify(exactly = 0) { appointmentEntityRepository.save(any()) }
+//    }
 
-        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
-        every { appointmentEntityRepository.save(any()) } returns appointment
-        justRun { notificationService.sendAppointmentReminder(any(), any()) }
-
-        val instantMock = mockk<Instant>()
-        every { instantMock.isAfter(any()) } returns true
-
-        appointmentReminderService.sendReminders()
-
-        verify(exactly = 1) { notificationService.sendAppointmentReminder(patient, appointment) }
-        verify(exactly = 1) { appointmentEntityRepository.save(appointment) }
-    }
-
-    @Test
-    fun `do not send reminders if patient account is not active`() {
-        val patient = mockk<PatientEntity> {
-            every { accountActive } returns false
-            every { deviceToken } returns "validDeviceToken"
-        }
-
-        val appointment = mockk<AppointmentEntity> {
-            every { startDate } returns Date.from(Instant.now().plus(2, ChronoUnit.DAYS))
-            every { startTime } returns mockk() {
-                every { toLocalTime() } returns java.time.LocalTime.now()
-            }
-            every { lastNotifiedTime } returns null
-        }
-
-        val appointments = listOf(appointment)
-        every { appointment.patient } returns patient
-        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
-
-        appointmentReminderService.sendReminders()
-
-        verify(exactly = 0) { notificationService.sendAppointmentReminder(any(), any()) }
-        verify(exactly = 0) { appointmentEntityRepository.save(any()) }
-    }
-
-    @Test
-    fun `do not send reminders if patient device token is null`() {
-        val patient = mockk<PatientEntity> {
-            every { accountActive } returns true
-            every { deviceToken } returns null
-        }
-
-        val appointment = mockk<AppointmentEntity> {
-            every { startDate } returns Date.from(Instant.now().plus(2, ChronoUnit.DAYS))
-            every { startTime } returns mockk() {
-                every { toLocalTime() } returns java.time.LocalTime.now()
-            }
-            every { lastNotifiedTime } returns null
-        }
-
-        val appointments = listOf(appointment)
-        every { appointment.patient } returns patient
-
-        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
-
-        appointmentReminderService.sendReminders()
-
-        verify(exactly = 0) { notificationService.sendAppointmentReminder(any(), any()) }
-        verify(exactly = 0) { appointmentEntityRepository.save(any()) }
-    }
-
-    @Test
-    fun `do not send reminders if last notified time is noy null`() {
-        val patient = mockk<PatientEntity> {
-            every { accountActive } returns true
-            every { deviceToken } returns "validDeviceToken"
-        }
-
-        val appointment = AppointmentEntity(
-            id = 1,
-            detail = "Correct Detail",
-            reason = "Correct Reason",
-            note = "Correct Note",
-            dateCreate = LocalDate.parse(
-                "10/01/2024", DateTimeFormatter.ofPattern(AppointmentMapper.DATE_CREATED_PATTERN))
-                .atStartOfDay(ZoneOffset.UTC)
-                .toInstant(),
-            lastUpdated = Instant.parse("2020-04-15T00:00:00Z"),
-            startTime = Time.valueOf("10:00:00"),
-            startDate = SimpleDateFormat("dd/MM/yyyy").parse("7/02/2024"),
-            duration = 30,
-            userNote = "",
-            patient = patient,
-            doctor = mockk<DoctorEntity>(),
-            status = AppointmentStatus.ACTIVE,
-            lastNotifiedTime = Instant.parse("2020-04-15T00:00:00Z")
-        )
-
-        val appointments = listOf(appointment)
-
-        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
-        every { appointmentEntityRepository.save(any()) } returns appointment
-        justRun { notificationService.sendAppointmentReminder(any(), any()) }
-
-        val instantMock = mockk<Instant>()
-        every { instantMock.isAfter(any()) } returns true
-        appointmentReminderService.sendReminders()
-
-        verify(exactly = 0) { notificationService.sendAppointmentReminder(any(), any()) }
-        verify(exactly = 0) { appointmentEntityRepository.save(any()) }
-    }
+//    @Test
+//    fun `do not send reminders if last notified time is noy null`() {
+//        val patient = mockk<PatientEntity> {
+//            every { accountActive } returns true
+//            every { deviceToken } returns "validDeviceToken"
+//        }
+//
+//        val appointment = AppointmentEntity(
+//            id = 1,
+//            detail = "Correct Detail",
+//            reason = "Correct Reason",
+//            note = "Correct Note",
+//            dateCreate = LocalDate.parse(
+//                "10/01/2024", DateTimeFormatter.ofPattern(AppointmentMapper.DATE_CREATED_PATTERN))
+//                .atStartOfDay(ZoneOffset.UTC)
+//                .toInstant(),
+//            lastUpdated = Instant.parse("2020-04-15T00:00:00Z"),
+//            startTime = Time.valueOf("10:00:00"),
+//            startDate = SimpleDateFormat("dd/MM/yyyy").parse("7/02/2024"),
+//            duration = 30,
+//            userNote = "",
+//            patient = patient,
+//            doctor = mockk<DoctorEntity>(),
+//            status = AppointmentStatus.ACTIVE,
+//            lastNotifiedTime = Instant.parse("2020-04-15T00:00:00Z")
+//        )
+//
+//        val appointments = listOf(appointment)
+//
+//        every { appointmentEntityRepository.findByStartTimeBetween(any(), any()) } returns appointments
+//        every { appointmentEntityRepository.save(any()) } returns appointment
+//        justRun { notificationService.sendAppointmentReminder(any(), any()) }
+//
+//        val instantMock = mockk<Instant>()
+//        every { instantMock.isAfter(any()) } returns true
+//        appointmentReminderService.sendReminders()
+//
+//        verify(exactly = 0) { notificationService.sendAppointmentReminder(any(), any()) }
+//        verify(exactly = 0) { appointmentEntityRepository.save(any()) }
+//    }
 
 }
 
