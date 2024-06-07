@@ -42,3 +42,6 @@ All pull requests are also required to pass the entire testing suite before bein
 
 ## Docs
 Documentation for the project is available in the docs folder of the repository. These documents are linked from Confluence.
+
+## Link to web app:
+https://medsecapi.com
