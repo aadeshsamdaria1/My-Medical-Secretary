@@ -42,8 +42,8 @@ export const sendMessageToPatientEndpoint = `${API_ENDPOINT}/messages/sendMessag
 export const getAllMessagesByPatient = (patientId) => `${API_ENDPOINT}/messages/getMessages/${patientId}`;
 export const deleteMessageByIdEndpoint = (messageId) => `${API_ENDPOINT}/messages/delete/${messageId}`;
 
-
-
+export const getDevceTokenEndpoint = (patientId) =>`${API_ENDPOINT}/notifications/deviceToken/${patientId}`;
+export const sendNotificationEndpoint = `${API_ENDPOINT}/notifications/send`;
 
 export const login = async (username, password) => {
   try {

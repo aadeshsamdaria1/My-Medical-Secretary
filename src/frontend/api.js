@@ -1,15 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {jwtDecode} from 'jwt-decode';
-
-//export const API_ENDPOINT = 'http://mymedicalsecretary.uk.to:8080/api';
-//export const API_ENDPOINT = 'https://wombat-mms.ap-southeast-2.elasticbeanstalk.com:8080/api';
-
-
+import { Base64 } from 'js-base64';
 
 export const API_ENDPOINT = 'https://medsecapi.com:444/api';
-
-
 
 // API endpoints
 export const getUserEndpoint = (userId) => `${API_ENDPOINT}/users/get_patient/${userId}`;
@@ -43,7 +36,7 @@ export const login = async (username, password) => {
 export const getActiveJwt = async () => {
   try {
     const jwtToken = await AsyncStorage.getItem("jwtToken");
-    const decoded = jwtDecode(jwtToken);
+    const decoded = JSON.parse(Base64.decode(jwtToken.split('.')[1]));
     const currentTime = Date.now() / 1000;
 
     if (decoded.exp < currentTime + 10) {
@@ -51,11 +44,9 @@ export const getActiveJwt = async () => {
     } else {
       return jwtToken;
     }
-    
   } catch (error) {
     throw error;
   }
-
 };
 
 const refreshToken = async () => {
@@ -63,7 +54,7 @@ const refreshToken = async () => {
     const refreshToken = await AsyncStorage.getItem('refreshToken');
     const userId = await AsyncStorage.getItem('userId');
     const response = await axios.post(`${API_ENDPOINT}/refresh`, {
-      patientId : userId,
+      patientId: userId,
       token: refreshToken
     });
     const { token } = response.data;
