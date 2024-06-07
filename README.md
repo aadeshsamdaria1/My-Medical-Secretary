@@ -17,7 +17,10 @@ Shaolong Xu - Backend Developer
 Yuan Cao - Frontend Developer
 
 ## Deployment 
-The backend and the web app are currently deployed on the client's AWS EC2 instance. The web app can be accessed through the link "https://medsecapi.com/". The mobile app cannot be deployed at this stage. We have been able to build the .apk and .ipa files but are having issues with deployment. Given this, we have included a video demonstrating the UI and features of the mobile app in the youtube link below.
+The backend and the web app are currently deployed on the client's AWS EC2 instance. The web app can be accessed through the link "https://medsecapi.com/". The mobile app cannot be fully deployed to the public due to testing and legal issues with the Apple App Store and google play store. The app is currently published as a beta version on these stores, accessible only to specified beta testers. Given this, we have included a video demonstrating the UI and features of the mobile app in the youtube link below.
+
+## Final Demo
+https://www.youtube.com/watch?v=Ls60j9QaYHc
 
 ## Demo (Sprint 3) Mobile App
 https://www.youtube.com/watch?v=hgyfC3yfLnw
