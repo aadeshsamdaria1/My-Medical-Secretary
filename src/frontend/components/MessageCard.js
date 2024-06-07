@@ -10,8 +10,17 @@ import {
 
 const MessageCard = ({ message, link, timeCreated, onPress }) => {
 
-  const formattedTime = new Date(timeCreated).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+  //const formattedTime = new Date(timeCreated).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
 
+
+  
+  const localTime = (timeCreated) => {
+    const timestamp = new Date(timeCreated+'Z');
+    const localDateString = timestamp.toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+
+    return localDateString;
+  }
+  const formattedTime = localTime(timeCreated);
   const handleCardPress = () => {
     if (onPress) {
       onPress();

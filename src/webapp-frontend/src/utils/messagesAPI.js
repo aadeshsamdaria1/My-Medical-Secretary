@@ -5,6 +5,7 @@ import {
   deleteMessageByIdEndpoint,
   handleRequestError,
 } from "../api";
+import { sendNotificationToPatient } from "./notificationAPI";
 
 export const sendMessage = async (newMessage) => {
     try {
@@ -13,6 +14,7 @@ export const sendMessage = async (newMessage) => {
         headers: { Authorization: `Bearer ${jwtToken}` }
       });
       console.log("Message added successfully:", response.data);
+      sendNotificationToPatient(newMessage.patientId, newMessage.text);
       return response.data;
     } catch (error) {
       return handleRequestError(error, axios.post, sendMessageToPatientEndpoint, newMessage);

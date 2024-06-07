@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "My Medical Secretary",
+    "name": "MMS",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/mms.png",
+    "icon": "./assets/favicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -17,14 +17,18 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.sophie12345.frontend",
-      "buildNumber": "2"
+      "buildNumber": "8"
     },
     "android": {
+      "icon": "./assets/favicon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/mms.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile": "process.env.SECRET_FILE",
+      "versionCode": 2,
+
+      "googleServicesFile": "google-services.json",
+
       "package": "com.sophie12345.frontend"
     },
     "web": {
