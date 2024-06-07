@@ -9,42 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="change files path">
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Plan.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Retrospective.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Review.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-4/Sprint-4-Plan.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/API-Documentation/Frontend-Backend-Endpoints.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Code-Reviews/Sprint-3-Code-Review.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Deployment-Details.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/System-Architecture.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Backend-Test-Cases.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Unit-Testing-Web-App.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Handover/AWS-Handover-&amp;-Shutdown.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Handover/Final Presentation Slides Content.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Handover/Final-Presentation-Slide.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Handover/Handover-Page-Description.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/User-Stories.pdf" afterDir="false" />
+    <list default="true" id="211072f3-6dc1-4a7c-a4d2-e9aefd098939" name="Changes" comment="Sprint-3-Confluence-Docs">
+      <change afterPath="$PROJECT_DIR$/docs/confluece-docs/Handover/Final-Demo.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint 3 Plan.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Authentication Architecture Diagram.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Cybersecurities/Authentication Architecture Diagram.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Cyber Security.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Cybersecurities/Cyber Security.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Cybersecurities/Risk Analysis.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Cybersecurities/Risk Analysis.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/API-Documentation/Frontend-Backend Endpoints.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Code Review.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Code-Reviews/Sprint-2-Code-Review.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/System Architecture.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Backend Test Cases.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Frontend Test Cases.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Development-Details/Testing/Test-Cases-Mobile-App.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/DO-BE-FEEL.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/DO-BE-FEEL.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/Goal Model.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/Goal Model.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Mark.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/List-of-Personas/Mark.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Olivia.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/List-of-Personas/Olivia.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Personas Description.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/List-of-Personas/Personas Description.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Ron.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/List-of-Personas/Ron.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/List-of-Personas/Sarah.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/List-of-Personas/Sarah.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Project-Details/Project Details.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Requirements/Project-Details/Project Details.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Requirements/User Stories.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Team-Page.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Team-Page.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Retrospective.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Retrospective.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Review.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-3/Sprint-3-Review.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-4/Sprint-4-Plan.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Agile Ceremonies/Sprint-4/Sprint-4-Plan.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/confluece-docs/Handover/AWS-Handover-&amp;-Shutdown.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/confluece-docs/Handover/AWS-Handover-&amp;-Shutdown.pdf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,41 +81,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;android.gradle.sync.needed&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/jonat/IdeaProjects/ME-Wombat&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.29419035&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;d95e07dfb136ca9b7671eb2fd1c117fb&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "android.gradle.sync.needed": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/jonat/IdeaProjects/ME-Wombat",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.29419035",
+    "spring.configuration.checksum": "d95e07dfb136ca9b7671eb2fd1c117fb",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Agile Ceremonies\Sprint-4" />
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Handover" />
       <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Agile Ceremonies\Sprint-3" />
-      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Development-Details\Code-Reviews" />
       <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Development-Details" />
-      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Development-Details\Testing" />
-      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Development-Details\API-Documentation" />
+      <recent name="C:\Users\andre\OneDrive\Documents\GitHub\ME-Wombat\docs\confluece-docs\Development-Details\Code-Reviews" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -168,7 +139,9 @@
       <workItem from="1712133243604" duration="1238000" />
       <workItem from="1714473071199" duration="1288000" />
       <workItem from="1716097811275" duration="2887000" />
-      <workItem from="1716529546478" duration="2601000" />
+      <workItem from="1716529546478" duration="7584000" />
+      <workItem from="1717639650310" duration="16000" />
+      <workItem from="1717735835095" duration="1975000" />
     </task>
     <task id="LOCAL-00001" summary="setting up ai chatgpt workflow">
       <option name="closed" value="true" />
@@ -186,7 +159,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714561050643</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Sprint-3-Confluence-Docs">
+      <option name="closed" value="true" />
+      <created>1716532396964</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1716532396964</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +176,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="setting up ai chatgpt workflow" />
     <MESSAGE value="change files path" />
-    <option name="LAST_COMMIT_MESSAGE" value="change files path" />
+    <MESSAGE value="Sprint-3-Confluence-Docs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sprint-3-Confluence-Docs" />
   </component>
 </project>
